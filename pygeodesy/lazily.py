@@ -30,8 +30,8 @@ and line number.
 from pygeodesy import internals as _internals, interns as _interns, \
                      _isfrozen  # DON'T _lazy_import2
 # from pygeodesy.errors import _error_init, _ImmutableError, _xkwds_item2  # _ALL_MODS
-from pygeodesy.internals import _caller3, _envPYGEODESY, _headof, printf, _tailof, \
-                                 typename, _versions  # _getenv, _PYGEODESY_ENV, \
+from pygeodesy.internals import _caller3, _envPYGEODESY, _headof, printf, _Property_RO, \
+                                _tailof, typename, _versions  # _getenv, _PYGEODESY_ENV, \
 #                               _MODS_Base, _MODS.sys_version_info2
 from pygeodesy.interns import _attribute_, _by_, _COLONSPACE_, _COMMASPACE_, _DALL_, \
                               _DMAIN_, _doesn_t_exist_, _DOT_, _EQUALSPACED_, _from_, \
@@ -234,7 +234,8 @@ _ALL_LAZY = _NamedEnum_RO(_name='_ALL_LAZY',
                                    'a_f2b', 'a_f_2b', 'b_f2a', 'b_f_2a',
                                    'e2f', 'e22f',
                                    'f2e2', 'f2e22', 'f2e32', 'f_2f', 'f2f_', 'f2f2', 'f2n', 'n2e2', 'n2f', 'n2f_'),
-                       elliptic=_a('Elliptic', 'EllipticError', 'Elliptic3Tuple'),
+                       elliptic=_a('Elliperim', 'Elliptic', 'EllipticError', 'Elliptic3Tuple',
+                                   'elliperim', 'elliperim_'),
                            epsg=_a('Epsg', 'EPSGError'),
                          errors=_a('AuxError', 'ClipError', 'CrossError', 'GeodesicError', 'IntersectionError',
                                    'NumPyError', 'LenError', 'LimitError', 'MGRSError',
@@ -250,10 +251,10 @@ _ALL_LAZY = _NamedEnum_RO(_name='_ALL_LAZY',
                                    'fpolynomial', 'fpowers', 'fprod', 'frandoms', 'frange', 'freduce', 'fremainder',
                                    'hypot', 'hypot_', 'hypot1', 'hypot2', 'hypot2_',
                                    'norm2', 'norm_', 'sqrt0', 'sqrt3', 'sqrt_a', 'zcrt', 'zqrt'),
-                          formy=_a('Elliperim', 'Radical2Tuple',
+                          formy=_a('Radical2Tuple',
                                    'angle2chord', 'antipode', 'antipode_', 'bearing', 'bearing_',
                                    'chord2angle', 'compassAngle', 'cosineLaw', 'cosineLaw_',
-                                   'elliperim', 'equirectangular', 'equirectangular4', 'euclidean', 'euclidean_',
+                                   'equirectangular', 'equirectangular4', 'euclidean', 'euclidean_',
                                    'excessAbc_', 'excessCagnoli_', 'excessGirard_', 'excessLHuilier_',
                                    'excessKarney', 'excessKarney_', 'excessQuad', 'excessQuad_',
                                    'flatLocal', 'flatLocal_', 'flatPolar', 'flatPolar_',
@@ -517,10 +518,16 @@ class _ALL_MODS(_internals._MODS_Base):
             if _headof(n) == _pygeodesy_:
                 yield n, m
 
+    @_Property_RO
+    def _triaxials_triaxial5(self):
+        '''(INTERNAL) Get module C{triaxial.triaxials}.
+        '''
+        return self.triaxials.triaxial5
+
 _internals._MODS = _ALL_MODS = _ALL_MODS()  # PYCHOK singleton
 
 __all__ = _ALL_LAZY.lazily
-__version__ = '25.12.23'
+__version__ = '26.01.06'
 
 
 def _ALL_OTHER(*objs):

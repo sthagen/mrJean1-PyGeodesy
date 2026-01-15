@@ -94,7 +94,7 @@ from pygeodesy.units import _isRadius, Radius_,  radians
 # import operator as _operator  # from .fmath
 
 __all__ = _ALL_LAZY.datums
-__version__ = '25.05.12'
+__version__ = '26.01.13'
 
 _a_ellipsoid_ = _UNDER_(_a_, _ellipsoid_)
 _BD72_        = 'BD72'
@@ -723,13 +723,10 @@ assert _WGS84.ellipsoid is _EWGS84
 
 if __name__ == _DMAIN_:
 
-    from pygeodesy.interns import _COMMA_, _NL_, _NLATvar_
-    from pygeodesy import printf
-
-    # __doc__ of this file, force all into registery
-    for r in (Datums, Transforms):
-        t = [NN] + r.toRepr(all=True, asorted=True).split(_NL_)
-        printf(_NLATvar_.join(i.strip(_COMMA_) for i in t))
+    from pygeodesy.internals import _pregistry
+    # __doc__ of this file, force all into registry
+    _pregistry(Datums)
+    _pregistry(Transforms)
 
 # **) MIT License
 #

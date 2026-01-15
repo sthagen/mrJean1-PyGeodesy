@@ -38,11 +38,11 @@ from pygeodesy.utily import atan1, atan1d, atan2, degrees360, sincos2, \
 from math import atanh, degrees, fabs, radians, sqrt
 
 __all__ = _ALL_LAZY.albers
-__version__ = '25.05.12'
+__version__ = '26.01.06'
 
 _k1_    = 'k1'
-_NUMIT  =   9  # XXX 4?
-_NUMIT0 =  41  # XXX 21?
+_MAXIT  =   9  # XXX 4?
+_MAXIT0 =  41  # XXX 21?
 _TERMS  =  31  # XXX 16?
 _TOL0   =  sqrt3(_TOL)
 
@@ -425,7 +425,7 @@ class _AlbersBase(_NamedBase):
         _Ta02  =  Fsum(ta0).fsum2f_
         _1, _2 = _1_0, _2_0
         _4, _6 = _4_0, _6_0
-        for self._iteration in range(1, _NUMIT0):  # 4 trips
+        for self._iteration in range(1, _MAXIT0):  # 4 trips
             ta02  =  ta0**2
             sca02 =  ta02 + _1
             sca0  =  sqrt(sca02)
@@ -492,7 +492,7 @@ class _AlbersBase(_NamedBase):
         ta   =  txi
         tol  = _tol(_TOL, ta)
         _Ta2 =  Fsum(ta).fsum2f_
-        for self._iteration in range(1, _NUMIT):  # max 2, mean 1.99
+        for self._iteration in range(1, _MAXIT):  # max 2, mean 1.99
             # dtxi / dta = (scxi / sca)^3 * 2 * (1 - e^2)
             #            / (qZ * (1 - e^2 * sa^2)^2)
             ta2   =  ta**2

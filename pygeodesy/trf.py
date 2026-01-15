@@ -1754,7 +1754,7 @@ if __name__ == _DMAIN_:
                 t = '%d,%3d,%3d' % t
                 printf('# %s = %s = %s %s', f, e, t, x)
 
-        # __doc__ of this file, force all into registery
+        # __doc__ of this file, force all into registry
         def _RFs():
             yield NN
             for t in RefFrames.toRepr(all=True).split(_NL_):

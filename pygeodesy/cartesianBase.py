@@ -43,7 +43,7 @@ from pygeodesy.vector3d import Vector3d, _xyzhdlln4
 # from math import degrees, fabs, radians, sqrt  # from .fmath, .utily
 
 __all__ = _ALL_LAZY.cartesianBase
-__version__ = '25.11.07'
+__version__ = '26.01.06'
 
 _r_         = 'r'
 _resections = _MODS.into(resections=__name__)
@@ -361,7 +361,7 @@ class CartesianBase(Vector3d, _EcefLocal):
         d = self.datum if earth is None else earth
         if normal and d is self.datum:
             r = self._height4
-        elif isinstance(d, _MODS.triaxials.triaxial5.Triaxial_):
+        elif isinstance(d, _MODS.triaxials.Triaxial_):
             r = d.height4(self, normal=normal)
             try:
                 d = d.toEllipsoid(name=n)

@@ -12,6 +12,21 @@ GeographicLib.SourceForge.io/C++/doc/classGeographicLib_1_1Triaxial_1_1Ellipsoid
 Copyright (C) U{Charles Karney<mailto:Karney@Alum.MIT.edu>} (2024-2025) and licensed under the MIT/X11
 License.  For more information, see the U{GeographicLib 2.7 <https://GeographicLib.SourceForge.io/>}
 documentation.
+
+@var Triaxial3s.Amalthea: Triaxial3(name='Amalthea', a=125000, b=73000, c=64000, k2=0.106947697, kp2=0.893052303, volume=2446253479595252, area=93239507787.490371704, area_p=93212299402.670425415)
+@var Triaxial3s.Ariel: Triaxial3(name='Ariel', a=581100, b=577900, c=577700, k2=0.05866109, kp2=0.94133891, volume=812633172614203904, area=4211301462766.580078125, area_p=4211301574065.829589844)
+@var Triaxial3s.Earth: Triaxial3(name='Earth', a=6378173.435, b=6378103.9, c=6356754.399999999, k2=0.996748146, kp2=0.003251854, volume=1083208241574987694080, area=510065911057441.0625, area_p=510065915922713.6875)
+@var Triaxial3s.Enceladus: Triaxial3(name='Enceladus', a=256600, b=251400, c=248300, k2=0.369647336, kp2=0.630352664, volume=67094551514082248, area=798618496278.596679688, area_p=798619018175.109985352)
+@var Triaxial3s.Europa: Triaxial3(name='Europa', a=1564130, b=1561230, c=1560930, k2=0.093663002, kp2=0.906336998, volume=15966575194402123776, area=30663773697323.515625, area_p=30663773794562.45703125)
+@var Triaxial3s.Io: Triaxial3(name='Io', a=1829400, b=1819300, c=1815700, k2=0.262045618, kp2=0.737954382, volume=25313121117889765376, area=41691875849096.734375, area_p=41691877397441.2109375)
+@var Triaxial3s.Mars: Triaxial3(name='Mars', a=3394600, b=3393300, c=3376300, k2=0.92878339, kp2=0.07121661, volume=162907283585817247744, area=144249140795107.4375, area_p=144249144150662.15625)
+@var Triaxial3s.Mimas: Triaxial3(name='Mimas', a=207400, b=196800, c=190600, k2=0.359218713, kp2=0.640781287, volume=32587072869017956, area=493855762247.691833496, area_p=493857714107.9375)
+@var Triaxial3s.Miranda: Triaxial3(name='Miranda', a=240400, b=234200, c=232900, k2=0.171062751, kp2=0.828937249, volume=54926187094835456, area=698880863325.757202148, area_p=698881306767.950317383)
+@var Triaxial3s.Moon: Triaxial3(name='Moon', a=1735550, b=1735324, c=1734898, k2=0.653331685, kp2=0.346668315, volume=21886698675223740416, area=37838824729886.09375, area_p=37838824733332.21875)
+@var Triaxial3s.Tethys: Triaxial3(name='Tethys', a=535600, b=528200, c=525800, k2=0.243190549, kp2=0.756809451, volume=623086233855821440, area=3528073490771.394042969, area_p=3528074261832.738769531)
+@var Triaxial3s.WGS84_3: Triaxial3(name='WGS84_3', a=6378171.36, b=6378101.609999999, c=6356751.84, k2=0.996738165, kp2=0.003261835, volume=1083207064030173855744, area=510065541435967.375, area_p=510065546301413.5625)
+@var Triaxial3s.WGS84_35: Triaxial3(name='WGS84_35', a=6378172, b=6378102, c=6356752.314245179, k2=0.996726499, kp2=0.003273501, volume=1083207319768789942272, area=510065621722018.25, area_p=510065626587483.3125)
+@var Triaxial3s.WGS84_3r: Triaxial3(name='WGS84_3r', a=6378172, b=6378102, c=6356752, k2=0.996726547, kp2=0.003273453, volume=1083207266220584468480, area=510065604942135.8125, area_p=510065609807745.0)
 '''
 # make sure int/int division yields float quotient, see .basics
 from __future__ import division as _; del _  # noqa: E702 ;
@@ -19,34 +34,34 @@ from __future__ import division as _; del _  # noqa: E702 ;
 from pygeodesy.angles import Ang, Ang_, _Ang3Tuple,  atan2, sincos2, _SinCos2
 from pygeodesy.basics import _copysign, map1
 from pygeodesy.constants import EPS, EPS_2, EPS02, EPS8, INT0, NAN, \
-                               _EPSqrt, _copysign_0_0, _copysign_1_0, \
+                               _EPSqrt, _SQRT3, _copysign_0_0, _copysign_1_0, \
                                _flipsign, _isfinite, _over, _1_over, _0_0, \
                                _0_5, _N_1_0, _1_0, _2_0, _3_0, _4_0, _9_0
 from pygeodesy.errors import _xattr, _xkwds, _xkwds_get, _xkwds_pop2
 from pygeodesy.fmath import cbrt2, fdot, hypot, hypot2, norm2,  fabs, sqrt
 from pygeodesy.fsums import Fsum, fsumf_,  Fmt
-from pygeodesy.interns import NN, _h_, _lam_, _name_, _phi_
-from pygeodesy.lazily import _ALL_LAZY, _ALL_MODS as _MODS
-from pygeodesy.named import _NamedDict, _Pass  # _Named
-from pygeodesy.namedTuples import Vector4Tuple
-from pygeodesy.props import Property_RO, property_ROver
+from pygeodesy.interns import NN, _DMAIN_, _h_, _lam_, _phi_
+# from pygeodesy.lazily import _ALL_LAZY  # from .vector3d
+# from pygeodesy.named import _Pass  # from .namedTuples
+from pygeodesy.namedTuples import Vector4Tuple,  _Pass
+# from pygeodesy.props import Property_RO  # from .units
 # from pygeodesy.streprs import Fmt  # from .fsums
 from pygeodesy.triaxials.bases import _bet_, _HeightINT0, LLK, _llk_, \
                                       _MAXIT, _omg_, _otherV3d_, _sqrt0, \
-                                      _Triaxial3Base, TriaxialError
-from pygeodesy.units import Degrees, Radians, Radius_
+                                      _Triaxial3Base, TriaxialError, \
+                                      _TriaxialsBase
+from pygeodesy.units import Degrees, Radians, Radius_,  Property_RO
 # from pygeodesy.utily import atan2, sincos2  # from .triaxials.angles
-from pygeodesy.vector3d import Vector3d
+from pygeodesy.vector3d import Vector3d,  _ALL_LAZY
 
 # from math import fabs, sqrt  # from .fmath
 from random import random
 
 __all__ = _ALL_LAZY.triaxials_triaxial3
-__version__ = '25.12.14'
+__version__ = '26.01.14'
 
 _alp_  = 'alp'
 _NAN3d =  Vector3d(NAN, NAN, NAN)
-_SQRT3 =  sqrt(_3_0)
 _TOL   =  cbrt2(EPS)
 _TOL2  = _TOL**2  # cbrt(EPS)**4
 _zet_  = 'zet'
@@ -801,38 +816,6 @@ class Triaxial3B(Triaxial3):
         self._init_abc3_e2_k2_kp2(Radius_(b=b), e2, k2, kp2, **name)
 
 
-class Triaxial3s(_NamedDict):
-    '''(INTERNAL) L{Triaxial3} registry, I{must} be a sub-class
-       to accommodate the L{_LazyNamedEnumItem} properties.
-    '''
-    def __getattr__(self, name):
-        '''Get the value of an item by B{C{name}}.
-        '''
-        try:
-            return self[name]
-        except KeyError:
-            if name == _name_:
-                return _MODS.named._Named.name.fget(self)
-        raise _NamedDict._AttributeError(self, self._DOT_(name))
-
-    def __getitem__(self, key):
-        '''Get the value of an item by B{C{key}}.
-        '''
-        T = self._Triaxials(key, None)
-        if T is None or key == _name_:
-            raise KeyError(key)
-        return Triaxial3(T, name=key)
-
-    @property_ROver
-    def _Triaxials(self):
-        '''(INTERNAL) Get the C{Triaxials.get}, I{once}.
-        '''
-        return _MODS.triaxials.triaxial5.Triaxials.get
-
-Triaxial3s = Triaxial3s()  # PYCHOK singleton
-'''Some pre-defined L{Triaxial3}s, like L{Triaxials<triaxials.Triaxials>}.'''
-
-
 def _cubic(rs, rt, l0, l1):  # Cartesian3.cubic
     '''(INTERNaL) Solve sum(R2[i]/(z + lq2[i]), i=0,1,2) - 1 = 0
         with lq2[2] = 0.  This has three real roots with just one
@@ -944,6 +927,20 @@ def _v_h_llk_name_NOIDAL(x_ct, y, z, **h_llk_name):
                dict(x=x_ct, y=y, z=z)
         raise TriaxialError(h=h, llk=llk, **kwds)
     return v, h, (LLK.ELLIPSOIDAL if llk is None else llk), name
+
+
+class Triaxial3s(_TriaxialsBase):
+    _Triaxial = Triaxial3
+
+Triaxial3s = Triaxial3s(Triaxial3, Triaxial3B)  # PYCHOK singleton
+'''Some pre-defined L{Triaxial3}s, like L{Triaxials<triaxials.triaxial5.Triaxials>}.'''
+Triaxial3s._assert()
+
+if __name__ == _DMAIN_:
+    # __doc__ of this file, force all into registry
+    from pygeodesy.internals import _pregistry
+    _pregistry(Triaxial3s)
+
 
 # **) MIT License
 #

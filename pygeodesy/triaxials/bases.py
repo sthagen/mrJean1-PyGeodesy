@@ -36,31 +36,31 @@ from __future__ import division as _; del _  # noqa: E702 ;
 
 # from pygeodesy.angles import Ang, isAng  # _MODS
 from pygeodesy.basics import map1, isscalar
-from pygeodesy.constants import EPS, EPS0, EPS02, EPS4, _EPS2e4, INT0, NAN, PI2, PI_3, PI4, \
-                               _isfinite, float0_, _0_0, _1_0, _N_1_0,  _4_0  # PYCHOK used!
-# from pygeodesy.ellipsoids import Ellipsoid  # _MODS
-# from pygeodesy.elliptic import Elliptic  # _MODS
-# from pygeodesy.errors import _ValueError, _xkwds  # from .formy
+from pygeodesy.constants import EPS, EPS0, EPS02, EPS4, _EPS2e4, INT0, \
+                               _isfinite, float0_, NAN, PI2, PI_3, PI4, \
+                               _0_0, _1_0, _N_1_0,  _4_0  # PYCHOK used!
+# from pygeodesy.ellipsoids import Ellipsoid, _EWGS84  # _MODS
+# from pygeodesy.elliptic import elliperim, Elliptic  # _MODS
+# from pygeodesy.errors import _ValueError, _xkwds  # from .utily
 from pygeodesy.fmath import fmean_, hypot, norm2, sqrt0,  fabs, sqrt
-from pygeodesy.formy import elliperim,  _ValueError, _xkwds
 from pygeodesy.fsums import _Fsumf_, fsumf_, fsum1f_
 # from pygeodesy.internals import typename  # _MODS
 from pygeodesy.interns import _a_, _b_, _c_, _inside_, _not_, _NOTEQUAL_, _null_, \
                               _outside_, _scale_, _SPACE_, _spherical_, _x_, _y_, _z_
 from pygeodesy.lazily import _ALL_DOCS, _ALL_LAZY, _ALL_MODS as _MODS, _FOR_DOCS
-from pygeodesy.named import _NamedEnumItem, _NamedTuple, _Pass
+from pygeodesy.named import _NamedEnum, _NamedEnumItem, _NamedTuple, _Pass  # _MODS
 from pygeodesy.namedTuples import Vector4Tuple
 from pygeodesy.props import Property_RO, property_doc_, property_RO, property_ROver
 # from pygeodesy.streprs import Fmt  # _MODS
 from pygeodesy.units import Degrees, Easting, Float, Height, Height_, Meter2, Meter3, \
                             Northing, Radius_, Scalar
-from pygeodesy.utily import asin1
+from pygeodesy.utily import asin1, km2m, m2km,  _ValueError, _xkwds
 from pygeodesy.vector3d import _otherV3d, Vector3d
 
 # from math import fabs, sqrt  # from .fmath
 
 __all__ = _ALL_LAZY.triaxials_bases
-__version__ = '25.12.31'
+__version__ = '26.01.14'
 
 _bet_         = 'bet'  # PYCHOK shared
 _llk_         = 'llk'  # PYCHOK shared
@@ -348,13 +348,13 @@ class _UnOrderedTriaxialBase(_NamedEnumItem):
 
     @property_ROver
     def _Ellipsoid(self):
-        '''(INTERNAL) Get class L{Ellipsoid}, I{once}.
+        '''(INTERNAL) Get class C{Ellipsoid}, I{once}.
         '''
         return _MODS.ellipsoids.Ellipsoid  # overwrite property_ROver
 
     @property_ROver
     def _Elliptic(self):
-        '''(INTERNAL) Get class L{Elliptic}, I{once}.
+        '''(INTERNAL) Get class C{Ellipsoid}, I{once}.
         '''
         return _MODS.elliptic.Elliptic  # overwrite property_ROver
 
@@ -364,15 +364,14 @@ class _UnOrderedTriaxialBase(_NamedEnumItem):
 
            @see: Function L{hartzell4<triaxials.triaxial5.hartzell4>} for further details.
         '''
-        return self._triaxials_triaxial5.hartzell4(pov, los=los, tri_biax=self, **name)
+        return _MODS.triaxials.hartzell4(pov, los=los, tri_biax=self, **name)
 
     def height4(self, x_xyz, y=None, z=None, normal=True, eps=EPS, **name):
         '''Compute the projection on and the height above or below this triaxial's surface.
 
            @see: Function L{height4<triaxials.triaxial5.height4>} for further details.
         '''
-        m = self._triaxials_triaxial5
-        return m.height4(x_xyz, y=y, z=z, tri_biax=self, normal=normal, eps=eps, **name)
+        return _MODS.triaxials.height4(x_xyz, y=y, z=z, tri_biax=self, normal=normal, eps=eps, **name)
 
     @Property_RO
     def isOrdered(self):
@@ -527,21 +526,21 @@ class _UnOrderedTriaxialBase(_NamedEnumItem):
         '''Get the C{ab} ellipse' perimeter (C{scalar}).
         '''
         a, b, _ = self._abc3
-        return Float(perimeter4ab=elliperim(a, b))
+        return Float(perimeter4ab=_MODS.elliptic.elliperim(a, b))
 
     @Property_RO
     def perimeter4ac(self):
         '''Get the C{ac} ellipse' perimeter (C{scalar}).
         '''
         a, _, c = self._abc3
-        return Float(perimeter4ac=elliperim(a, c))
+        return Float(perimeter4ac=_MODS.elliptic.elliperim(a, c))
 
     @Property_RO
     def perimeter4bc(self):
         '''Get the C{bc} ellipse' perimeter (C{scalar}).
         '''
         _, b, c = self._abc3
-        return Float(perimeter4bc=elliperim(b, c))
+        return Float(perimeter4bc=_MODS.elliptic.elliperim(b, c))
 
     def _radialTo3(self, sbeta, cbeta, somega, comega):
         '''(INTERNAL) I{Unordered} helper for C{.height4}.
@@ -625,41 +624,23 @@ class _UnOrderedTriaxialBase(_NamedEnumItem):
            @return: This C{Triaxial}'s attributes (C{str}).
         '''
         T = _UnOrderedTriaxialBase
-        C =  self._triaxials_triaxial3.Triaxial3B
+        m = _MODS.triaxials
+        C =  m.Triaxial3B
         if isinstance(self, C):
-            t  =  T.b, C.e2, C.k2, C.kp2
+            t  = T.b, C.e2, C.k2, C.kp2
         else:
-            t  =  T.a,  # props
-            C  =  self._triaxials_triaxial5.ConformalSphere
+            t  = T.a,  # props
+            C  = m.ConformalSphere
             t += (C.ab, C.bc) if isinstance(self, C) else (T.b, T.c)
             C  = _Triaxial3Base
             t += (C.k2, C.kp2) if isinstance(self, C) else \
                  (T.e2ab, T.e2bc, T.e2ac)
-        for C in (self._triaxials_triaxial5.Conformal,
-                  self._triaxials_conformal3.Conformal3):
+        for C in (m.Conformal, m.Conformal3):
             if isinstance(self, C):
                 t += C.xyQ2,
                 break
         t += T.volume, T.area
         return self._instr(area_p=self.area_p(), prec=prec, props=t, **name)
-
-    @property_ROver
-    def _triaxials_conformal3(self):
-        '''(INTERNAL) Get module L{pygeodesy.triaxials.conformal3}, I{once}.
-        '''
-        return _MODS.triaxials.conformal3  # overwrite property_ROver
-
-    @property_ROver
-    def _triaxials_triaxial3(self):
-        '''(INTERNAL) Get module L{pygeodesy.triaxials.triaxial3}, I{once}.
-        '''
-        return _MODS.triaxials.triaxial3  # overwrite property_ROver
-
-    @property_ROver
-    def _triaxials_triaxial5(self):
-        '''(INTERNAL) Get module L{pygeodesy.triaxials.triaxial5}, I{once}.
-        '''
-        return _MODS.triaxials.triaxial5  # overwrite property_ROver
 
     @Property_RO
     def unOrdered(self):
@@ -723,7 +704,7 @@ class _OrderedTriaxialBase(_UnOrderedTriaxialBase):
                          aE.fF(r) * c2 / s)
             a  = Meter2(area=a * b * PI2)
         else:  # a == b > c
-            a  = self._Ellipsoid(a, b=c).areax
+            a  =  self._Ellipsoid(a, b=c).areax
         return a
 
     @Property_RO
@@ -897,6 +878,47 @@ class TriaxialError(_ValueError):
     '''Raised for any triaxial issue.
     '''
     pass  # ...
+
+
+class _TriaxialsBase(_NamedEnum):
+    '''(INTERNAL) C{Triaxial*} registry, I{must} be a sub-class
+       to accommodate the L{_LazyNamedEnumItem} properties.
+    '''
+    _assert_kwds = {}    # like propertyROnce
+    _Triaxial    = None  # must be overloaded
+
+    def _Lazy(self, *abc, **name):
+        '''(INTERNAL) Instantiate the C{self._Triaxial}.
+        '''
+        return self._Triaxial(*abc, **name)
+
+    def _assert(self):  # PYCHOK signature
+        kwds = _TriaxialsBase._assert_kwds
+        if not kwds:
+            _lazy    = _MODS.named._lazyNamedEnumItem
+            EWGS84   = _MODS.ellipsoids._EWGS84
+            abc84_35 =  map1(m2km, EWGS84.a + 35, EWGS84.a - 35, EWGS84.b)
+            # <https://ArxIV.org/pdf/1909.06452.pdf> Table 1 Semi-axes in Km
+            # <https://www.JPS.NASA.gov/education/images/pdf/ss-moons.pdf>
+            # <https://link.Springer.com/article/10.1007/s00190-022-01650-9>
+            # <https://GeographicLib.SourceForge.io/C++/doc/classGeographicLib_1_1Constants.html>
+            for n, abc in dict(  # a (Km)       b (Km)      c (Km)       planet
+                      Amalthea= (125.0,        73.0,       64.0),      # Jupiter
+                      Ariel=    (581.1,       577.9,      577.7),      # Uranus
+                      Earth=   (6378.173435, 6378.1039,  6356.7544),
+                      Enceladus=(256.6,       251.4,      248.3),      # Saturn
+                      Europa=  (1564.13,     1561.23,    1560.93),     # Jupiter
+                      Io=      (1829.4,      1819.3,     1815.7),      # Jupiter
+                      Mars=    (3394.6,      3393.3,     3376.3),
+                      Mimas=    (207.4,       196.8,      190.6),      # Saturn
+                      Miranda=  (240.4,       234.2,      232.9),      # Uranus
+                      Moon=    (1735.55,     1735.324,   1734.898),    # Earth
+                      Tethys=   (535.6,       528.2,      525.8),      # Saturn
+                      WGS84_3= (6378.17136,  6378.10161, 6356.75184),  # C++
+                      WGS84_3r=(6378.172,    6378.102,   6356.752),    # C++, rounded
+                      WGS84_35=abc84_35).items():
+                kwds[n] = _lazy(n, *map(km2m, abc))
+        _NamedEnum._assert(self, **kwds)
 
 
 def _getitems(items, *indices):

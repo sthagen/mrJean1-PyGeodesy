@@ -96,7 +96,7 @@ from pygeodesy.utily import atan1, atan1d, atan2b, degrees90, m2radians, radians
 from math import asinh, atan, atanh, cos, degrees, exp, fabs, radians, sin, sinh, sqrt, tan  # as _tan
 
 __all__ = _ALL_LAZY.ellipsoids
-__version__ = '25.12.14'
+__version__ = '26.01.13'
 
 _f_0_0    = Float(f =_0_0)  # zero flattening
 _f__0_0   = Float(f_=_0_0)  # zero inverse flattening
@@ -1140,7 +1140,8 @@ class Ellipsoid(_NamedEnumItem):
                  methods L{Ellipsoid.height4} and L{Triaxial.hartzell4}.
         '''
         try:
-            v, d, i = _MODS.triaxials.triaxial5._hartzell3(pov, los, self._triaxial)
+            m = _MODS._triaxials_triaxial5
+            v, d, i = m._hartzell3(pov, los, self._triaxial)
         except Exception as x:
             raise IntersectionError(pov=pov, los=los, cause=x)
         return Vector4Tuple(v.x, v.y, v.z, d, iteration=i, name__=self.hartzell4)
@@ -1194,7 +1195,8 @@ class Ellipsoid(_NamedEnumItem):
                 v = v.times_(t, t, 0)  # force z=0.0
                 h = x - a  # equatorial
             else:  # normal in 1st quadrant
-                x, y, i = _MODS.triaxials.triaxial5._plumbTo3(x, y, self)
+                m = _MODS._triaxials_triaxial5
+                x, y, i = m._plumbTo3(x, y, self)
                 t, v = v, v.times_(x, x, y)
                 h = t.minus(v).length
 
@@ -1910,8 +1912,8 @@ class Ellipsoid(_NamedEnumItem):
     def _triaxial(self):
         '''(INTERNAL) Get this ellipsoid's un-/ordered C{Triaxial/_}.
         '''
-        a, b, m = self.a, self.b, _MODS.triaxials
-        T = m.Triaxial if a > b else m.Triaxial_
+        a, b, t = self.a, self.b, _MODS.triaxials
+        T = t.Triaxial if a > b else t.Triaxial_
         return T(a, a, b, name=self.name)
 
     @Property_RO
@@ -2433,7 +2435,6 @@ _EWGS84 = Ellipsoids.WGS84  # (INTERNAL) shared
 
 if __name__ == _DMAIN_:
 
-    from pygeodesy.interns import _COMMA_, _NL_, _NLATvar_
     from pygeodesy import nameof, printf
 
     for E in (_EWGS84, Ellipsoids.GRS80,  # NAD83,
@@ -2450,9 +2451,9 @@ if __name__ == _DMAIN_:
         printf('# %s  %s', Ellipsoid.BetaKs.name, fstr(E.BetaKs,  prec=20))
         printf('# %s %s', nameof(Ellipsoid.KsOrder), E.KsOrder)  # property
 
+    from pygeodesy.internals import _pregistry
     # __doc__ of this file, force all into registry
-    t = [NN] + Ellipsoids.toRepr(all=True, asorted=True).split(_NL_)
-    printf(_NLATvar_.join(i.strip(_COMMA_) for i in t))
+    _pregistry(Ellipsoids)
 
 # % python3.13 -m pygeodesy.ellipsoids
 

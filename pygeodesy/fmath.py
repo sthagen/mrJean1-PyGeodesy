@@ -22,10 +22,10 @@ from pygeodesy.lazily import _ALL_LAZY, _ALL_MODS as _MODS
 from pygeodesy.units import Int_, _isHeight, _isRadius
 
 from math import fabs, sqrt  # pow
-import operator as _operator  # in .datums, .trf, .utm
+import operator as _operator  # in .datums, .elliptic, .trf, .utm
 
 __all__ = _ALL_LAZY.fmath
-__version__ = '25.12.23'
+__version__ = '26.01.06'
 
 # sqrt(2) - 1 <https://WikiPedia.org/wiki/Square_root_of_2>
 _0_4142  =  0.41421356237309504880  # ~ 3_730_904_090_310_553 / 9_007_199_254_740_992

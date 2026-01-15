@@ -35,7 +35,7 @@ from pygeodesy.streprs import attrs, Fmt, lrstrip, pairs, reprs, unstr
 # from pygeodesy.units import _toUnit  # _MODS
 
 __all__ = _ALL_LAZY.named
-__version__ = '25.11.13'
+__version__ = '26.01.14'
 
 _COMMANL_           = _COMMA_ + _NL_
 _COMMASPACEDOT_     = _COMMASPACE_ + _DOT_
@@ -658,17 +658,23 @@ class _NamedEnum(_NamedDict):
         '''(INTERNAL) Check attribute name against given, registered name.
         '''
         pypy = _isPyPy()
-        _isa =  isinstance
         for n, v in kwds.items():
-            if _isa(v, _LazyNamedEnumItem):  # property
+            if isinstance(v, _LazyNamedEnumItem):  # property
                 assert (n == v.name) if pypy else (n is v.name)
                 # assert not hasattr(self.__class__, n)
                 setattr(self.__class__, n, v)
-            elif _isa(v, self._item_Classes):  # PYCHOK no cover
+            elif isinstance(v, self._item_Classes):  # PYCHOK no cover
                 assert self[n] is v and getattr(self, n) \
                                     and self.find(v) == n
             else:
                 raise _TypeError(v, name=n)
+
+    def _asserts(self):  # in .triaxials.triaxial3
+        '''(INTERNAL) Yield all asserted items.
+        '''
+        for n, p in tuple(type(self).__dict__.items()):
+            if isinstance(p, _LazyNamedEnumItem):
+                yield n, p
 
     def find(self, item, dflt=None, all=False):
         '''Find a registered item.
@@ -707,10 +713,8 @@ class _NamedEnum(_NamedDict):
                            case-insensitive} order (C{bool}).
         '''
         if all:  # instantiate any remaining L{_LazyNamedEnumItem}
-            _isa = isinstance
-            for n, p in tuple(type(self).__dict__.items()):
-                if _isa(p, _LazyNamedEnumItem):
-                    _ = getattr(self, n)
+            for n, _ in self._asserts():
+                _ = getattr(self, n)
         return itemsorted(self) if asorted else ADict.items(self)
 
     def keys(self, **all_asorted):
@@ -857,7 +861,7 @@ def _lazyNamedEnumItem(name, *args, **kwds):
 
 
 class _NamedEnumItem(_NamedBase):
-    '''(INTERNAL) Base class for items in a C{_NamedEnum} registery.
+    '''(INTERNAL) Base class for items in a C{_NamedEnum} registry.
     '''
     _enum = None
 

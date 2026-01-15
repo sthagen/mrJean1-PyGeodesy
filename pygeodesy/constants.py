@@ -26,7 +26,7 @@ except ImportError:  # Python 2-
     _inf, _nan = float(_INF_), float(_NAN_)
 
 __all__ = _ALL_LAZY.constants
-__version__ = '25.12.06'
+__version__ = '26.01.14'
 
 
 def _copysign_0_0(y):
@@ -295,6 +295,11 @@ OVERFLOW = _Float(OVERFLOW=_1_0 / EPS0)   # PYCHOK = 2.028240960365e+31
 # _1SQRT2= _Float(_1SQRT2 =sqrt(_2_0) + 1)
 # 0.707106781186547_524_400_844_362_104_849_039_284_835_937_688_474_036_588_339_868_99
 _SQRT2_2 = _Float(_SQRT2_2=sqrt(_0_5))  # PYCHOK = 0.707106781186547_5 == sqrt(2) / 2
+# sqrt(3) <https://WikiPedia.org/wiki/Square_root_of_3>
+# 1.732050807568877_293_527_446_341_505_872_366_942_805_253_810_380_628_055_806
+_SQRT3   = _Float(_SQRT3  =sqrt(_3_0))  # PYCHOK = 1.732050807568877_2 == sqrt(3)
+# 0.866025403784438_646_763_723_170_752_936_183_471_402_626_905_190_314_027_903
+_SQRT3_2 = _Float(_SQRT3_2=sqrt(_0_75))  # PYCHOK = 0.866025403784438_6 == sqrt(3) / 2
 
 INF   =  Float(INF =_inf)    # PYCHOK INFinity, see function L{isinf}, L{isfinite}, NOT _Float!
 INT0  =  Int(  INT0= 0)      # PYCHOK unique int(0) instance, see .fsums, useZ=False

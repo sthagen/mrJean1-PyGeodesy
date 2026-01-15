@@ -26,7 +26,7 @@ from pygeodesy.units import Degrees, Meter
 # from pygeodesy.utily import sincos2d  # from .karney
 
 __all__ = _ALL_LAZY.geod3solve
-__version__ = '25.12.31'
+__version__ = '26.01.04'
 
 _Triaxial3_WGS84 = Triaxial3s.WGS84_3r  # a=6378172, b=6378102, c=6356752
 
@@ -48,16 +48,31 @@ class Geod3Solve8Tuple(_GTuple):
     _Names_ = ('bet1', 'omg1', 'alp1', 'bet2', 'omg2', 'alp2', _s12_, _a12_)
     _Units_ = ( Deg,    Deg,    Deg,    Deg,    Deg,    Deg,    Meter, Deg)
 
+#   @Property_RO
+#   def A12(self):
+#       '''Approximate arc C{A12} as C{Deg}.
+#       '''
+#       t = self
+#       d = t.s12 or _0_0
+#       if d:
+#           a = hypot(Deg(t.bet2 - t.bet1).degrees,
+#                     Deg(t.omg2 - t.omg1).degrees)
+#           d = (-a) if d < 0 else a
+#       return Deg(d)
+
 
 class _Geodesic3SolveBase(_Solve3Base):
     '''(INTERNAL) Base class for L{Geodesic3Solve} and L{GeodesicLine3Solve}.
     '''
+    _a12x          =  Geod3Solve8Tuple._Names_.index(_a12_)  # last
     _Error         =  Geodesic3Error
     _Names_Direct  = _Names_Distance = \
-    _Names_Inverse =  Geod3Solve8Tuple._Names_[:7]  # 7 only, always
+    _Names_Inverse =  Geod3Solve8Tuple._Names_[:_a12x]  # 7 only, always
     _triaxial3     = _Triaxial3_WGS84
     _Xable_name    = _Xables.Geod3Solve.__name__  # typename
     _Xable_path    = _Xables.Geod3Solve()
+#   assert _a12x  ==  len(Geod3Solve8Tuple._Names_) - 1
+    del _a12x
 
     @Property_RO
     def a(self):
@@ -162,7 +177,7 @@ class Geodesic3Solve(_Geodesic3SolveBase):
         '''
         a = r.s12 or _0_0
         if a:
-            t = self.triaxial3
+            t =  self.triaxial3
             z = _toAzi(r.alp1) + _toAzi(r.alp2)
             s, c = sincos2d(z * _0_5)
             a *= hypot(_over(s, t.perimeter4ab),  # azimuth!

@@ -4,18 +4,17 @@
 # Test L{elliptic} Python implementation.
 
 __all__ = ('Tests',)
-__version__ = '25.05.31'
+__version__ = '26.01.15'
 
-from bases import endswith, TestsBase
+from bases import endswith, startswith, TestsBase
 
-from pygeodesy import elliptic, Elliptic, EllipticError, Elliptic3Tuple, \
-                      EPS, fstr, PI_2, PI_4, radians, Scalar, sincos2
+from pygeodesy import elliptic, Elliperim, Elliptic, EllipticError, Elliptic3Tuple, \
+                      elliperim, EPS, fstr, PI_2, PI_4, radians, Scalar, sincos2
 
 
 class Tests(TestsBase):
 
     def testElliptic(self):  # MCCABE 13
-
         RC = Elliptic.fRC
         RD = Elliptic.fRD
         RF = Elliptic.fRF
@@ -147,8 +146,8 @@ class Tests(TestsBase):
             self.test(s, e, t)
 
         f = elliptic._convergenceError
-        x = f(1, 2)
-        self.test(f.__name__, str(x), "no convergence (1), tolerance (2)", nl=1)
+        x = f(9, 1, 2)
+        self.test(f.__name__, str(x), "maxit (9): no convergence (1), tolerance (2)", nl=1)
 
         f = elliptic._ellipticError
         x = f(self.testElliptic, None, txt='test')
@@ -156,10 +155,52 @@ class Tests(TestsBase):
         x = f(f.__name__, None, cause=x)
         self.test(f.__name__, str(x), "invokation Elliptic.testElliptic(None): test", known=endswith)
 
+    def testElliperim(self):
+
+        def _n(m):
+            return Elliperim.__class__.__name__ + '.' + (m.__name__ + ' ')[:3]
+
+        a = 6378172.0
+        for b, x in ((6378102.0, '40075016.6858801'),
+                     (a * 0.9,   '38097844.6222377'),
+                     (a / 2,     '30897294.5'),
+                     (a / 4,     '273573'),
+                     (a / 8,     '26106'),
+                     (EPS,       '25512')):
+            m = 1. - (b / a)**2
+            self.test('a, b, b/a, m', (a, b, (b / a), m), '(6378172.0, ', known=startswith, nl=1)
+            for m in (Elliperim.E2k, Elliperim.e2k, Elliperim.AGM,
+                      Elliperim.HG,  Elliperim.GK,  Elliperim.R2):
+                p = m(a, b)
+                if p is not None:
+                    self.test(_n(m), p, x, known=startswith, prec=9)
+
+            m = Elliperim.Arc43
+            t = str(m(a, b)).lstrip('(').rstrip(')')
+            self.test(_n(m), t, x[:1], known=startswith)
+
+            n = elliperim.__name__ + '    '
+            x = x.split('.')[0]  # str(int(float(x)))
+            self.test(n, elliperim(a, b), x, known=startswith)
+            self.test(n, elliperim(a, a), 40075236.597, prec=3)
+            self.test(n, elliperim(a, 0), a * 4, prec=1)
+            self.test(n, elliperim(0, b), b * 4, prec=1)
+            self.test(n, elliperim(0, 0), '0.0')
+
+            m =  Elliperim.arc
+            n = _n(m)
+            x =  m(a, b, 45)
+            self.test(n, x, x, prec=6)
+            self.test(n, m(b, a, 90, 45), x, prec=6)
+            x = m(a, b, 270)
+            self.test(n, x, x, prec=6)
+            self.test(n, m(b, a, 360, 90), x, prec=6)
+
 
 if __name__ == '__main__':
 
     t = Tests(__file__, __version__)
     t.testElliptic()
+    t.testElliperim()
     t.results()
     t.exit()

@@ -37,9 +37,8 @@ from pygeodesy.angles import _SinCos2,  Property_RO
 from pygeodesy.basics import _isin, isLatLon
 from pygeodesy.constants import EPS, EPS0, EPS02, _EPS2e4, INT0, \
                                _isfinite, isnear1, _over, _SQRT2_2, \
-                               _0_0, _0_5, _1_0, _N_1_0, _64_0
-from pygeodesy.datums import Datum, _spherical_datum, _WGS84,  _EWGS84, Fmt
-# from pygeodesy.ellipsoids import Ellipsoid, _EWGS84  # from .datums
+                               _0_0, _0_5, _1_0, _N_1_0
+from pygeodesy.datums import Datum, _spherical_datum, _WGS84,  Fmt
 # from pygeodesy.elliptic import Elliptic  # _MODS
 from pygeodesy.errors import _AssertionError, _ValueError, _xkwds_pop2
 from pygeodesy.fmath import Fdot, fdot, hypot, hypot_,  fabs, sqrt
@@ -48,7 +47,7 @@ from pygeodesy.interns import NN, _beta_, _distant_, _DMAIN_, _finite_, _height_
                              _inside_, _near_, _negative_, _not_, _null_, _opposite_, \
                              _outside_, _too_, _x_, _y_
 from pygeodesy.lazily import _ALL_LAZY, _FOR_DOCS
-from pygeodesy.named import _lazyNamedEnumItem as _lazy, _name__, _NamedEnum, _Pass
+from pygeodesy.named import _name__, _Pass
 from pygeodesy.namedTuples import LatLon3Tuple, _NamedTupleTo, Vector2Tuple, \
                                   Vector3Tuple, Vector4Tuple
 # from pygeodesy.props import Property_RO  # from .triaxials.angles
@@ -56,15 +55,15 @@ from pygeodesy.namedTuples import LatLon3Tuple, _NamedTupleTo, Vector2Tuple, \
 from pygeodesy.triaxials.bases import Conformal5Tuple, _HeightINT0, _hypot2_1, \
                                      _not_ordered_, _OrderedTriaxialBase, _over0, \
                                      _otherV3d_, _over02, _sqrt0, TriaxialError, \
-                                     _Triaxial3Base, _UnOrderedTriaxialBase
+                                     _Triaxial3Base, _TriaxialsBase, _UnOrderedTriaxialBase
 from pygeodesy.units import Degrees, Height_, Lat, Lon, Meter, Radians, Radius_, Scalar_
-from pygeodesy.utily import atan2, atan2d, km2m, m2km
+from pygeodesy.utily import atan2, atan2d
 from pygeodesy.vector3d import _otherV3d, Vector3d
 
 # from math import fabs, sqrt  # from .fmath
 
 __all__ = _ALL_LAZY.triaxials_triaxial5
-__version__ = '25.11.29'
+__version__ = '26.01.14'
 
 _omega_ = 'omega'
 _TRIPS  =  359  # Eberly 1074?
@@ -757,41 +756,6 @@ class ConformalSphere(Conformal):
         return self.a
 
 
-class Triaxials(_NamedEnum):
-    '''(INTERNAL) L{Triaxial} registry, I{must} be a sub-class
-       to accommodate the L{_LazyNamedEnumItem} properties.
-    '''
-    def _Lazy(self, *abc, **name):
-        '''(INTERNAL) Instantiate the C{Triaxial}.
-        '''
-        a, b, c = map(km2m, abc)
-        return Triaxial(a, b, c, **name)
-
-Triaxials = Triaxials(Triaxial, Triaxial_)  # PYCHOK singleton
-'''Some pre-defined L{Triaxial}s, all I{lazily} instantiated.'''
-# <https://ArxIV.org/pdf/1909.06452.pdf> Table 1 Semi-axes in Km
-# <https://www.JPS.NASA.gov/education/images/pdf/ss-moons.pdf>
-# <https://link.Springer.com/article/10.1007/s00190-022-01650-9>
-# <https://GeographicLib.SourceForge.io/C++/doc/classGeographicLib_1_1Constants.html>
-_abc84_35 = (_EWGS84.a + 35), (_EWGS84.a - 35), _EWGS84.b
-Triaxials._assert(                 # a (Km)       b (Km)      c (Km)       planet
-    Amalthea  = _lazy('Amalthea',  125.0,        73.0,      _64_0),      # Jupiter
-    Ariel     = _lazy('Ariel',     581.1,       577.9,      577.7),      # Uranus
-    Earth     = _lazy('Earth',    6378.173435, 6378.1039,  6356.7544),
-    Enceladus = _lazy('Enceladus', 256.6,       251.4,      248.3),      # Saturn
-    Europa    = _lazy('Europa',   1564.13,     1561.23,    1560.93),     # Jupiter
-    Io        = _lazy('Io',       1829.4,      1819.3,     1815.7),      # Jupiter
-    Mars      = _lazy('Mars',     3394.6,      3393.3,     3376.3),
-    Mimas     = _lazy('Mimas',     207.4,       196.8,      190.6),      # Saturn
-    Miranda   = _lazy('Miranda',   240.4,       234.2,      232.9),      # Uranus
-    Moon      = _lazy('Moon',     1735.55,     1735.324,   1734.898),    # Earth
-    Tethys    = _lazy('Tethys',    535.6,       528.2,      525.8),      # Saturn
-    WGS84_3   = _lazy('WGS84_3',  6378.17136,  6378.10161, 6356.75184),  # C++
-    WGS84_3r  = _lazy('WGS84_3r', 6378.172,    6378.102,   6356.752),    # C++, rounded
-    WGS84_35  = _lazy('WGS84_35', *map(m2km, _abc84_35)))
-del _abc84_35, _EWGS84
-
-
 def _hartzell3(pov, los, Tun):  # in .Ellipsoid.hartzell4, .formy.hartzell
     '''(INTERNAL) Hartzell's "Satellite Line-of-Sight Intersection ...",
        formula from a Point-Of-View to an I{un-/ordered} Triaxial.
@@ -1180,20 +1144,24 @@ def _validate(a, b, c, d, T, x, y, z, val):
                                 dot=e, eps=val)
 
 
+class Triaxials(_TriaxialsBase):
+    _Triaxial = Triaxial
+
+Triaxials = Triaxials(Triaxial, Triaxial_)  # PYCHOK singleton
+'''Some pre-defined L{Triaxial}s, all I{lazily} instantiated.'''
+Triaxials._assert()
+
 if __name__ == _DMAIN_:
 
-    from pygeodesy import printf
-    from pygeodesy.interns import _COMMA_, _NL_, _NLATvar_
+    from pygeodesy.internals import _pregistry, printf
 
     T = Triaxial_(6378388.0, 6378318.0, 6356911.9461)
     t = T.height4(3909863.9271, 3909778.123, 3170932.5016)
     printf('# Bektas: %r', t)
+    # __doc__ of this file, force all into registry
+    _pregistry(Triaxials)
 
-    # __doc__ of this file, force all into registery
-    t = [NN] + Triaxials.toRepr(all=True, asorted=True).split(_NL_)
-    printf(_NLATvar_.join(i.strip(_COMMA_) for i in t))
-
-# % python3 -m pygeodesy.triaxials
+# % python3 -m pygeodesy.triaxials.triaxial5
 #
 # Bektas: height4(x=3909251.554667, y=3909165.750567, z=3170432.501602, h=999.999996)
 

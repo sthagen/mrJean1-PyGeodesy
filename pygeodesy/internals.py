@@ -6,8 +6,8 @@ u'''Mostly INTERNAL functions, except L{machine}, L{print_} and L{printf}.
 # from pygeodesy.basics import isiterablen, ubstr  # _MODS
 # from pygeodesy.errors import _AttributeError, _error_init, _ImmutableError, _UnexpectedError, _xError2  # _MODS
 from pygeodesy.interns import _BAR_, _COLON_, _DASH_, _DMAIN_, _DOT_, _ELLIPSIS_, _NL_, NN, \
-                              _pygeodesy_, _PyPy__, _python_, _QUOTE1_, _QUOTE2_, _s_, _sys, \
-                              _SPACE_, _UNDER_
+                              _NLATvar_, _pygeodesy_, _PyPy__, _python_, _QUOTE1_, _QUOTE2_, \
+                              _s_, _sys, _SPACE_, _UNDER_
 from pygeodesy.interns import _COMMA_, _Python_  # PYCHOK used!
 # from pygeodesy.streprs import anstr, pairs, unstr  # _MODS
 
@@ -459,6 +459,13 @@ def _popen2(cmd, stdin=None):  # in .mgrs, .solveBase, .testMgrs
     return _MODS.basics.ub2str(r).strip(), p.returncode
 
 
+def _pregistry(registry):
+    '''(INTERNAL) Print all items of a C{registry}.
+    '''
+    t = [NN] + registry.toRepr(all=True, asorted=True).split(_NL_)
+    printf(_NLATvar_.join(i.strip(_COMMA_) for i in t))
+
+
 def print_(*args, **nl_nt_prec_prefix__end_file_flush_sep__kwds):  # PYCHOK no cover
     '''Python 3+ C{print}-like formatting and printing.
 
@@ -709,7 +716,7 @@ def _versions(sep=_SPACE_):
 
 
 __all__ = tuple(map(typename, (machine, print_, printf, typename)))
-__version__ = '25.10.26'
+__version__ = '26.01.13'
 
 if __name__ == _DMAIN_:
 

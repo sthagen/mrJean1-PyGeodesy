@@ -651,13 +651,9 @@ def toLcc(latlon, conic=Conics.WRF_Lb, height=None, Lcc=Lcc,
 
 
 if __name__ == _DMAIN_:
-
-    from pygeodesy.interns import _NL_, _NLATvar_
-    from pygeodesy.lazily import printf
-
-    # __doc__ of this file, force all into registery
-    t = _NL_ + Conics.toRepr(all=True, asorted=True)
-    printf(_NLATvar_.join(t.split(_NL_)))
+    # __doc__ of this file, force all into registry
+    from pygeodesy.internals import _pregistry
+    _pregistry(Conics)
 
 # **) MIT License
 #
