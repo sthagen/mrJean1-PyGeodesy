@@ -82,7 +82,7 @@ from pygeodesy.constants import EPS, EPS_2, INF, NAN, PI, PI_2, PI_4, PI2, \
                                _360_0, _flipsign, _over, _1_over
 from pygeodesy.constants import _10_0, _EPSjam as _TolJAM, MANT_DIG as _DIG53  # PYCHOK used!
 # from pygeodesy.errors import _ValueError  # from .fsums
-from pygeodesy.fmath import favg, Fdot, Fdot_, fma, fhorner, hypot, hypot1, \
+from pygeodesy.fmath import favg, Fdot, Fdot_, fhorner, hypot, hypot1, \
                             zqrt,  _operator
 from pygeodesy.fsums import Fsum, _fsum,  _ValueError
 from pygeodesy.internals import _Enum, typename
@@ -102,7 +102,7 @@ from math import asin, asinh, atan, ceil, cosh, fabs, floor, radians, \
 # import operator as _operator  # from .fmath
 
 __all__ = _ALL_LAZY.elliptic
-__version__ = '26.01.15'
+__version__ = '26.01.16'
 
 _TolRD  =  zqrt(EPS * 0.002)
 _TolRF  =  zqrt(EPS * 0.030)
@@ -1656,7 +1656,8 @@ class _RJfma(object):
         self._Rj = _RJ(*args)
 
     def ma(self, b, c):
-        r = fma(self._Rj, b, c)  # nonfinites=True
+        r = self._Rj._fma(b, c, nonfinites=True)
+        # assert r is not self._Rj
         return float(r)
 
 # **) MIT License

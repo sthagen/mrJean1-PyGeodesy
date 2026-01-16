@@ -62,7 +62,7 @@ from math import fabs, isinf, isnan, \
                  ceil as _ceil, floor as _floor  # PYCHOK used! .ltp
 
 __all__ = _ALL_LAZY.fsums
-__version__ = '25.12.24'
+__version__ = '26.01.16'
 
 from pygeodesy.interns import (
   _PLUS_     as _add_op_,  # in .auxilats.auxAngle
@@ -1449,6 +1449,12 @@ class Fsum(_Named):  # sync __methods__ with .vector3dBase.Vector3dBase, .fstats
                               override L{nonfinites<Fsum.nonfinites>} and
                               the L{nonfiniterrors} default (C{bool}).
         '''
+        f = self._fma(other1, other2, **nonfinites)
+        return self._fset(f)
+
+    def _fma(self, other1, other2, **nonfinites):  # in .elliptic
+        '''(INTERNAL) Return C{self * B{other1} + B{other2}}.
+        '''
         op  = typename(self.fma)
         _fs = self._ps_other
         try:
@@ -1459,7 +1465,7 @@ class Fsum(_Named):  # sync __methods__ with .vector3dBase.Vector3dBase, .fstats
             elif _residue(other1) or _residue(other2):
                 fs = _2split3s(_fs(op, other1))
                 fs = _2products(s, fs, *_fs(op, other2))
-                f  = _Psum(self._ps_acc([], fs, up=False), name=op)
+                f  =  Fsum(fs, name=op, **nonfinites)
             else:
                 f  = _fma(s, other1, other2)
                 f  = _2finite(f, **self._isfine)
@@ -1469,7 +1475,7 @@ class Fsum(_Named):  # sync __methods__ with .vector3dBase.Vector3dBase, .fstats
             f  = self._mul_reduce(s, other1)  # INF, NAN, NINF
             f += sum(_fs(op, other2))
             f  = self._nonfiniteX(X, op, f, **nonfinites)
-        return self._fset(f)
+        return f
 
     def fma_(self, *xys, **nonfinites):
         '''Fused-multiply-accumulate C{for i in range(0, len(xys), B{2}):
