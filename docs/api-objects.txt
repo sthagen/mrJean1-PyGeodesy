@@ -2797,10 +2797,12 @@ pygeodesy.geoids._supported_	pygeodesy.geoids-module.html#_supported_
 pygeodesy.geoids._isin	pygeodesy.basics-module.html#_isin
 pygeodesy.geoids._as_llis2	pygeodesy.heights-module.html#_as_llis2
 pygeodesy.geoids.favg	pygeodesy.fmath-module.html#favg
-pygeodesy.geoids._endian_	pygeodesy.geoids-module.html#_endian_
+pygeodesy.geoids._lonE2lon	pygeodesy.geoids-module.html#_lonE2lon
+pygeodesy.geoids._lon2lonE	pygeodesy.geoids-module.html#_lon2lonE
 pygeodesy.geoids.isodd	pygeodesy.basics-module.html#isodd
 pygeodesy.geoids._ALL_DOCS	pygeodesy.lazily-module.html#_ALL_OTHER
 pygeodesy.geoids._assert_	pygeodesy.geoids-module.html#_assert_
+pygeodesy.geoids._endian_	pygeodesy.geoids-module.html#_endian_
 pygeodesy.geoids._kind	pygeodesy.geoids-module.html#_kind
 pygeodesy.geoids.pairs	pygeodesy.streprs-module.html#pairs
 pygeodesy.geoids._crop	pygeodesy.geoids-module.html#_crop
@@ -2815,7 +2817,6 @@ pygeodesy.geoids._header_	pygeodesy.geoids-module.html#_header_
 pygeodesy.geoids.fstr	pygeodesy.streprs-module.html#fstr
 pygeodesy.geoids.min2	pygeodesy.basics-module.html#min2
 pygeodesy.geoids._lli_	pygeodesy.geoids-module.html#_lli_
-pygeodesy.geoids.fdot	pygeodesy.fmath-module.html#fdot
 pygeodesy.hausdorff	pygeodesy.hausdorff-module.html
 pygeodesy.hausdorff._formy	pygeodesy.hausdorff-module.html#_formy
 pygeodesy.hausdorff._xkwds	pygeodesy.errors-module.html#_xkwds
@@ -15309,6 +15310,7 @@ pygeodesy.named._Named.renamed	pygeodesy.named._Named-class.html#renamed
 pygeodesy.elliptic.Elliptic._cK	pygeodesy.elliptic.Elliptic-class.html#_cK
 pygeodesy.named._Named._xrenamed	pygeodesy.named._Named-class.html#_xrenamed
 pygeodesy.elliptic.Elliptic.fDelta	pygeodesy.elliptic.Elliptic-class.html#fDelta
+pygeodesy.elliptic.Elliptic._fRF3RD	pygeodesy.elliptic.Elliptic-class.html#_fRF3RD
 pygeodesy.elliptic.Elliptic._cE	pygeodesy.elliptic.Elliptic-class.html#_cE
 pygeodesy.named._Named.toRepr	pygeodesy.named._Named-class.html#toRepr
 pygeodesy.named._Named.sizeof	pygeodesy.named._Named-class.html#sizeof
@@ -15336,7 +15338,6 @@ pygeodesy.elliptic.Elliptic.cE	pygeodesy.elliptic.Elliptic-class.html#cE
 pygeodesy.elliptic.Elliptic.cD	pygeodesy.elliptic.Elliptic-class.html#cD
 pygeodesy.named._Named.dup	pygeodesy.named._Named-class.html#dup
 pygeodesy.named._Named._notImplemented	pygeodesy.named._Named-class.html#_notImplemented
-pygeodesy.elliptic.Elliptic._RFRD	pygeodesy.elliptic.Elliptic-class.html#_RFRD
 pygeodesy.named._Named.copy	pygeodesy.named._Named-class.html#copy
 pygeodesy.elliptic.Elliptic.reset	pygeodesy.elliptic.Elliptic-class.html#reset
 pygeodesy.elliptic.Elliptic._jam	pygeodesy.elliptic.Elliptic-class.html#_jam

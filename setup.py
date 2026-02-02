@@ -27,7 +27,7 @@ from os import getenv
 from setuptools import setup
 
 __all__ = ()
-__version__ = '25.12.31'
+__version__ = '26.02.02'
 
 _PACKAGE = 'pygeodesy'  # 'PyGeodesy'
 
@@ -63,7 +63,7 @@ _KeyWords = ('AER', 'AGM', 'Albers', 'altitude', 'Andoyer', 'annulus', 'antipode
              'conformal', 'conformal-sphere', 'conic', 'constants', 'contact-triangle',
              'Cook', 'Correia', 'cosines-law', 'coverage', 'curvature', 'cylindrical',
              'datum', 'deprecation', 'deficit', 'development', 'discrete', 'distance', 'Douglas',
-             'earth', 'east-north-up', 'eccentricity', 'ECEF', 'elevation', 'ellipsoid',
+             'earth', 'east-north-up', 'eccentricity', 'ECEF', 'elevation', 'ellipse', 'ellipsoid',
              'ellipsoidal-latitude-beta', 'ellipsoidal-longitude-omega', 'elliptic',
              'ENU', 'EPSG', 'equal-area', 'equidistant', 'equirectangular', 'ETM', 'ETRF',
              'Euclidean', 'even-odd-rule', 'ExactTM', 'excess', 'Farrell', 'Farrell-Barth',

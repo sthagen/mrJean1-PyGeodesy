@@ -89,18 +89,17 @@ courtesy of SBFRF.
 # make sure int/int division yields float quotient, see .basics
 from __future__ import division as _; del _  # noqa: E702 ;
 
-from pygeodesy.basics import _isin, len2, min2, isodd, _splituple, \
-                              ub2str as _ub2str
+from pygeodesy.basics import _isin, len2, min2, isodd, _splituple
 from pygeodesy.constants import EPS, _float as _F, _1_0, _N_90_0, _180_0, \
                                      _N_180_0, _360_0
 from pygeodesy.datums import Datums, _ellipsoidal_datum, _WGS84
 # from pygeodesy.dms import parseDMS2  # _MODS
 from pygeodesy.errors import _incompatible, LenError, RangeError, _SciPyIssue, \
                              _xkwds_pop2
-from pygeodesy.fmath import favg, Fdot, fdot, Fhorner, frange
+from pygeodesy.fmath import favg, frange,  Fsum
 # from pygoedesy.formy import heightOrthometric  # _MODS
-from pygeodesy.heights import _as_llis2, _ascalar, _HeightBase, HeightError, \
-                              _Wrap
+# from pygeodesy.fsums import Fsum  # from .fmath
+from pygeodesy.heights import _as_llis2, _ascalar, _HeightBase, HeightError,  _Wrap
 # from pygeodesy.internals import typename, _version2  # _MODS
 from pygeodesy.interns import NN, _COLONSPACE_, _COMMASPACE_, _DMAIN_, _E_, \
                              _height_, _in_, _kind_, _lat_, _lon_, _mean_, _N_, \
@@ -115,8 +114,8 @@ from pygeodesy.units import Height, Int_, Lat, Lon
 # from pygeodesy.utily import _Wrap  # from .heights
 
 from math import floor as _floor
-# from os import SEEK_CUR, SEEK_SET  # _MODS
-# import os.path  # _MODS
+# import os as _os  # _MODS
+# import os.path  # _os.path
 from struct import calcsize as _calcsize, unpack as _unpack
 try:
     from StringIO import StringIO as _BytesIO  # reads bytes
@@ -124,9 +123,10 @@ try:
 
 except ImportError:  # Python 3+
     from io import BytesIO as _BytesIO  # PYCHOK expected
+    from pygeodesy.basics import ub2str as _ub2str
 
 __all__ = _ALL_LAZY.geoids
-__version__ = '25.09.26'
+__version__ = '26.02.02'
 
 _assert_    = 'assert'
 _bHASH_     = b'#'
@@ -135,8 +135,49 @@ _format_    = '%s %r'
 _header_    = 'header'
 _intCs      = {}  # cache int value, del below
 _lli_       = 'lli'
+_os         = _MODS.os
 _rb_        = 'rb'
 _supported_ = 'supported'
+
+if __debug__:
+    from pygeodesy.fmath import Fdot as _Dotf, Fhorner as _Hornerf
+
+else:  # -OO ... runs GeoidKarney 8+X faster (w/o Fwelford)
+    from pygeodesy.fsums import _fsum
+    from operator import mul as _mul
+
+    class _GKsum(Fsum):  # for GeoidKarney only
+
+        def __iadd__(self, other):
+            xs = other._ps if isinstance(other, _GKsum) else (other,)
+            self._ps_acc(self._ps, xs, up=False)
+            return self
+
+        def __imul__(self, x):
+            self._ps[:] = (x * p for p in self._ps)
+            return self
+
+        fmul = __imul__  # like .fsums.Fsum
+
+        def fsum(self):  # PYCHOK signature
+            return _fsum(self._ps)
+
+    class _Dotf(_GKsum):  # PYCHOK redef
+        '''Fast precision dot product M{sum(a[i] * b[i] for i=0..len(a))}
+           but for C{float} C{a} and C{b} only.
+        '''
+        def __init__(self, a, *b):
+            self._ps = self._ps_acc([], map(_mul, a, b), up=False)
+
+    class _Hornerf(_GKsum):  # PYCHOK redef
+        '''Fast polynomial evaluation M{sum(cs[i] * x**i for i=0..len(cs))}
+           but for C{float} C{x} and C{cs} and C{incx=True} only.
+        '''
+        def __init__(self, x, *cs):  # incx=True
+            self._ps = []
+            for c in reversed(cs):  # multiply-accumulate
+                self *= x  # ps[:] = (x * p for p in ps)
+                self += c  # self._ps_acc(ps, (c,), up=False)
 
 
 class GeoidError(HeightError):
@@ -484,7 +525,7 @@ class _GeoidBase(_HeightBase):
 
     def _load(self, g, dtype=float, n=-1, offset=0, **sep):  # sep=NN
         # numpy.fromfile, like .frombuffer
-        g.seek(offset, _MODS.os.SEEK_SET)
+        g.seek(offset, _os.SEEK_SET)
         return self.numpy.fromfile(g, dtype, count=n, **sep)
 
     @Property_RO
@@ -566,8 +607,8 @@ class _GeoidBase(_HeightBase):
     def _open(self, geoid, datum, kind, name, smooth):
         # open the geoid file
         try:
-            self._geoid = _MODS.os.path.basename(geoid)
-            self._sizeB = _MODS.os.path.getsize(geoid)
+            self._geoid = _os.path.basename(geoid)
+            self._sizeB = _os.path.getsize(geoid)
             g = open(geoid, _rb_)
         except (IOError, OSError) as x:
             raise GeoidError(geoid=geoid, cause=x)
@@ -774,15 +815,11 @@ class GeoidEGM96(_GeoidBase):
 
     def _g2ll2(self, lat, lon):
         # convert grid (lat, lon) to earth (lat, lon)
-        while lon > _180_0:  # Eastern
-            lon -= _360_0
-        return -lat, lon  # invert lat
+        return -lat, _lonE2lon(lon)  # invert lat
 
     def _ll2g2(self, lat, lon):
         # convert earth (lat, lon) to grid (lat, lon)
-        while lon < 0:  # Eastern
-            lon += _360_0
-        return -lat, lon  # invert lat
+        return -lat, _lon2lonE(lon)  # invert lat
 
     if _FOR_DOCS:
         __call__ = _GeoidBase.__call__
@@ -791,29 +828,27 @@ class GeoidEGM96(_GeoidBase):
 
 class GeoidG2012B(_GeoidBase):
     '''Geoid height interpolator for U{GEOID12B Model
-       <https://www.NGS.NOAA.gov/GEOID/GEOID12B/>} grids U{CONUS
-       <https://www.NGS.NOAA.gov/GEOID/GEOID12B/GEOID12B_CONUS.shtml>},
-       U{Alaska<https://www.NGS.NOAA.gov/GEOID/GEOID12B/GEOID12B_AK.shtml>},
-       U{Hawaii<https://www.NGS.NOAA.gov/GEOID/GEOID12B/GEOID12B_HI.shtml>},
+       <https://Geodesy.NOAA.gov/GEOID/GEOID12B/>} grids U{CONUS
+       <https://Geodesy.NOAA.gov/GEOID/GEOID12B/GEOID12B_CONUS.shtml>},
+       U{Alaska<https://Geodesy.NOAA.gov/GEOID/GEOID12B/GEOID12B_AK.shtml>},
+       U{Hawaii<https://Geodesy.NOAA.gov/GEOID/GEOID12B/GEOID12B_HI.shtml>},
        U{Guam and Northern Mariana Islands
-       <https://www.NGS.NOAA.gov/GEOID/GEOID12B/GEOID12B_GMNI.shtml>},
+       <https://Geodesy.NOAA.gov/GEOID/GEOID12B/GEOID12B_GMNI.shtml>},
        U{Puerto Rico and U.S. Virgin Islands
-       <https://www.NGS.NOAA.gov/GEOID/GEOID12B/GEOID12B_PRVI.shtml>} and
-       U{American Samoa<https://www.NGS.NOAA.gov/GEOID/GEOID12B/GEOID12B_AS.shtml>}
+       <https://Geodesy.NOAA.gov/GEOID/GEOID12B/GEOID12B_PRVI.shtml>} and
+       U{American Samoa<https://Geodesy.NOAA.gov/GEOID/GEOID12B/GEOID12B_AS.shtml>}
        based on C{SciPy} interpolation U{RectBivariateSpline<https://docs.SciPy.org/doc/
        scipy/reference/generated/scipy.interpolate.RectBivariateSpline.html>}, U{interp2d
        <https://docs.SciPy.org/doc/scipy/reference/generated/scipy.interpolate.interp2d.html>}
        or U{bisplrep/-ev<https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.
        bisplrep.html>}.
-
-       Use any of the C{le} (little endian) or C{be} (big endian) C{g2012b*.bin} binary grid files.
     '''
     _datum = Datums.NAD83
 
     def __init__(self, g2012b_bin, datum=Datums.NAD83, kind=3, smooth=0, **name_crop):
         '''New L{GeoidG2012B} interpolator.
 
-           @arg g2012b_bin: A C{GEOID12B} grid file name (C{.bin}).
+           @arg g2012b_bin: A C{GEOID12B} grid file name (C{.bin}, see B{note}).
            @kwarg datum: Optional grid datum (L{Datum}, L{Ellipsoid}, L{Ellipsoid2} or
                          L{a_f2Tuple}), overriding C{NAD83}.
            @kwarg kind: C{scipy.interpolate} order (C{int}), use 1..5 for U{RectBivariateSpline
@@ -827,8 +862,8 @@ class GeoidG2012B(_GeoidBase):
            @kwarg name_crop: Optional geoid C{B{name}=NN} (C{str}) and UNSUPPORTED keyword argument
                        C{B{crop}=None}.
 
-           @raise GeoidError: Invalid B{C{crop}}, B{C{kind}} or B{C{smooth}} or a G2012B grid file
-                              B{C{g2012b_bin}} issue.
+           @raise GeoidError: Invalid B{C{crop}}, B{C{kind}} or B{C{smooth}} or a B{C{g2012b_bin}}
+                              grid file issue.
 
            @raise ImportError: Package C{numpy} or C{scipy} not found or not installed.
 
@@ -840,8 +875,11 @@ class GeoidG2012B(_GeoidBase):
 
            @raise TypeError: Invalid B{C{datum}}.
 
-           @note: Specify C{B{kind}=-1, -3 or -5} to use C{scipy.interpolate.interp2d}
-                  before or C{scipy.interpolate.bisplrep/-ev} since C{Scipy} version 1.14.
+           @note: Only use any of the C{le} (little-endian) or C{be} (big-endian) C{g2012b*.bin}
+                  I{binary} grid files.
+
+           @note: Specify C{B{kind}=-1, -3 or -5} to use C{scipy.interpolate.interp2d} I{before}
+                  or C{scipy.interpolate.bisplrep/-ev} I{since} C{Scipy} version 1.14.
         '''
         crop, name = _xkwds_pop2(name_crop, crop=None)
         if crop is not None:
@@ -871,7 +909,7 @@ class GeoidG2012B(_GeoidBase):
             p.slat, p.wlon, p.dlat, p.dlon = map(float, self._load(g, en_+'f8', 4))
             # read all f4 heights, ignoring the first 4xf8 and 3xi4
             hs = self._load(g, self._endian, n, 44).reshape(p.nlat, p.nlon)
-            p.wlon -= _360_0  # western-most East longitude to earth (..., lon)
+            p.wlon -= _360_0  # western-most lon XXX _lonE2lon
             _GeoidBase.__init__(self, hs, p)
 
         except Exception as x:
@@ -975,12 +1013,12 @@ class GeoidKarney(_GeoidBase):
     _CM = (_T(' 0, -1'),  # 10x12 cubic matrix [i, j] indices
            _T(' 1, -1'),
            _T('-1,  0'),
-           _T(' 0,  0'),
-           _T(' 1,  0'),
+           _T(' 0,  0'),  # _BT[0]
+           _T(' 1,  0'),  # _BT[1]
            _T(' 2,  0'),
            _T('-1,  1'),
-           _T(' 0,  1'),
-           _T(' 1,  1'),
+           _T(' 0,  1'),  # _BT[2]
+           _T(' 1,  1'),  # _BT[3]
            _T(' 2,  1'),
            _T(' 0,  2'),
            _T(' 1,  2'))
@@ -1063,7 +1101,7 @@ class GeoidKarney(_GeoidBase):
         p = self._pgm
         if 0 < x < (p.nlon - 2) and 0 < y < (p.nlat - 2):
             # read 4x4 ushorts, drop the 4 corners
-            S = _MODS.os.SEEK_SET
+            S = _os.SEEK_SET
             e =  self._4endian
             g =  self._egm
             n =  self._4u2B
@@ -1099,7 +1137,7 @@ class GeoidKarney(_GeoidBase):
         y, x = int(_floor(fy)), int(_floor(fx))
         fy -= y
         fx -= x
-        H  = self._ev2d(fy, fx, y, x)  # PYCHOK ._ev2k or ._ev3k
+        H  = self._ev2d(fy, fx, y, x)  # PYCHOK ._ev3k or ._ev2k
         H *= self._pgm.Scale   # H.fmul(self._pgm.Scale)
         H += self._pgm.Offset  # H.fadd(self._pgm.Offset)
         return H.fsum()  # float(H)
@@ -1112,10 +1150,10 @@ class GeoidKarney(_GeoidBase):
             y, x = self._yx_i = yx
             self._yx_t = self._raws(y, x, GeoidKarney._BT)
         t  =  self._yx_t
-        v  = _1_0, -fx, fx
-        H  = Fdot(v, t[0], t[0], t[1]).fmul(_1_0 - fy)  # c = a * (1 - fy)
-        H += Fdot(v, t[2], t[2], t[3]).fmul(fy)  # c += b * fy
-        return H
+        v  = _1_0, (-fx), fx
+        H  = _Dotf(v, t[0], t[0], t[1]).fmul(_1_0 - fy)  # c = a * (1 - fy)
+        H += _Dotf(v, t[2], t[2], t[3]).fmul(fy)  # c += b * fy
+        return H  # Fsum
 
     def _ev3k(self, fy, fx, *yx):
         # compute the cubic 10-tuple and interpolate raw H
@@ -1124,7 +1162,7 @@ class GeoidKarney(_GeoidBase):
         else:
             c0, c3, v  = self._c0c3v(*yx)
             # assert len(c3) == self._nterms
-            self._yx_t = tuple(fdot(v, *r3) / c0 for r3 in c3)
+            self._yx_t = tuple(_Dotf(v, *r3).fover(c0) for r3 in c3)
             self._yx_i = yx
         # GeographicLib/Geoid.cpp Geoid::height(lat, lon) ...
         # real h = t[0] + fx * (t[1] + fx * (t[3] + fx * t[6])) +
@@ -1132,20 +1170,18 @@ class GeoidKarney(_GeoidBase):
         #                 fy * (t[5] + fx *  t[8] + fy * t[9]));
         t  =  self._yx_t
         v  = _1_0, fx, fy
-        H  = Fdot(v, t[5], t[8], t[9])
-        H *= fy
-        H += Fhorner(fx, t[2], t[4], t[7])
-        H *= fy
-        H += Fhorner(fx, t[0], t[1], t[3], t[6])
-        return H
+        H  = _Dotf(v, t[5], t[8], t[9])
+        H *=  fy
+        H += _Hornerf(fx, t[2], t[4], t[7])
+        H *=  fy
+        H += _Hornerf(fx, t[0], t[1], t[3], t[6])
+        return H  # Fsum
 
     _ev2d = _ev3k  # overriden for kind=2, see ._ev_name
 
     def _g2ll2(self, lat, lon):
         # convert grid (lat, lon) to earth (lat, lon), uncropped
-        while lon > _180_0:
-            lon -= _360_0
-        return lat, lon
+        return lat, _lonE2lon(lon)
 
     def _g2yx2(self, lat, lon):
         # convert grid (lat, lon) to grid (y, x) indices
@@ -1188,9 +1224,7 @@ class GeoidKarney(_GeoidBase):
 
     def _ll2g2(self, lat, lon):
         # convert earth (lat, lon) to grid (lat, lon), uncropped
-        while lon < 0:
-            lon += _360_0
-        return lat, lon
+        return lat, _lon2lonE(lon)
 
     def _llh3minmax(self, highest, *lat2):
         # find highest or lowest, takes 10+ secs for egm2008-1.pgm geoid
@@ -1277,7 +1311,7 @@ class GeoidKarney(_GeoidBase):
         p, g = self._pgm, self._egm
         if g:
             b = p.skip + (y * p.nlon + x) * self._u2B
-            g.seek(b, _MODS.os.SEEK_SET)
+            g.seek(b, _os.SEEK_SET)
             return b  # position
         raise GeoidError('closed file', txt=repr(p.egm))  # IOError
 
@@ -1347,7 +1381,7 @@ class GeoidPGM(_GeoidBase):
                   the available memory, especially with 32-bit Python.  To reduce memory
                   usage, set keyword argument B{C{crop}} to the region of interest.  For
                   example C{B{crop}=(20, -125, 50, -65)} covers the U{conterminous US
-                  <https://www.NGS.NOAA.gov/GEOID/GEOID12B/maps/GEOID12B_CONUS_grids.png>}
+                  <https://Geodesy.NOAA.gov/GEOID/GEOID12B/maps/GEOID12B_CONUS_grids.png>}
                   (CONUS), less than 3% of the entire C{egm2008-1.pgm} dataset.
 
            @see: Class L{GeoidKarney} and function L{egmGeoidHeights}.
@@ -1382,8 +1416,7 @@ class GeoidPGM(_GeoidBase):
         if self._cropped:
             lon -= self._lon_of
         else:
-            while lon > _180_0:
-                lon -= _360_0
+            lon = _lonE2lon(lon)
         return lat, lon
 
     def _ll2g2(self, lat, lon):
@@ -1391,8 +1424,7 @@ class GeoidPGM(_GeoidBase):
         if self._cropped:
             lon += self._lon_of
         else:
-            while lon < 0:
-                lon += _360_0
+            lon = _lon2lonE(lon)
         return lat, lon
 
     if _FOR_DOCS:
@@ -1541,8 +1573,8 @@ class _PGM(_Gpars):
         self.slat, self.wlon = self.Origin
         # note, negative .dlat and .rlat since rows
         # are from .slat 90N down in decreasing lat
-        self.dlat, self.dlon = _180_0 / (1 - nlat), _360_0 / nlon
-        self.rlat, self.rlon = (1 - nlat) / _180_0, nlon / _360_0
+        self.dlat, self.dlon = (_180_0 / (1 - nlat)), (_360_0 / nlon)
+        self.rlat, self.rlon = ((1 - nlat) / _180_0), (nlon / _360_0)
 
         # grid corners in earth (lat, lon), .slat = 90, .dlat < 0
         n = float(self.slat)
@@ -1604,11 +1636,11 @@ class _PGM(_Gpars):
         t, c = 0, self._tmpfile()
         # reading (s - n) rows, forward
         for y in range(n, s):  # PYCHOK y unused
-            g.seek(z, _MODS.os.SEEK_SET)
+            g.seek(z, _os.SEEK_SET)
             # Python 2 tmpfile.write returns None
             t += c.write(g.read(r)) or r
             if p:  # wrap around to start of row
-                g.seek(-q, _MODS.os.SEEK_CUR)
+                g.seek(-q, _os.SEEK_CUR)
                 # assert(g.tell() == (z - w * self.u2B))
                 # Python 2 tmpfile.write returns None
                 t += c.write(g.read(p)) or p
@@ -1635,7 +1667,7 @@ class _PGM(_Gpars):
         self.knots = k
         self.skip  = 0  # no header lines in c
 
-        c.seek(0, _MODS.os.SEEK_SET)
+        c.seek(0, _os.SEEK_SET)
         # c = open(c.name, _rb_)  # reopen for numpy 1.8.0-
         return c
 
@@ -1659,11 +1691,11 @@ class _PGM(_Gpars):
         try:
             from tempfile import NamedTemporaryFile as tmpfile
         except ImportError:  # Python 2.7.16-
-            from _MODS.os import tmpfile
-        t = _MODS.os.path.basename(self.pgm)
-        t = _MODS.os.path.splitext(t)[0]
+            from _os import tmpfile  # PYCHOK from
+        t = _os.path.basename(self.pgm)
+        t = _os.path.splitext(t)[0]
         f =  tmpfile(mode='w+b', prefix=t or 'egm')
-        f.seek(0, _MODS.os.SEEK_SET)  # force overwrite
+        f.seek(0, _os.SEEK_SET)  # force overwrite
         return f
 
     @Property_RO
@@ -1703,7 +1735,7 @@ def egmGeoidHeights(GeoidHeights_dat):
         dat = _BytesIO(dat)
 
     try:
-        dat.seek(0, _MODS.os.SEEK_SET)  # reset
+        dat.seek(0, _os.SEEK_SET)  # reset
     except AttributeError as x:
         raise GeoidError(GeoidHeights_dat=type(dat), cause=x)
 
@@ -1711,9 +1743,24 @@ def egmGeoidHeights(GeoidHeights_dat):
         t = t.strip()
         if t and not t.startswith(_bHASH_):
             lat, lon, egm84, egm96, egm2008 = map(float, t.split())
-            while lon > _180_0:  # EasternLon to earth lon
-                lon -= _360_0
+            lon = _lonE2lon(lon)  # Eastern to earth lon
             yield GeoidHeight5Tuple(lat, lon, egm84, egm96, egm2008)
+
+
+def _lonE2lon(lon):
+    '''(INTERNAL) East to earth longitude.
+    '''
+    while lon > _180_0:
+        lon -= _360_0
+    return lon
+
+
+def _lon2lonE(lon):
+    '''(INTERNAL) Earth to East longitude.
+    '''
+    while lon < 0:
+        lon += _360_0
+    return lon
 
 
 __all__ += _ALL_DOCS(_GeoidBase)

@@ -52,9 +52,8 @@ from pygeodesy.interns import NN, _arg_, _COMMASPACE_, _DMAIN_, _DOT_, _from_, \
 # from pygeodesy.lazily import _ALL_LAZY, _ALL_MODS as _MODS  # from .named
 from pygeodesy.named import _name__, _name2__, _Named, _NamedTuple, \
                             _NotImplemented,  _ALL_LAZY, _MODS
-from pygeodesy.props import _allPropertiesOf_n, deprecated_method, \
-                             deprecated_property_RO, Property, \
-                             Property_RO, property_RO
+from pygeodesy.props import _allPropertiesOf_n, deprecated_method, Property, \
+                             deprecated_property_RO, Property_RO, property_RO
 from pygeodesy.streprs import Fmt, fstr, unstr
 # from pygeodesy.units import Float, Int  # from .constants
 
@@ -62,7 +61,7 @@ from math import fabs, isinf, isnan, \
                  ceil as _ceil, floor as _floor  # PYCHOK used! .ltp
 
 __all__ = _ALL_LAZY.fsums
-__version__ = '26.01.16'
+__version__ = '26.02.02'
 
 from pygeodesy.interns import (
   _PLUS_     as _add_op_,  # in .auxilats.auxAngle
@@ -197,8 +196,7 @@ except  ImportError:  # PYCHOK DSPACE! Python 3.12-
     _2FACTOR = pow(2, (MANT_DIG + 1) // 2) + _1_0  # 134217729 if MANT_DIG == 53
 
     def _2split3(x):
-        # Split U{Algorithm 3.2
-        # <https://www.TUHH.De/ti3/paper/rump/OgRuOi05.pdf>}
+        # Split U{Algorithm 3.2<https://www.TUHH.De/ti3/paper/rump/OgRuOi05.pdf>}
         a  = c = x * _2FACTOR
         a -= c - x
         b  = x - a
@@ -326,13 +324,31 @@ def nonfiniterrors(raiser=None):
          _xkwds_get1(d, _isfine=_isfinite) is _isfinite) if d else True
 
 
-def _1primed(xs):  # in .fmath
-    '''(INTERNAL) 1-Primed summation of iterable C{xs}
+# def _nsum(xs):
+#     '''(INTERNAL) U{Neumaier summation
+#        <https://StackOverflow.com/questions/78633770/can-neumaier-summation-be-sped-up>},
+#        see IV. Verbessertes Kahan-Babuška-Verfahren.
+#     '''
+#     s = r = _0_0
+#     for x in map(float, xs):
+#         t = s + x
+#         if fabs(x) <= fabs(s):
+#             r += (s - t) + x
+#         else:
+#             r += (x - t) + s
+#         s = t
+#     return s + r
+
+
+def _1primed(xs, *ys):  # in .fmath
+    '''(INTERNAL) 1-Primed summation of iterable C{xs} less any C{ys}
        items, all I{known} to be C{scalar}.
     '''
     yield _1_0
     for x in xs:
         yield x
+    for y in ys:
+        yield -y
     yield _N_1_0
 
 
@@ -485,10 +501,10 @@ class Fsum(_Named):  # sync __methods__ with .vector3dBase.Vector3dBase, .fstats
               i.e. any C{type} having method C{__float__}.
 
        @note: Handling of I{non-finites} as C{inf}, C{INF}, C{NINF}, C{nan} and C{NAN} is
-              determined by function L{nonfiniterrors<fsums.nonfiniterrors>} for the default
-              or by method L{nonfinites<Fsum.nonfinites>} for individual C{Fsum} instances,
-              overruling the default.  For backward compatibility, I{non-finites} raise
-              exceptions by default.
+              determined globally by function L{nonfiniterrors<fsums.nonfiniterrors>} or
+              by method L{nonfinites<Fsum.nonfinites>} for individual C{Fsum} instances,
+              overruling the global setting.  For backward compatibility, I{non-finites}
+              raise exceptions by default.
 
        @see: U{Hettinger<https://GitHub.com/ActiveState/code/tree/master/recipes/Python/
              393090_Binary_floating_point_summatiaccurate_full/recipe-393090.py>},
@@ -1333,11 +1349,10 @@ class Fsum(_Named):  # sync __methods__ with .vector3dBase.Vector3dBase, .fstats
                     H._fadd(c, up=False)
             else:  # x == 0
                 H = cs[0] if n else 0
-            self._fadd(H)
+            return self._fadd(H)
         except Exception as X:
             t = unstr(where, x, *cs, _ELLIPSIS=4, incx=incx)
             raise self._ErrorX(X, _add_op_, t)
-        return self
 
     def _finite(self, other, op=None):
         '''(INTERNAL) Return B{C{other}} if C{finite}.
@@ -2286,7 +2301,7 @@ class Fsum(_Named):  # sync __methods__ with .vector3dBase.Vector3dBase, .fstats
         # assert isscalar(s) and isscalar(x)
         return self._pow_2_3(s, x, other, op, **raiser_RESIDUAL)
 
-    def _ps_acc(self, ps, xs, up=True, **unused):
+    def _ps_acc(self, ps, xs, up=True, **unused):  # in .geoids._Dotf and ._Hornerf
         '''(INTERNAL) Accumulate C{xs} known scalars into list C{ps}.
         '''
         n   =  0
@@ -2356,15 +2371,7 @@ class Fsum(_Named):  # sync __methods__ with .vector3dBase.Vector3dBase, .fstats
     def _ps_1sum(self, *less):
         '''(INTERNAL) Return the partials sum, 1-primed C{less} some scalars.
         '''
-        def _1psls(ps, ls):
-            yield _1_0
-            for p in ps:
-                yield  p
-            for p in ls:
-                yield -p
-            yield _N_1_0
-
-        return _fsum(_1psls(self._ps, less))
+        return _fsum(_1primed(self._ps, *less))
 
     def _raiser(self, r, s, raiser=True, **RESIDUAL):
         '''(INTERNAL) Does ratio C{r / s} exceed the RESIDUAL threshold
@@ -2726,7 +2733,7 @@ try:
 except ImportError:
     _sum =  sum
 
-    def _fsum(xs):  # in .elliptic
+    def _fsum(xs):  # in .elliptic, .geoids
         '''(INTERNAL) Precision summation, Python 2.5-.
         '''
         F = Fsum(name=_fsum.name, f2product=False, nonfinites=True)
@@ -2867,8 +2874,11 @@ if __name__ == _DMAIN_:
         # copied from Hettinger, see L{Fsum} reference
         from pygeodesy import frandoms, printf
 
+#       printf(typename(_sum),  end=_COMMASPACE_)
         printf(typename(_fsum), end=_COMMASPACE_)
         printf(typename(_psum), end=_COMMASPACE_)
+        printf(len(Fsum.__dict__), end=_COMMASPACE_)
+#       printf(len(globals()), end=_COMMASPACE_)
 
         F = Fsum()
         if F.is_math_fsum():

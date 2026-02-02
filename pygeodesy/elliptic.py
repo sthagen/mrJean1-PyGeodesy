@@ -102,7 +102,7 @@ from math import asin, asinh, atan, ceil, cosh, fabs, floor, radians, \
 # import operator as _operator  # from .fmath
 
 __all__ = _ALL_LAZY.elliptic
-__version__ = '26.01.16'
+__version__ = '26.01.20'
 
 _TolRD  =  zqrt(EPS * 0.002)
 _TolRF  =  zqrt(EPS * 0.030)
@@ -1213,6 +1213,17 @@ class Elliptic(_Named):
             raise _ellipticError(Elliptic.fRF, x, y, z, cause=X)
 
     @staticmethod
+    def _fRF3RD(x, z, m):  # in .auxilats.AuxDLat.DE, -.AuxLat.Rectifying
+        y = _1_0 - m
+        try:  # float(RF(x, y, z) - RD(x, y, z, 3 / m))
+            R = _RF3(x, y, z)
+            if m:
+                R -= _RD(x, y, z, _3_0 / m)
+        except Exception as X:
+            raise _ellipticError(Elliptic._fRF3RD, x, y, z, m, cause=X)
+        return float(R)
+
+    @staticmethod
     def fRG(x, y, z=0):
         '''Symmetric or complete symmetric integral of the second kind
            C{RG(x, y, z)} respectively C{RG(x, y)}.
@@ -1245,16 +1256,6 @@ class Elliptic(_Named):
             return float(_RJ(x, y, z, p))
         except Exception as X:
             raise _ellipticError(Elliptic.fRJ, x, y, z, p, cause=X)
-
-    @staticmethod
-    def _RFRD(x, y, z, m):  # in .auxilats.AuxDLat.DE, -.AuxLat.Rectifying
-        try:  # float(RF(x, y, z) - RD(x, y, z, 3 / m))
-            R = _RF3(x, y, z)
-            if m:
-                R -= _RD(x, y, z, _3_0 / m)
-        except Exception as X:
-            raise _ellipticError(Elliptic._RFRD, x, y, z, m, cause=X)
-        return float(R)
 
 _allPropertiesOf_n(16, Elliptic)  # PYCHOK assert, see Elliptic.reset
 

@@ -26,7 +26,7 @@ from pygeodesy.utily import atan1, atan2  # from .auxilats.auxily
 from math import cos, sin, sqrt
 
 __all__ = ()
-__version__ = '25.05.12'
+__version__ = '26.01.20'
 
 
 class AuxDLat(AuxLat):
@@ -107,10 +107,9 @@ class AuxDLat(AuxLat):
             t2  = _1_0 + t**2
             Dt *= _2_0 / t2
             sk2 = (d * Dt)**2 * k2
-            d2  = _1_0 - sk2
             c2  = ((_1_0 - t) * (_1_0 + t) / t2)**2 if t else _1_0
             # E(z)/sin(z)
-            Dt *= _Ef._RFRD(c2, d2, _1_0, sk2) - k2 * sx * sy
+            Dt *= _Ef._fRF3RD(c2, _1_0, sk2) - k2 * sx * sy
         return Dt
 
     def DIsometric(self, Phi1, Phi2):

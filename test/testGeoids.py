@@ -4,7 +4,7 @@
 # Test L{geoids} interpolators.
 
 __all__ = ('Tests',)
-__version__ = '24.12.29'
+__version__ = '26.01.21'
 
 import warnings  # PYCHOK expected
 # RuntimeWarning: numpy.ufunc size changed, may indicate binary
@@ -255,6 +255,7 @@ class Tests(TestsBase):
     _epsHeight =  0.010  # 1 centi-meter
     _hIndex    =  0  # invalid
     _kind      =  3
+    _stats     =  True
 
     def dat5llhs3(self, grid, hIndex=4):
         # Generate test 3-tuples (lat, lon, expected)
@@ -290,7 +291,8 @@ class Tests(TestsBase):
                         e = abs(h - expected)
                         if e_max < e:
                             e_max = e
-                        w.fadd_(e)
+                        if self._stats:
+                            w.fadd_(e)  # VERY slow!
                         self.test(t, h, expected, fmt='%.3f', known=e < eps)
                     except GeoidError as x:
                         self.test(t, str(x), '%.3f' % (expected,),
@@ -310,10 +312,11 @@ class Tests(TestsBase):
                     t = '%smax (in %s FAILED)' % (h, f)
                     x = eps if f > 0 else e_max
                     self.test(t, e_max, x, fmt='%.6f', known=e_max < eps, nl=1)
-                    for t, x in (('mean',  w.fmean()),
-                                 ('stdev', w.fstdev())):
-                        t = '%s%s (of %s total)' % (h, t, len(w))
-                        self.test(t, x, x, fmt='%.6f')
+                    if self._stats:
+                        for t, x in (('mean',  w.fmean()),
+                                     ('stdev', w.fstdev())):
+                            t = '%s%s (of %s total)' % (h, t, len(w))
+                            self.test(t, x, x, fmt='%.6f')
 
                 # print('%r\n\n%r' % (g, getattr(g, 'pgm', None)))
                 if coverage:
@@ -365,7 +368,7 @@ if __name__ == '__main__':  # PYCHOK internal error?
 
         if '-crop'.startswith(g_) and len(g_) > 1:
             t._crop4 = _CONUS
-        elif '-karney'.startswith(g_) and len(g_) > 1:
+        elif '-karney'.startswith(g_) and len(g_) > 2:
             _GeoidEGM = GeoidKarney
         elif '-pgm'.startswith(g_) and len(g_) > 1:
             _GeoidEGM = GeoidPGM
@@ -376,16 +379,17 @@ if __name__ == '__main__':  # PYCHOK internal error?
         elif '-dat'.startswith(g_) and len(g_) > 1:
             # load GeoidHeights.dat from file
             f = open(gs.pop(0), 'rb')
-            if f.read(2) == b'\037\213':  # .gz
+            if f.read(2) == b'\037\213':  # .dat.gz
                 t.test('-dat <file.dat>', f.name, '-.dat')
                 t.exit()
             f.seek(0, _SEEK_SET)
             t._dat5tests = f
+            t._stats = False  # too slow
         elif '-eps'.startswith(g_) and len(g_) > 1:
             t._epsHeight = float(gs.pop(0))
         elif '-hindex'.startswith(g_) and len(g_) > 1:
             t._hIndex = int(gs.pop(0))
-        elif '-kind'.startswith(g_) and len(g_) > 1:
+        elif '-kind'.startswith(g_) and len(g_) > 2:
             t._kind = int(gs.pop(0))
         else:
             gs.insert(0, g)
@@ -405,7 +409,7 @@ if __name__ == '__main__':  # PYCHOK internal error?
             if g_.endswith('.pgm',):
                 # Karney or PGM geoids .../egm*.pgm
                 if _GeoidEGM:
-                    t.testGeoid(_GeoidEGM, g, t.dat5llhs3(g), crop=t._crop4)
+                    t.testGeoid(_GeoidEGM, g, t.dat5llhs3(g), crop=t._crop4, kind=t._kind)
                 else:
                     t.testGeoid(GeoidKarney, g, t.dat5llhs3(g), kind=2, eps=0.12)
                     t.testGeoid(GeoidKarney, g, t.dat5llhs3(g), kind=3)

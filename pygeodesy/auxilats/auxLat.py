@@ -48,7 +48,7 @@ except ImportError:  # Python 3.11-
         return pow(_2_0, x)
 
 __all__ = ()
-__version__ = '25.05.12'
+__version__ = '26.01.20'
 
 _TRIPS = 1024  # XXX 2 or 3?
 
@@ -621,19 +621,18 @@ class AuxLat(AuxAngle):
             ka,  kb  = kb,  ka
             ka1, kb1 = kb1, ka1
             sb,  cb  = cb,  sb
-        # now a, b = larger/smaller semiaxis
-        # Beta measured from larger semiaxis
+        # now a, b = larger/smaller semi-axis
+        # Beta measured from larger semi-axis
         # kb, ka = modulus-squared for distance from Beta = 0, pi/2
         # NB kb <= 0; 0 <= ka <= 1
         # sa = b*E(Beta, sqrt(kb))
         # sb = a*E(Beta',sqrt(ka))
         # 1 - ka * (1 - sb2) = 1 - ka + ka*sb2
-        sb2 =  sb**2
-        cb2 =  cb**2
-        da2 =  ka1 + ka * sb2
-        db2 = _1_0 - kb * sb2
+        sb2 = sb**2
+        cb2 = cb**2
+        da2 = ka1 + ka * sb2
         # DLMF Eq. 19.25.9
-        my = b * sb * _Ef._RFRD(cb2, db2, _1_0, kb * sb2)
+        my = b * sb * _Ef._fRF3RD(cb2, _1_0, kb * sb2)
         # DLMF Eq. 19.25.10 with complementary angles
         mx = a * cb * (_Ef.fRF(sb2,  da2, _1_0) * ka1 +
             ka * cb2 * _Ef.fRD(sb2, _1_0,  da2, _3_0) * ka1 +
