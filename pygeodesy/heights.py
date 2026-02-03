@@ -59,7 +59,7 @@ C{>>> h1, h2, ... = hinterpolator.height_(lat1, lon1, lat2, lon2, ...)}
        L{HeightSmoothBiSpline} require package U{scipy<https://SciPy.org>}.
        Classes L{HeightIDWkarney} and L{HeightIDWdistanceTo} -if used with
        L{ellipsoidalKarney.LatLon} points- require I{Karney}'s U{geographiclib
-       <https://PyPI.org/project/geographiclib>} to be installed.
+       <https://PyPI.org/project/geographiclib>} package to be installed.
 
 @note: Errors from C{scipy} are raised as L{SciPyError}s.  Warnings issued
        by C{scipy} can be thrown as L{SciPyWarning} exceptions, provided
@@ -92,7 +92,7 @@ from pygeodesy.units import _isDegrees, Float_, Int_
 # from math import radians  # from .points
 
 __all__ = _ALL_LAZY.heights
-__version__ = '25.09.29'
+__version__ = '26.02.02'
 
 _error_  = 'error'
 _formy   = _MODS.into(formy=__name__)
@@ -160,7 +160,7 @@ def _orderedup(ts, lo=EPS, hi=PI2-EPS):
     return sorted(set(max(lo, min(hi, t)) for t in ts))  # list
 
 
-def _xyhs(wrap=False, _lat=_90_0, _lon=_180_0, **name_lls):
+def _xyhs(wrap=False, _lat=_90_0, _lon=_180_0, height=True, **name_lls):
     # map (lat, lon, h) to (x, y, h) in radians, offset
     # x as 0 <= lon <= PI2 and y as 0 <= lat <= PI
     name, lls = _xkwds_item2(name_lls)
@@ -168,8 +168,9 @@ def _xyhs(wrap=False, _lat=_90_0, _lon=_180_0, **name_lls):
     try:
         for i, ll in enumerate(lls):
             y, x = _w(ll.lat, ll.lon)
-            yield max(_0_0, _r(x + _lon)), \
-                  max(_0_0, _r(y + _lat)), ll.height
+            h = ll.height if height else 0
+            yield (max(_0_0, _r(x + _lon)),
+                   max(_0_0, _r(y + _lat)), h)
     except Exception as x:
         i = Fmt.INDEX(name, i)
         raise HeightError(i, ll, cause=x)
@@ -266,9 +267,9 @@ class _HeightBase(_HeightNamed):  # in .geoids
         # convert lli C{LatLon}s to tuples or C{NumPy} arrays of
         # C{SciPy} sphericals and determine the return type
         atype = self.numpy.array
-        wrap = _xkwds(wrap, wrap=self._wrap)
+        kwds = _xkwds(wrap, wrap=self._wrap, height=False)
         _as, llis   = _as_llis2(llis)
-        xis, yis, _ =  zip(*_xyhs(llis=llis, **wrap))  # PYCHOK yield
+        xis, yis, _ =  zip(*_xyhs(llis=llis, **kwds))  # PYCHOK yield
         return _as, atype(xis), atype(yis), llis
 
     def _ev(self, *args):  # PYCHOK no cover
