@@ -11,14 +11,14 @@ the C{Geod3Solve} executable or use property L{Geodesic3Solve.Geod3Solve
 '''
 
 from pygeodesy.angles import Ang, Deg, isAng,  hypot
-from pygeodesy.basics import _xinstanceof  # typename
+from pygeodesy.basics import _xinstanceof,  _MODS  # typename
 from pygeodesy.constants import _0_0, _0_5, _360_0, _over
+# from pygeodesy.ellipses import Ellipse  # _MODS
 from pygeodesy.errors import GeodesicError, _xkwds_get
 # from pygeodesy.fmath import hypot  # from .angles
-# from pygeodesy.geodesicx import GeodesicAreaExact  # _MODS
 from pygeodesy.interns import NN, _a12_, _DMAIN_, _s12_, _UNDER_, _UNUSED_
 from pygeodesy.karney import Caps, _GTuple, _Xables,  sincos2d
-# from pygeodesy.lazily import _ALL_DOCS, _ALL_LAZY  # from .solveBase
+# from pygeodesy.lazily import _ALL_DOCS, _ALL_LAZY, _ALL_MODS as _MODS
 from pygeodesy.props import Property, Property_RO, property_RO
 from pygeodesy.solveBase import _Solve3Base,  _ALL_DOCS, _ALL_LAZY
 from pygeodesy.triaxials.triaxial3 import Triaxial3, Triaxial3s
@@ -26,7 +26,7 @@ from pygeodesy.units import Degrees, Meter
 # from pygeodesy.utily import sincos2d  # from .karney
 
 __all__ = _ALL_LAZY.geod3solve
-__version__ = '26.01.04'
+__version__ = '26.02.12'
 
 _Triaxial3_WGS84 = Triaxial3s.WGS84_3r  # a=6378172, b=6378102, c=6356752
 
@@ -175,14 +175,15 @@ class Geodesic3Solve(_Geodesic3SolveBase):
     def _a12d(self, r):
         '''(INTERNAL) Add arc C{a12} in degrees to C{GDict}.
         '''
-        a = r.s12 or _0_0
-        if a:
-            t =  self.triaxial3
+        d = r.s12
+        if d:
+            a, b, c = self.triaxial3.abc3
+            E = _MODS.ellipses.Ellipse
             z = _toAzi(r.alp1) + _toAzi(r.alp2)
-            s, c = sincos2d(z * _0_5)
-            a *= hypot(_over(s, t.perimeter4ab),  # azimuth!
-                       _over(c, t.perimeter4bc)) * _360_0
-        r[_a12_] = a
+            s, z = sincos2d(z * _0_5)
+            d *= hypot(_over(s, E(a, b).perimeter2k),  # azimuth!
+                       _over(z, E(b, c).perimeter2k)) * _360_0
+        r[_a12_] = d or _0_0
         return r
 
     def Direct(self, bet1, omg1, alp1, s12, outmask=_UNUSED_, **unit):  # PYCHOK unused
@@ -483,7 +484,7 @@ if __name__ == _DMAIN_:
 
 # **) MIT License
 #
-# Copyright (C) 2016-2026 -- mrJean1 at Gmail -- All Rights Reserved.
+# Copyright (C) 2025-2026 -- mrJean1 at Gmail -- All Rights Reserved.
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),

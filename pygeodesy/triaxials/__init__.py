@@ -18,7 +18,7 @@ from pygeodesy.lazily import _ALL_LAZY, _ALL_OTHER, _lazy_import_as, _unLazy0
 # from pygeodesy.triaxials.bases import TriaxialError  # likewise
 
 __all__ = _ALL_LAZY.triaxials  # _triaxial5  # likewise
-__version__ = '25.12.04'
+__version__ = '26.02.06'
 
 if _unLazy0:  # or _isfrozen
     from pygeodesy.triaxials.bases import LLK, TriaxialError

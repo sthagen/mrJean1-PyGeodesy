@@ -34,8 +34,8 @@ from pygeodesy.constants import EPS, INF, INT0, PI, PI2, PI_4, \
 from pygeodesy.constants import _EPSjam  # PYCHOK used!
 from pygeodesy.ellipsoids import _EWGS84,  Fmt, unstr
 from pygeodesy.errors import GeodesicError, IntersectionError, _an, \
-                            _xgeodesics, _xkwds_get, _xkwds_kwds, \
-                            _xkwds_pop2
+                            _xgeodesics, _xkwds, _xkwds_get, \
+                            _xkwds_kwds, _xkwds_pop2
 # from pygeodesy.errors import exception_chaining  # _MODS
 from pygeodesy.fmath import euclid, fdot
 from pygeodesy.fsums import Fsum, fsum1_,  _ceil
@@ -51,14 +51,14 @@ from pygeodesy.props import deprecated_method, Property, \
 from pygeodesy.solveBase import _SolveCapsBase,  pairs
 # from pygeodesy.streprs import pairs  # from .solveBase
 # from pygeodesy.streprs import Fmt, unstr  # from .ellipsoids
-from pygeodesy.units import Azimuth as Azi, Degrees, Float, Int, \
-                           _isDegrees,  Lat, Lon, Meter, Meter_
+from pygeodesy.units import Azimuth as Azi, Degrees, Int, _isDegrees, \
+                            Lat, Lon, Meter, Meter_
 from pygeodesy.utily import atan2, sincos2,  fabs, radians
 
 # from math import ceil as _ceil, fabs, radians  # .fsums, .utily
 
 __all__ = _ALL_LAZY.geodesici
-__version__ = '25.12.31'
+__version__ = '26.02.04'
 
 _0t     =  0,  # int
 _1_1t   = -1, +1
@@ -80,26 +80,25 @@ _TRIPS  =  128
 
 
 class XDict(ADict):
-    '''4+Item result from L{Intersectool} and L{Intersector} methods
-       C{All}, C{Closest}, C{Next} and C{Segment} with the intersection
-       offsets C{sA}, C{sB} and C{sX0} in C{meter} and the coincidence
-       indicator C{c}, an C{int}, +1 for parallel, -1 for anti-parallel
-       or 0 otherwise.
+    '''4+Item result from L{Intersectool} and L{Intersector} methods C{All},
+       C{Closest}, C{Next} and C{Segment} with the intersection offsets
+       C{sA}, C{sB} and C{sX0} in C{meter} and the coincidence indicator
+       C{c}, an C{int}, +1 for parallel, -1 for anti-parallel or 0 otherwise.
 
-       Offsets C{sA} and C{sB} are distances measured I{along} geodesic
-       line C{glA} respectively C{glB}, but C{sX0} is the I{L1-distance}
-       between the intersection and the I{origin} C{X0}.
+       Offsets C{sA} and C{sB} are distances measured I{along} geodesic line
+       C{glA} respectively C{glB}, but C{sX0} is the I{L1-distance} between
+       the intersection and the I{origin} C{X0}.
 
-       If present, distance C{sAB} and angular distance C{aAB} represent
-       the difference between the intersection point on geodesic lines
-       C{glA} and C{glB} in C{meter} respectively C{degrees}, typically
-       below C{5e-9 meter} or C{5 nm} and C{5e-14 degrees} or C{1 n"}.
+       If present, distance C{sAB} and angular distance C{aAB} represent the
+       separation between the intersection point on geodesic lines C{glA}
+       and C{glB} in C{meter} respectively C{degrees}, typically below
+       C{5e-9 meter} or C{5 nm} respectively C{5e-14 degrees} or C{1 n"}.
 
        For segments, indicators C{kA} and C{kB} are C{0} if the segments
        intersect or C{-1} or C{+1} if the intersection is I{before} the
        start, respectively I{after} the end of the segment, similar to
-       L{Intersection3Tuple<Intersection3Tuple>}.  Segment indicator
-       C{k} is I{Karney}'s C{segmode}, equal C{kA * 3 + kB}.
+       L{Intersection3Tuple<Intersection3Tuple>}.  Segment indicator C{k}
+       is I{Karney}'s C{segmode}, equal C{kA * 3 + kB}.
     '''
     _Delta = EPS  # default margin, see C{Intersector._Delto}
 
@@ -130,8 +129,9 @@ class XDict(ADict):
 
     def __lt__(self, other):
         # _xinstanceof(XDict, other=other)
-        return (self.sA < other.sA or (self.sA == other.sA and  # PYCHOK sA
-                self.sB < other.sB) and self != other)  # PYCHOK sB
+        return self.sA < other.sA or (self.sA == other.sA and  # PYCHOK sA
+                                      self.sB <  other.sB and  # PYCHOK sB
+                                      self    != other)
 
     def __ne__(self, other):
         # _xinstanceof(XDict, other=other)
@@ -303,7 +303,7 @@ class _IntersectBase(_NamedBase):
 
     @property_RO
     def geodesic(self):
-        '''Get the C{geodesic} (C{Geodesic...}).
+        '''Get the C{Geodesic} (C{GeodesicExact, GeodesicSolve, or ...}).
         '''
         return self._g
 
@@ -323,8 +323,8 @@ class _IntersectBase(_NamedBase):
 
     def intersect7(self, start1, end1, start2, end2, X0=_X000, aMaX0=0, sMaX0=_cWGS84,
                                                                **LatLon_and_kwds):
-        '''Yield the intersection points of two lines, each defined by two (ellipsoidal)
-           points or by an (ellipsoidal) start point and an azimuth from North.
+        '''Yield the intersections of two geodesic lines, each defined by a start
+           and end point or by a start point and an azimuth (bearing from North).
 
            @arg start1: Start point of the first line (C{LatLon}).
            @arg end1: End point of the first line (C{LatLon}) or the azimuth at the
@@ -477,7 +477,7 @@ class Intersectool(_IntersectBase, _SolveCapsBase):
     def __init__(self, a_geodesic=None, f=None, **name):
         '''New L{IntersectTool}.
 
-           @arg a_geodesic: Earth' equatorial axis (C{meter}) or a geodesic
+           @arg a_geodesic: Earth' equatorial axis (C{meter}) or a C{Geodesic}
                             (L{GeodesicExact<pygeodesy.geodesicx.GeodesicExact>},
                             wrapped L{Geodesic<pygeodesy.geodesicw.Geodesic>} or
                             L{GeodesicSolve<pygeodesy.geodsolve.GeodesicSolve>}).
@@ -496,7 +496,7 @@ class Intersectool(_IntersectBase, _SolveCapsBase):
         _IntersectBase.__init__(self, g, **name)
 
     def All(self, glA, glB, X0=_X000, eps1=_0_0, aMaX0=0, **sMaX0_C):  # PYCHOK signature
-        '''Yield all intersection of two geodesic lines up to a limit.
+        '''Yield all intersections of two geodesic lines up to a limit.
 
            @kwarg eps1: Optional margin for the L{euclid<pygeodesy.euclid>}ean distance
                         (C{degrees}) between the C{(lat1, lon1)} points of both lines for
@@ -540,7 +540,7 @@ class Intersectool(_IntersectBase, _SolveCapsBase):
 
         sMaX0, _C = self._sMaX0_C2(**aMaX0_sMaX0_C)
         for X in self._XDictInvoke(_x, _sX0_, (A + a + B + b),
-                                   _C=_C, _R=sMaX0):
+                                              _C=_C, _R=sMaX0):
             if _C:
                 T = self._In5T(glA, glB, X, X)
                 if _aAB_ not in X:
@@ -550,7 +550,7 @@ class Intersectool(_IntersectBase, _SolveCapsBase):
             yield X.set_(c=int(X.c)), T
 
     def All5(self, glA, glB, X0=_X000, **aMaX0_sMaX0):
-        '''Yield all intersection of two geodesic lines up to a limit.
+        '''Yield all intersections of two geodesic lines up to a limit.
 
            @return: An L{Intersectool5Tuple} for each intersection.
         '''
@@ -626,8 +626,8 @@ class Intersectool(_IntersectBase, _SolveCapsBase):
         self._setXable(path)
 
     def Line(self, lat1, lon1, azi1_lat2, *lon2, **name):
-        '''Return a geodesic line from this C{Intersector}'s geodesic, specified by
-           two (goedetic) points or a (goedetic) point and an (forward) azimuth.
+        '''Return a geodesic line from this C{Intersector}'s geodesic, specified
+           by two points or a point and an azimuth (bearing from North).
 
            @return: A 3- or 6-item, named L{GDict}.
         '''
@@ -647,8 +647,7 @@ class Intersectool(_IntersectBase, _SolveCapsBase):
 
            @return: An L{XDict}.
         '''
-        X, _, _, _, _ = self._middle5(glA, glB, **_C)
-        return X
+        return self._middle5(glA, glB, **_C)[0]
 
     def _middle5(self, glA, glB, _C=False, **unused):
         # return intersections C{A} and C{B} and the
@@ -717,10 +716,9 @@ class Intersectool(_IntersectBase, _SolveCapsBase):
 
            @return: An L{XDict}.
         '''
-        X = self._XDictInvoke(self._i_alt, 'k',
-                                   (glA.lat1, glA.lon1, glA.lat2, glA.lon2,
-                                    glB.lat1, glB.lon1, glB.lat2, glB.lon2),
-                                   _C=_xkwds_get(_C_unused, _C=False))  # _R=None
+        X = self._XDictInvoke(self._i_alt, 'k', (glA.lat1, glA.lon1, glA.lat2, glA.lon2,
+                                                 glB.lat1, glB.lon1, glB.lat2, glB.lon2),
+                                                _C=_xkwds_get(_C_unused, _C=False))  # _R=None
         try:
             ks = self.k2kAkB(int(X.k))
         except Exception as x:
@@ -773,9 +771,9 @@ class Intersectool(_IntersectBase, _SolveCapsBase):
 
 
 class Intersector(_IntersectBase):
-    '''Finder of intersections between two goedesic lines, each an instance
-       of L{GeodesicLineExact<pygeodesy.geodesicx.GeodesicLineExact>},
-       wrapped L{GeodesicLine<pygeodesy.geodesicw.GeodesicLine>} or
+    '''Finder of intersections between two goedesic lines, each an instance of
+       L{GeodesicLineExact<pygeodesy.geodesicx.GeodesicLineExact>}, wrapped
+       L{GeodesicLine<pygeodesy.geodesicw.GeodesicLine>} or
        L{GeodesicLineSolve<pygeodesy.geodsolve.GeodesicLineSolve>}.
 
        @see: I{Karney}'s C++ class U{Intersect<https://GeographicLib.SourceForge.io/
@@ -786,12 +784,11 @@ class Intersector(_IntersectBase):
         '''New L{Intersector}.
 
            @arg geodesic: The geodesic (L{GeodesicExact<pygeodesy.geodesicx.GeodesicExact>},
-                                        wrapped L{Geodesic<pygeodesy.geodesicw.Geodesic>} or
-                                        L{GeodesicSolve<pygeodesy.geodsolve.GeodesicSolve>}).
+                          wrapped L{Geodesic<pygeodesy.geodesicw.Geodesic>} or
+                          L{GeodesicLineSolve<pygeodesy.geodsolve.GeodesicLineSolve>}).
            @kwarg name: Optional C{B{name}=NN} (C{str}).
 
-           @raise GeodesicError: The eccentricity of the B{C{geodesic}}'s ellipsoid is too
-                                 large or no initial convergence.
+           @raise GeodesicError: The B{C{geodesic}}'s ellipsoid is too eccentric or no initial convergence.
 
            @see: The B{Note} at I{Karney}'s C++ U{Intersect<https://GeographicLib.SourceForge.io/
                  C++/doc/classGeographicLib_1_1Intersect.html#ae41f54c9a44836f6c8f140f6994930cf>}.
@@ -799,27 +796,26 @@ class Intersector(_IntersectBase):
         _IntersectBase.__init__(self, geodesic, **name)
         E  = self.ellipsoid
         t1 = E.b * PI  # min distance between intersects
-        t2 = self._polarDist2(_90_0)[0] * _2_0  # furthest, closest intersect
-        t5 = self._Inversa12( _90_0)[0] * _2_0  # longest, shortest geodesic
+        t2 = self._polarDist2(_90_0)[0] * _2_0  # furthest distance to closest intersect
         if self.f > 0:
-            t3 = self._obliqDist4()[0]
-            t4 = t1
+            t3 = self._obliqDist4()[0]  # half furthest min distance to next intersect
+            t4 = t1  # capture radius for spherical
         else:  # PYCHOK no cover
-            t1, t2, t3 = t2, t1, t5
-            t4,  _,  _ = self._polarB3()
+            t1, t2 = t2, t1
+            t3 = self._Inversa12( _90_0)[0] * _2_0  # longest, shortest geodesic
+            t4 = self._polarB3()[0]
 
         self._D1 = d1 = t2 * _0_5  # ~E.L tile spacing for Closest
         self._D2 = d2 = t3 / _1_5  # tile spacing for Next
         self._D3 = d3 = t4 - self.Delta  # tile spacing for All
         self._T1 = t1  # min distance between intersects
         self._T2 = t2 = t1 * _2_0
-#       self._T5 = t5  # not used
         if not (d1 < d3 and d2 < d3 and d2 < t2):
             t = Fmt.PARENSPACED(_too_('eccentric'), E.e)
             raise GeodesicError(ellipsoid=E.toStr(terse=2), txt=t)
 
-    def All(self, glA, glB, X0=None, aMaX0=0, **sMaX0_C):  # MCCABE 13
-        '''Yield all intersection of two geodesic lines up to a limit.
+    def All(self, glA, glB, X0=None, aMaX0=0, **sMaX0_C):  # MCCABE 15
+        '''Yield all intersections of two geodesic lines up to a limit.
 
            @arg glA: A geodesic line (L{Line<Intersector.Line>}).
            @arg glB: An other geodesic line (L{Line<Intersector.Line>}).
@@ -921,7 +917,7 @@ class Intersector(_IntersectBase):
             S  = self._Spherical(glA, glB, X)
             X += S
             i += 1
-            if X.c or S.L1() <= self._Tol:  # or isnan
+            if X.c or not (S.L1() > self._Tol):  # or isnan
                 return self._Delto(X), i
 
         raise IntersectionError(Fmt.no_convergence(S.L1(), self._Tol))
@@ -947,7 +943,7 @@ class Intersector(_IntersectBase):
            @arg glB: An other geodesic line (L{Line<Intersector.Line>}).
            @kwarg X0: Optional I{origin} for I{L1-closeness} (L{XDict}).
            @kwarg _C: If C{True}, include the lat-/longitudes C{latA},
-                      C{lonA}, C{latB}, C{lonB} oon and distances C{sAB}
+                      C{lonA}, C{latB}, C{lonB} and distances C{sAB}
                       and C{aSB} between the intersections.
 
            @return: The intersection (L{XDict}) or C{None} if none found.
@@ -991,14 +987,14 @@ class Intersector(_IntersectBase):
         # else:
         #     solve for m23 = 0 using dm23 / ds3 = M32
         _S2, _abs, _1 = Fsum(s).fsum2_, fabs, _1_0
-        for _ in range(_TRIPS):
+        for _ in range(_TRIPS):  # 2..3
             m13, M13, M31 = self._m12_M12_M21(gl, s)
             # see "Algorithms for geodesics", eqs. 31, 32, 33.
             m23 = m13 * M12
             M32 = M31 * M12
             if m12:  # PYCHOK no cover
                 m23 -= m12 * M13
-                if m13:
+                if m12 and m13:
                     M32 += (_1 - M13 * M31) * m12 / m13
             if semi:
                 M23 = M13 * M21
@@ -1056,10 +1052,10 @@ class Intersector(_IntersectBase):
         return (self.f + _2_0) * self.a * PI_4
 
     @Property_RO
-    def _GeodesicLines(self):
-        '''(INTERNAL) Get the C{Geodesic...Line} class(es).
+    def _GeodesicLine(self):
+        '''(INTERNAL) Get the C{GeodesicLine} class (C{GeodesicLineExact, GeodesicLineSolve or ...}).
         '''
-        return type(self._Line()),
+        return type(self._Line()),  # as *args tuple
 
     def _In5T(self, glA, glB, S, X, k2=False, **_2X):
         # Return an intersection as C{Intersector5Tuple}.
@@ -1077,7 +1073,7 @@ class Intersector(_IntersectBase):
 
     def Line(self, lat1, lon1, azi1_lat2, *lon2, **name):
         '''Return a geodesic line from this C{Intersector}'s geodesic, specified by
-           two (goedetic) points or a (goedetic) point and an (initial) azimuth.
+           two points or a point and an azimuth (bearing from North).
 
            @arg lat1: Latitude of the first point (C{degrees}).
            @arg lon1: Longitude of the first point (C{degrees}).
@@ -1090,12 +1086,10 @@ class Intersector(_IntersectBase):
            @return: A line (from L{geodesic<Intersector.geodesic>}C{.Line} or
                     C{.InverseLine} method) with C{LINE_CAPS}.
         '''
-        args = self._ll3z4ll(lat1, lon1, azi1_lat2, *lon2)
-        gl   = self._g.InverseLine(*args, caps=Caps.LINE_CAPS) if lon2 else \
-               self._g.Line(       *args, caps=Caps.LINE_CAPS)
-        if name:
-            gl.name= name
-        return gl
+        args =  self._ll3z4ll(lat1, lon1, azi1_lat2, *lon2)
+        kwds = _xkwds(name, caps=Caps.LINE_CAPS)
+        return self._g.InverseLine(*args, **kwds) if lon2 else \
+               self._g.Line(       *args, **kwds)
 
     def _Line(self, lat1=0, lon1=0, azi1=0):
         return self._g.Line(lat1, lon1, azi1, caps=Caps.LINE_CAPS)
@@ -1248,12 +1242,11 @@ class Intersector(_IntersectBase):
             s1, lat1 = _pD2(latx + _1_0)
             s2, lat2 = \
             sx, latx = _pD2(latx)
-            prolate  =  self.f < 0
             # solve for ds(lat) / dlat = 0 with a quadratic fit
-            for _ in range(_TRIPS):
+            for _ in range(8):  # 1..2
                 t = (lat1 - lat0), (lat0 - lat2), (lat2 - lat1)
                 d = _d(t, s2, s1, s0) * _2_0
-                if not d:  # or isnan(d)
+                if not (d > 0 or d < 0):  # d == 0 or isnan(d)
                     break
                 lat = _d(t, (lat1 + lat0) * s2,
                             (lat0 + lat2) * s1,
@@ -1261,7 +1254,7 @@ class Intersector(_IntersectBase):
                 s0, lat0 =  s1, lat1
                 s1, lat1 =  s2, lat2
                 s2, lat2 = _pD2(lat)
-                if (s2 < sx) if prolate else (s2 > sx):
+                if (s2 < sx) if self.f < 0 else (s2 > sx):
                     sx, latx = s2, lat2
             if lats:
                 _, lat = _pD2(latx, lat2=True)
@@ -1409,8 +1402,8 @@ class Intersector(_IntersectBase):
 
     def _xLines(self, glA, glB, s13=False):
         # check two geodesic lines vs this geodesic
-        C, gls = Caps.LINE_CAPS, dict(glA=glA, glB=glB)
-        _xinstanceof(*self._GeodesicLines, **gls)
+        gls, C = dict(glA=glA, glB=glB), Caps.LINE_CAPS
+        _xinstanceof(*self._GeodesicLine, **gls)
         for n, gl in gls.items():
             try:
                 _xgeodesics(gl.geodesic, self.geodesic)
@@ -1449,7 +1442,7 @@ class Intersectool5Tuple(_NamedTuple):
               C{azi1} or C{lat2}, C{lon2} from the geodesic line C{glA}
               respectively C{glB} and the intersection location in C{latX},
               C{lonX}, distance C{s1X} in C{meter} and angular distance
-              C{a1M} in C{degrees} and the segment indicator C{kX}.  See
+              C{a1X} in C{degrees} and the segment indicator C{kX}.  See
               L{XDict} for more details.
     '''
     _Names_ = Intersect7Tuple._Names_[:5]
@@ -1469,6 +1462,7 @@ class Intersector5Tuple(Intersectool5Tuple):
               segment indicator C{kX}.  See L{XDict} for more details.
     '''
     _Names_ = Intersectool5Tuple._Names_
+#   _Units_ = Intersectool5Tuple._Units_
 
 
 class Middle5Tuple(Intersectool5Tuple):
@@ -1480,6 +1474,7 @@ class Middle5Tuple(Intersectool5Tuple):
        for more details.
     '''
     _Names_ = (_A_, _B_, 'sMM', 'aMM', _c_)
+#   _Units_ = Intersectool5Tuple._Units_
 
 
 class _List(list):
@@ -1526,14 +1521,14 @@ def _L1(a, b):
 
 __all__ += _ALL_DOCS(_IntersectBase)
 
-if __name__ == _DMAIN_:  # MCCABE 14
+if __name__ == _DMAIN_:  # MCCABE 36
 
     from pygeodesy import printf
     __help_ = '--help'
 
     def _main(args):
 
-        from pygeodesy import GeodesicExact
+        from pygeodesy import Float, GeodesicExact
         from pygeodesy.internals import _plural, _usage
         from pygeodesy.interns import _COLONSPACE_, _DOT_, _EQUAL_, \
                                       _i_, _m_, _n_, _version_, _X_
@@ -1687,7 +1682,8 @@ if __name__ == _DMAIN_:  # MCCABE 14
             raise
         exit(1)
 
-# % env PYGEODESY_INTERSECTTOOL=... python3 -m pygeodesy.geodesici --help
+
+# % env PYGEODESY_INTERSECTTOOL=<path-to-IntersectTool> python3 -m pygeodesy.geodesici --help
 
 # % python3 -m pygeodesy.geodesici -h
 #

@@ -6,7 +6,7 @@
 from __future__ import division as _; del _  # noqa: E702 ;
 
 __all__ = ('Tests',)
-__version__ = '25.12.30'
+__version__ = '26.02.06'
 
 from bases import Geod3Solve, numpy, random, startswith, TestsBase
 
@@ -207,7 +207,7 @@ class Tests(TestsBase):
 
         # <https://GeographicLib.SourceForge.io/C++/doc/Cart3Convert.1.html>
         T = TX = module.Conformal3(Triaxials.WGS84_3)
-        self.test(n, T, "name='WGS84_3', a=6378171.36, b=6378101.61, c=6356751.84, ", known=True)
+        self.test(n, T, "name='WGS84_3', a=6378171.36, b=6378101.6", known=startswith)  # b=6378101.609999999, c=6356751.84, ...
 
         n = T.forwardBetOmg.__name__
         t = T.forwardBetOmg(33.3, 44.4, M=True, unit=Degrees)

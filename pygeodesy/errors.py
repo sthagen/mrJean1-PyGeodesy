@@ -28,7 +28,7 @@ from pygeodesy.lazily import _ALL_LAZY, _ALL_MODS as _MODS, _PYTHON_X_DEV
 from copy import copy as _copy
 
 __all__ = _ALL_LAZY.errors  # _ALL_DOCS('_InvalidError', '_IsnotError')  _under
-__version__ = '25.12.02'
+__version__ = '26.02.12'
 
 _argument_   = 'argument'
 _basics      = _MODS.into(basics=__name__)
@@ -90,6 +90,14 @@ class _AttributeError(AttributeError):
     '''
     def __init__(self, *args, **kwds):
         _error_init(AttributeError, self, args, **kwds)
+
+
+class _ConvergenceError(ValueError):  # in .ellipses, .elliptic
+    '''(INTERNAL) Format a C{ConvergenceError}.
+    '''
+    def __init__(self, maxit, d, tol, **thresh):  # PYCHOK cause=None
+        t = _streprs.Fmt.no_convergence(d, tol, **thresh)
+        _error_init(ValueError, self, (), maxit=maxit, txt=t)
 
 
 class _ImportError(ImportError):
@@ -778,15 +786,15 @@ try:
 
     def _xkwds(kwds, **dflts):
         '''(INTERNAL) Update C{dflts} with specified C{kwds},
-           i.e. C{copy(kwds).update(dflts)}.
+           i.e. C{copy(dflts).update(kwds)}.
         '''
-        return ((dflts | kwds) if kwds else dflts) if dflts else kwds
+        return ((dflts | kwds) if dflts else kwds) if kwds else dflts
 
 except AttributeError:
 
     def _xkwds(kwds, **dflts):  # PYCHOK expected
         '''(INTERNAL) Update C{dflts} with specified C{kwds},
-           i.e. C{copy(kwds).update(dflts)}.
+           i.e. C{copy(dflts).update(kwds)}.
         '''
         d = dflts
         if kwds:

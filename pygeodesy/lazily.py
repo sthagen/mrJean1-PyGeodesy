@@ -221,6 +221,7 @@ _ALL_LAZY = _NamedEnum_RO(_name='_ALL_LAZY',
                      ecefLocals=_a(),  # module only
                      elevations=_a('Elevation2Tuple', 'GeoidHeight2Tuple',
                                    'elevation2', 'geoidHeight2'),
+                       ellipses=_a('Ellipse',),
                 ellipsoidalBase=_a(),  # module only
               ellipsoidalBaseDI=_a(),  # module only
                ellipsoidalExact=_a(),  # module only
@@ -234,8 +235,7 @@ _ALL_LAZY = _NamedEnum_RO(_name='_ALL_LAZY',
                                    'a_f2b', 'a_f_2b', 'b_f2a', 'b_f_2a',
                                    'e2f', 'e22f',
                                    'f2e2', 'f2e22', 'f2e32', 'f_2f', 'f2f_', 'f2f2', 'f2n', 'n2e2', 'n2f', 'n2f_'),
-                       elliptic=_a('Elliperim', 'Elliptic', 'EllipticError', 'Elliptic3Tuple',
-                                   'elliperim', 'elliperim_'),
+                       elliptic=_a('Elliptic', 'EllipticError', 'Elliptic3Tuple'),
                            epsg=_a('Epsg', 'EPSGError'),
                          errors=_a('AuxError', 'ClipError', 'CrossError', 'GeodesicError', 'IntersectionError',
                                    'NumPyError', 'LenError', 'LimitError', 'MGRSError',
@@ -407,7 +407,7 @@ _ALL_DEPRECATED = _NamedEnum_RO(_name='_ALL_DEPRECATED',
                                          'Lam_', 'LatLonExact4Tuple', 'NearestOn4Tuple', 'Ned3Tuple',
                                          'Phi_', 'RefFrameError', 'Rhumb7Tuple', 'RhumbOrder2Tuple',
                                          'Transform7Tuple', 'TriAngle4Tuple', 'UtmUps4Tuple', 'XDist'),
-                 deprecated_consterns=_a('EPS1_2', 'MANTIS', 'OK'),
+                 deprecated_consterns=_a('Elliperim', 'EPS1_2', 'MANTIS', 'OK'),
                      deprecated_datum=_a('Curvature2Tuple', 'Datum',  'Ellipsoid',  'Transform',  # assert
                                                             'Datums', 'Ellipsoids', 'Transforms',
                                          'R_FM', 'R_KM', 'R_M', 'R_MA', 'R_MB', 'R_NM', 'R_SM', 'R_VM'),
@@ -415,7 +415,8 @@ _ALL_DEPRECATED = _NamedEnum_RO(_name='_ALL_DEPRECATED',
                                          'clipCS3', 'clipDMS', 'clipStr', 'collins', 'copysign',  # ... and spherical flavors
                                          'cosineAndoyerLambert', 'cosineAndoyerLambert_',
                                          'cosineForsytheAndoyerLambert', 'cosineForsytheAndoyerLambert_',
-                                         'decodeEPSG2', 'encodeEPSG', 'enStr2', 'equirectangular_', 'equirectangular3',
+                                         'decodeEPSG2',
+                                         'elliperim', 'elliperim_', 'encodeEPSG', 'enStr2', 'equirectangular_', 'equirectangular3',
                                          'excessAbc', 'excessGirard', 'excessLHuilier',
                                          'false2f', 'falsed2f', 'float0', 'fStr', 'fStrzs', 'Fsum2product',
                                          'hypot3', 'inStr', 'isenclosedby', 'istuplist',
@@ -527,7 +528,7 @@ class _ALL_MODS(_internals._MODS_Base):
 _internals._MODS = _ALL_MODS = _ALL_MODS()  # PYCHOK singleton
 
 __all__ = _ALL_LAZY.lazily
-__version__ = '26.01.06'
+__version__ = '26.02.09'
 
 
 def _ALL_OTHER(*objs):

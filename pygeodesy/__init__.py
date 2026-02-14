@@ -422,6 +422,7 @@ if _init__all__ and not _lazy_import2:  # import and set __all__
     import pygeodesy.ecef                  as ecef                   # noqa: F401
     import pygeodesy.ecefLocals            as ecefLocals             # noqa: F401
     import pygeodesy.elevations            as elevations             # noqa: F401
+    import pygeodesy.ellipses              as ellipses               # noqa: F401
     import pygeodesy.ellipsoidalBase       as ellipsoidalBase        # noqa: F401 INTERNAL
     import pygeodesy.ellipsoidalBaseDI     as ellipsoidalBaseDI      # noqa: F401 INTERNAL
     import pygeodesy.ellipsoidalExact      as ellipsoidalExact       # noqa: F401
@@ -510,6 +511,7 @@ if _init__all__ and not _lazy_import2:  # import and set __all__
     from pygeodesy.ecef                  import *  # noqa: F403
 #   from pygeodesy.ecefLocals            import *  # noqa: F403
     from pygeodesy.elevations            import *  # noqa: F403
+    from pygeodesy.ellipses              import *  # noqa: F403
 #   from pygeodesy.ellipsoidalBase       import *  # noqa: F403 INTERNAL
 #   from pygeodesy.ellipsoidalBaseDI     import *  # noqa: F403 INTERNAL
 #   from pygeodesy.ellipsoidalExact      import *  # noqa: F403
@@ -626,7 +628,7 @@ else:
 
 from pygeodesy.internals import _version2,  _DOT_  # noqa: E402
 # from pygeodesy.interns import _DOT_  # from .internals
-__version__ = '26.02.02'
+__version__ = '26.02.16'
 # see setup.py for similar logic
 version     = _DOT_(*_version2(__version__, n=3))
 

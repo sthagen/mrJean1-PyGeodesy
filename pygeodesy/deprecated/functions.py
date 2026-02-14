@@ -7,6 +7,7 @@ u'''DEPRECATED functions kept for backward compatibility.
 # from pygeodesy.basics import copysign0  # _MODS_
 from pygeodesy.constants import EPS, R_M, float0_
 from pygeodesy.deprecated.classes import ClipCS3Tuple, TriAngle4Tuple, _TriAngle5Tuple
+# from pygeodesy.ellipses import Ellipse  # _MODS
 from pygeodesy.interns import NN, _area_, _COMMASPACE_, _negative_, \
                              _scalar_, _sep_, _SPACE_, _UNDER_, _value_
 from pygeodesy.lazily import _ALL_DEPRECATED, _ALL_MODS as _MODS
@@ -15,7 +16,7 @@ from pygeodesy.props import deprecated_function
 from pygeodesy.units import _1mm, Number_, Scalar_
 
 __all__ = _ALL_DEPRECATED.deprecated_functions
-__version__ = '24.12.31'
+__version__ = '26.02.12'
 
 _WGS84 = _UTM = object()
 
@@ -116,6 +117,20 @@ def decodeEPSG2(arg):  # PYCHOK no cover
        @return: 2-Tuple C{(zone, hemipole)}
     '''
     return tuple(_MODS.epsg.decode2(arg))
+
+
+@deprecated_function
+def elliperim(a, b, *deg2_1):  # PYCHOK no cover
+    '''DEPRECATED on 2026.02.12, use method L{pygeodesy.Ellipse.arc} or property L{pygeodesy.Ellipse.perimeter2k_}.'''
+    E = _MODS.ellipses.Ellipse(a, b)
+    return E.arc(*deg2_1) if deg2_1 else E.perimeter2k_
+
+
+@deprecated_function
+def elliperim_(a, b, *rad2_1):  # PYCHOK no cover
+    '''DEPRECATED on 2026.02.12, use method L{pygeodesy.Ellipse.arc_} or property L{pygeodesy.Ellipse.perimeter2k_}.'''
+    E = _MODS.ellipses.Ellipse(a, b)
+    return E.arc_(*rad2_1) if rad2_1 else E.perimeter2k_
 
 
 @deprecated_function

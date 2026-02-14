@@ -21,9 +21,10 @@ from pygeodesy.constants import EPS, INF, NAN, PI_2, \
                                _copysign_1_0, _over, _1_over, remainder, \
                                _0_0, _0_01, _0_5, _0_75, _1_0, _2_0, _4_0
 from pygeodesy.constants import _16_0  # PYCHOK used!
-from pygeodesy.fmath import hypot1,  _ALL_LAZY, Fmt
+# from pygeodesy.elliptic import Elliptic  # _MODS
+from pygeodesy.fmath import hypot1,  _ALL_LAZY, Fmt, _MODS
 from pygeodesy.interns import _DMAIN_, _scale_
-# from pygeodesy.lazily import _ALL_LAZY  # from .fmath
+# from pygeodesy.lazily import _ALL_LAZY, _ALL_MODS as _MODS  # from .fmath
 # from pygeodesy.named import _NamedTuple, _Pass  # from .namedTuples
 from pygeodesy.namedTuples import Vector2Tuple,  _Pass
 # from pygeodesy.props import Property_RO  # from .triaxials.angles
@@ -39,7 +40,7 @@ from pygeodesy.utily import sincos2
 from math import atan, atanh, exp, fabs, log, sinh, sqrt
 
 __all__ = _ALL_LAZY.triaxials_conformal3
-__version__ = '25.11.29'
+__version__ = '26.02.09'
 
 _gam_    = 'gam'
 _LOG2MIN =  log(EPS) * _2_0
@@ -115,8 +116,8 @@ class Conformal3(_Triaxial3Base):
         x, y = self.xyQ2
         # Find C{b, k2, kp2} s.t. C{b * K(kp2) = x},
         # C{b * K(k2) = y} and C{x * K(k2) - y * K(kp2) = 0}.
-        _EF = self._Elliptic
-        _xy = x < y
+        _EF = _MODS.elliptic.Elliptic
+        _xy =  x < y
         if _xy:
             x, y = y, x
         # Now x >= y, k2 <= 1/2
@@ -389,8 +390,8 @@ class Conformal3Sphere(Triaxial3B):  # note C{Triaxial3}!
            @see: L{Triaxial3<triaxials.triaxial3.Triaxial3>} for more information.
         '''
         self._init_abc3_e2_k2_kp2(Radius_(radius), 0, k2, kp2, **name)
-        # self._xE = self._Elliptic(kp2, 0, k2,  **name)  # _Triaxial3Base._xE
-        # self._yE = self._Elliptic(k2,  0, kp2, **name)  # _Triaxial3Base._yE
+        # self._xE = _MODS.elliptic.Elliptic(kp2, 0, k2,  **name)  # _Triaxial3Base._xE
+        # self._yE = _MODS.elliptic.Elliptic(k2,  0, kp2, **name)  # _Triaxial3Base._yE
 
 
 def _bet_omg_name(bet, omg, unit=Radians, **name):
@@ -562,24 +563,24 @@ if __name__ == _DMAIN_:
     # name='WGS84_3', a=6378171.36, b=6378101.609999999, c=6356751.84, ...
     t = T.forwardBetOmg(Ang.fromDegrees(33.3), Ang.fromDegrees(44.4), M=True)
     printf((t.x, t.y, t.scale))
-    # (-5077802.461853351, 3922572.0186951873, 1.197034384522207)
-    #  -5077732.396        3922571.859         1.1970343759  C++
+    # (-5077726.431878843, 3922574.862034525, 1.1970322930902468)
+    #  -5077732.396        3922571.859        1.1970343759  C++
     t = T.reverseBetOmg(*t[:2], M=True)
     printf((t.bet.degrees0, t.omg.degrees0, t.scale))
-    # (33.47654394192169, 44.39937131735643, 1.1994622456567812)
-    #  33.30000000        44.40000000        1.1970343759  C++
+    # (33.300000000000004, 44.39999999999999, 1.1970322930902468)
+    #  33.30000000         44.40000000        1.1970343759  C++
 
     T = Conformal3(Triaxials.WGS84_3r)  # rounded
     printf(T)
     # name='WGS84_3r', a=6378172, b=6378102, c=6356752, ...
     t = T.forwardBetOmg(Degrees(33.3), Degrees(44.4), M=True)
     printf((t.x, t.y, t.scale))
-    # (-5077802.439189989, 3922571.859124643, 1.197034375926918)
+    # (-5077732.396020001, 3922571.859124643, 1.197034375926918)
     #  -5077732.396        3922571.859        1.1970343759  C++
     t = T.reverseBetOmg(*t[:2], M=True)
     printf((t.bet.degrees0, t.omg.degrees0, t.scale))
-    # (33.47654654826102, 44.39937131735643, 1.1994622731246583)
-    #  33.30000000        44.40000000        1.1970343759  C++
+    # (33.3,       44.400000000000006, 1.197034375926918)
+    #  33.30000000 44.40000000         1.1970343759  C++
 
     c = 6378137 * (1 - 1 / (298257223563 / 1000000000))
     T = Conformal3(6378172, 6378102, c)
@@ -587,12 +588,26 @@ if __name__ == _DMAIN_:
     # name='', a=6378172, b=6378102, c=6356752.314245179, ...
     t = T.forwardBetOmg(Degrees(33.3), Degrees(44.4), M=True)
     printf((t.x, t.y, t.scale))
-    # (-5077802.461853351, 3922572.0186951873, 1.197034384522207)
+    # (-5077732.418682504, 3922572.0186951878, 1.197034384522207)
     #  -5077732.396        3922571.859         1.1970343759  C++
     t = T.reverseBetOmg(*t[:2], M=True)
     printf((t.bet.degrees0, t.omg.degrees0, t.scale))
-    # (33.47654394192169, 44.39937131735643, 1.1994622456567812)
-    #  33.30000000        44.40000000        1.1970343759  C++
+    # (33.300000000000004, 44.4,        1.197034384522207)
+    #  33.30000000         44.40000000  1.1970343759  C++
+
+# % python3 -m pygeodesy.triaxials.conformal3
+
+# name='WGS84_3', a=6378171.36, b=6378101.609999999, c=6356751.84, k2=0.996738165, kp2=0.003261835, volume=1083207064030173855744, area=510065541435967.4375, R2=6371006.679496506, area_p=510065546301413.5625
+# (-5077726.431878843, 3922574.862034525, 1.1970322930902468)
+# (33.300000000000004, 44.39999999999999, 1.1970322930902468)
+
+# name='WGS84_3r', a=6378172, b=6378102, c=6356752, k2=0.996726547, kp2=0.003273453, volume=1083207266220584468480, area=510065604942135.9375, R2=6371007.076110449, area_p=510065609807745.0
+# (-5077732.396020001, 3922571.859124643, 1.197034375926918)
+# (33.3, 44.400000000000006, 1.197034375926918)
+
+# name='', a=6378172, b=6378102, c=6356752.314245179, k2=0.996726499, kp2=0.003273501, volume=1083207319768789942272, area=510065621722018.25, R2=6371007.180905545, area_p=510065626587483.3125
+# (-5077732.418682504, 3922572.0186951878, 1.197034384522207)
+# (33.300000000000004, 44.4, 1.197034384522207)
 
 # **) MIT License
 #

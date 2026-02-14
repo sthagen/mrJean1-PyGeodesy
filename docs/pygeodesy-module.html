@@ -612,7 +612,7 @@
 
 <hr />
 <div class="fields">      <p><strong>Version:</strong>
-        26.02.02
+        26.02.16
       </p>
 </div><!-- ==================== SUBMODULES ==================== -->
 <a name="section-Submodules"></a>
@@ -752,7 +752,8 @@
         href="pygeodesy.latlonBase-module.html" 
         class="link">pygeodesy.latlonBase</a> instead.</em>    </li>
     <li class="private"> <strong class="uidlink"><a href="pygeodesy.deprecated.classes-module.html" onclick="show_private();">pygeodesy.deprecated.classes</a></strong>: <em class="summary">DEPRECATED classes kept for backward compatibility.</em>    </li>
-    <li class="private"> <strong class="uidlink"><a href="pygeodesy.deprecated.consterns-module.html" onclick="show_private();">pygeodesy.deprecated.consterns</a></strong>: <em class="summary">DEPRECATED constants and interns kept for backward compatibility.</em>    </li>
+    <li class="private"> <strong class="uidlink"><a href="pygeodesy.deprecated.consterns-module.html" onclick="show_private();">pygeodesy.deprecated.consterns</a></strong>: <em class="summary">DEPRECATED constants, interns and singletons kept for backward 
+        compatibility.</em>    </li>
     <li> <strong class="uidlink"><a href="pygeodesy.deprecated.datum-module.html">pygeodesy.deprecated.datum</a></strong>: <em class="summary">DEPRECATED on 2022.09.12, use module <a 
         href="pygeodesy.datums-module.html" 
         class="link">pygeodesy.datums</a> or <a 
@@ -783,6 +784,8 @@
         module <code>ecef</code> to defer importing the latter into 
         <code>CartesianBase</code> and <code>LatLonBase</code>.</em>    </li>
     <li> <strong class="uidlink"><a href="pygeodesy.elevations-module.html">pygeodesy.elevations</a></strong>: <em class="summary">Web-services-based elevations and <code>CONUS</code> geoid heights.</em>    </li>
+    <li> <strong class="uidlink"><a href="pygeodesy.ellipses-module.html">pygeodesy.ellipses</a></strong>: <em class="summary">Class <code>Ellipse</code> for 2-D ellipse attributes, like 
+        perimeter, area, etc.</em>    </li>
     <li> <strong class="uidlink"><a href="pygeodesy.ellipsoidalBase-module.html">pygeodesy.ellipsoidalBase</a></strong>: <em class="summary">(INTERNAL) Private ellipsoidal base classes 
         <code>CartesianEllipsoidalBase</code> and 
         <code>LatLonEllipsoidalBase</code>.</em>    </li>
@@ -795,8 +798,8 @@
     <li> <strong class="uidlink"><a href="pygeodesy.ellipsoidalNvector-module.html">pygeodesy.ellipsoidalNvector</a></strong>: <em class="summary">Ellipsoidal, <code>N-vector</code>-based geodesy.</em>    </li>
     <li> <strong class="uidlink"><a href="pygeodesy.ellipsoidalVincenty-module.html">pygeodesy.ellipsoidalVincenty</a></strong>: <em class="summary">Ellipsoidal, <i>Vincenty</i>-based geodesy.</em>    </li>
     <li> <strong class="uidlink"><a href="pygeodesy.ellipsoids-module.html">pygeodesy.ellipsoids</a></strong>: <em class="summary">Ellipsoidal and spherical earth models.</em>    </li>
-    <li> <strong class="uidlink"><a href="pygeodesy.elliptic-module.html">pygeodesy.elliptic</a></strong>: <em class="summary"><i>Karney</i>'s elliptic integrals and elliptic and ellipse 
-        functions.</em>    </li>
+    <li> <strong class="uidlink"><a href="pygeodesy.elliptic-module.html">pygeodesy.elliptic</a></strong>: <em class="summary"><i>Karney</i>'s elliptic integrals and elliptic functions in pure 
+        Python.</em>    </li>
     <li> <strong class="uidlink"><a href="pygeodesy.epsg-module.html">pygeodesy.epsg</a></strong>: <em class="summary">European Petroleum Survey Group (EPSG) en-/decoding.</em>    </li>
     <li> <strong class="uidlink"><a href="pygeodesy.errors-module.html">pygeodesy.errors</a></strong>: <em class="summary">Errors, exceptions, exception formatting and exception chaining.</em>    </li>
     <li> <strong class="uidlink"><a href="pygeodesy.etm-module.html">pygeodesy.etm</a></strong>: <em class="summary">A pure Python version of <i>Karney</i>'s <code>Exact Transverse 
@@ -2252,9 +2255,19 @@
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pygeodesy.elliptic.Elliperim-class.html" class="summary-name">Elliperim</a><br />
-      Singleton with various methods to compute the perimeter of an 
-        ellipse.
+        <a href="pygeodesy.deprecated.consterns.Elliperim-class.html" class="summary-name">Elliperim</a><br />
+      DEPRECATED on 2026.02.06, use class <a 
+        href="pygeodesy.ellipses.Ellipse-class.html" 
+        class="link">Ellipse</a>.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pygeodesy.ellipses.Ellipse-class.html" class="summary-name">Ellipse</a><br />
+      Class to compute attributes of a 2-D ellipse, like perimeter, area 
+        and arcs.
     </td>
   </tr>
 <tr>
@@ -7940,14 +7953,11 @@
           <td><span class="summary-sig"><a href="pygeodesy-module.html#elliperim" class="summary-sig-name">elliperim</a>(<span class="summary-sig-arg">a</span>,
         <span class="summary-sig-arg">b</span>,
         <span class="summary-sig-arg">*deg2_1</span>)</span><br />
-      Compute the perimeter or an arc of an ellipse with semi-axes 
-      <code>a</code> and <code>b</code> using method <a 
-      href="pygeodesy.elliptic.Elliperim-class.html#e2k" 
-      class="link">Elliperim.e2k</a>, <a 
-      href="pygeodesy.elliptic.Elliperim-class.html#E2k" 
-      class="link">Elliperim.E2k</a> or <a 
-      href="pygeodesy.elliptic.Elliperim-class.html#arc" 
-      class="link">Elliperim.arc</a>.</td>
+      DEPRECATED on 2026.02.12, use method <a 
+      href="pygeodesy.ellipses.Ellipse-class.html#arc" 
+      class="link">pygeodesy.Ellipse.arc</a> or property <a 
+      href="pygeodesy.ellipses.Ellipse-class.html#perimeter2k_" 
+      class="link">pygeodesy.Ellipse.perimeter2k_</a>.</td>
           <td align="right" valign="top">
             
             
@@ -7966,14 +7976,11 @@
           <td><span class="summary-sig"><a href="pygeodesy-module.html#elliperim_" class="summary-sig-name">elliperim_</a>(<span class="summary-sig-arg">a</span>,
         <span class="summary-sig-arg">b</span>,
         <span class="summary-sig-arg">*rad2_1</span>)</span><br />
-      Compute the perimeter or an arc of an ellipse with semi-axes 
-      <code>a</code> and <code>b</code> using method <a 
-      href="pygeodesy.elliptic.Elliperim-class.html#e2k" 
-      class="link">Elliperim.e2k</a>, <a 
-      href="pygeodesy.elliptic.Elliperim-class.html#E2k" 
-      class="link">Elliperim.E2k</a> or <a 
-      href="pygeodesy.elliptic.Elliperim-class.html#arc_" 
-      class="link">Elliperim.arc_</a>.</td>
+      DEPRECATED on 2026.02.12, use method <a 
+      href="pygeodesy.ellipses.Ellipse-class.html#arc_" 
+      class="link">pygeodesy.Ellipse.arc_</a> or property <a 
+      href="pygeodesy.ellipses.Ellipse-class.html#perimeter2k_" 
+      class="link">pygeodesy.Ellipse.perimeter2k_</a>.</td>
           <td align="right" valign="top">
             
             
@@ -9848,7 +9855,7 @@
         <span class="summary-sig-arg">seed</span>=<span class="summary-sig-default">None</span>,
         <span class="summary-sig-arg">units</span>=<span class="summary-sig-default">''</span>,
         <span class="summary-sig-arg">distance</span>=<span class="summary-sig-default">None</span>,
-        <span class="summary-sig-arg">point</span>=<span class="summary-sig-default">&lt;function _point at 0x7ff398386f50&gt;</span>)</span><br />
+        <span class="summary-sig-arg">point</span>=<span class="summary-sig-default">&lt;function _point at 0x7fdf10399650&gt;</span>)</span><br />
       Compute the <code>directed</code> or <code>symmetric</code> <a 
       href="https://WikiPedia.org/wiki/Hausdorff_distance" 
       target="_top">Hausdorff</a> distance between 2 sets of points with or
@@ -15096,7 +15103,7 @@
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a name="version"></a><span class="summary-name">version</span> = <code title="'26.2.2'">'26.2.2'</code><br />
+        <a name="version"></a><span class="summary-name">version</span> = <code title="'26.2.16'">'26.2.16'</code><br />
       Normalized <code>pygeodesy</code> version (<code>str</code>).
     </td>
   </tr>
@@ -15914,7 +15921,8 @@ Transforms.WGS84: Transform(name='WGS84', tx=0.0, ty=0.0, tz=0.0, s1=1\
     </td><td class="summary">
         <a href="pygeodesy-module.html#Triaxial3s" class="summary-name">Triaxial3s</a> = <code title="Triaxial3s.WGS84_3r: Triaxial3(name='WGS84_3r', a=6378172, b=6378102, \
 c=6356752, k2=0.996726547, kp2=0.003273453, volume=1083207266220584468\
-480, area=510065604942135.9375, area_p=510065609807745.0)">Triaxial3s.WGS84_3r: Triaxial3(name='WGS84_3r', a<code class="variable-ellipsis">...</code></code>
+480, area=510065604942135.9375, R2=6371007.076110449, area_p=510065609\
+807745.0)">Triaxial3s.WGS84_3r: Triaxial3(name='WGS84_3r', a<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
@@ -19816,24 +19824,16 @@ c=6356752, k2=0.996726547, kp2=0.003273453, volume=1083207266220584468\
     </td>
   </tr></table>
   
-  <p>Compute the perimeter or an arc of an ellipse with semi-axes 
-  <code>a</code> and <code>b</code> using method <a 
-  href="pygeodesy.elliptic.Elliperim-class.html#e2k" 
-  class="link">Elliperim.e2k</a>, <a 
-  href="pygeodesy.elliptic.Elliperim-class.html#E2k" 
-  class="link">Elliperim.E2k</a> or <a 
-  href="pygeodesy.elliptic.Elliperim-class.html#arc" 
-  class="link">Elliperim.arc</a>.</p>
+  <p>DEPRECATED on 2026.02.12, use method <a 
+  href="pygeodesy.ellipses.Ellipse-class.html#arc" 
+  class="link">pygeodesy.Ellipse.arc</a> or property <a 
+  href="pygeodesy.ellipses.Ellipse-class.html#perimeter2k_" 
+  class="link">pygeodesy.Ellipse.perimeter2k_</a>.</p>
   <dl class="fields">
-    <dt>Arguments:</dt>
+    <dt>Decorators:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>deg2_1</code></strong> - Optional, arc end and start angle (<code>degrees</code>), see 
-          method <a href="pygeodesy.elliptic.Elliperim-class.html#arc" 
-          class="link">Elliperim.arc</a>.</li>
+        <li><code>@deprecated_function</code></li>
     </ul></dd>
-    <dt>Returns:</dt>
-        <dd>The perimeter or arc length (<code>scalar</code>, same units as 
-          <code>a</code> and <code>b</code>).</dd>
   </dl>
 </td></tr></table>
 </div>
@@ -19853,24 +19853,16 @@ c=6356752, k2=0.996726547, kp2=0.003273453, volume=1083207266220584468\
     </td>
   </tr></table>
   
-  <p>Compute the perimeter or an arc of an ellipse with semi-axes 
-  <code>a</code> and <code>b</code> using method <a 
-  href="pygeodesy.elliptic.Elliperim-class.html#e2k" 
-  class="link">Elliperim.e2k</a>, <a 
-  href="pygeodesy.elliptic.Elliperim-class.html#E2k" 
-  class="link">Elliperim.E2k</a> or <a 
-  href="pygeodesy.elliptic.Elliperim-class.html#arc_" 
-  class="link">Elliperim.arc_</a>.</p>
+  <p>DEPRECATED on 2026.02.12, use method <a 
+  href="pygeodesy.ellipses.Ellipse-class.html#arc_" 
+  class="link">pygeodesy.Ellipse.arc_</a> or property <a 
+  href="pygeodesy.ellipses.Ellipse-class.html#perimeter2k_" 
+  class="link">pygeodesy.Ellipse.perimeter2k_</a>.</p>
   <dl class="fields">
-    <dt>Arguments:</dt>
+    <dt>Decorators:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>rad2_1</code></strong> - Optional, arc end and start angle (<code>radians</code>), see 
-          method <a href="pygeodesy.elliptic.Elliperim-class.html#arc_" 
-          class="link">Elliperim.arc_</a>.</li>
+        <li><code>@deprecated_function</code></li>
     </ul></dd>
-    <dt>Returns:</dt>
-        <dd>The perimeter or arc length (<code>scalar</code>, same units as 
-          <code>a</code> and <code>b</code>).</dd>
   </dl>
 </td></tr></table>
 </div>
@@ -23600,7 +23592,7 @@ c=6356752, k2=0.996726547, kp2=0.003273453, volume=1083207266220584468\
         <span class="sig-arg">seed</span>=<span class="sig-default">None</span>,
         <span class="sig-arg">units</span>=<span class="sig-default">''</span>,
         <span class="sig-arg">distance</span>=<span class="sig-default">None</span>,
-        <span class="sig-arg">point</span>=<span class="sig-default">&lt;function _point at 0x7ff398386f50&gt;</span>)</span>
+        <span class="sig-arg">point</span>=<span class="sig-default">&lt;function _point at 0x7fdf10399650&gt;</span>)</span>
   </h3>
   </td><td align="right" valign="top"
     >&nbsp;
@@ -34286,7 +34278,8 @@ Transforms.WGS84: Transform(name='WGS84', tx=0.0, ty=0.0, tz=0.0, s1=1<span clas
       <dd><table><tr><td><pre class="variable">
 Triaxial3s.WGS84_3r: Triaxial3(name='WGS84_3r', a=6378172, b=6378102, <span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
 c=6356752, k2=0.996726547, kp2=0.003273453, volume=1083207266220584468<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-480, area=510065604942135.9375, area_p=510065609807745.0)
+480, area=510065604942135.9375, R2=6371007.076110449, area_p=510065609<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+807745.0)
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -34324,7 +34317,7 @@ c=6356752, k2=0.996726547, kp2=0.003273453, volume=1083207266220584468<span clas
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Tue Feb  3 11:00:30 2026
+    Generated by Epydoc 3.0.1 on Sat Feb 14 15:33:19 2026
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

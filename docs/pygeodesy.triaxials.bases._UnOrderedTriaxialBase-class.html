@@ -117,23 +117,6 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="pygeodesy.triaxials.bases._UnOrderedTriaxialBase-class.html#__str__" class="summary-sig-name">__str__</a>(<span class="summary-sig-arg">self</span>)</span><br />
-      Default <code>str(self)</code>.</td>
-          <td align="right" valign="top">
-            
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
           <td><span class="summary-sig"><a href="pygeodesy.triaxials.bases._UnOrderedTriaxialBase-class.html#area_p" class="summary-sig-name">area_p</a>(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">p</span>=<span class="summary-sig-default">1.6075</span>)</span><br />
       <i>Approximate</i> the surface area (<code>meter</code> 
@@ -324,6 +307,7 @@
       </p>
     <p class="indent-wrapped-lines"><b>Inherited from <code><a href="pygeodesy.named._NamedBase-class.html">named._NamedBase</a></code></b>:
       <code><a href="pygeodesy.named._NamedBase-class.html#__repr__">__repr__</a></code>,
+      <code><a href="pygeodesy.named._NamedBase-class.html#__str__">__str__</a></code>,
       <code><a href="pygeodesy.named._NamedBase-class.html#others">others</a></code>,
       <code><a href="pygeodesy.named._NamedBase-class.html#toRepr">toRepr</a></code>
       </p>
@@ -367,6 +351,42 @@
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
+        <a href="pygeodesy.triaxials.bases._UnOrderedTriaxialBase-class.html#R2" class="summary-name">R2</a><br />
+      Get the <i>authalic</i> earth radius (<code>meter</code>), <i 
+      class="math">sqrt(area / PI4)</i>.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pygeodesy.triaxials.bases._UnOrderedTriaxialBase-class.html#R3" class="summary-name">R3</a><br />
+      Get the <i>volumetric</i> earth radius (<code>meter</code>), <i 
+      class="math">(a * b * c)**(1/3)</i>.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pygeodesy.triaxials.bases._UnOrderedTriaxialBase-class.html#Rauthalic" class="summary-name">Rauthalic</a><br />
+      Get the <i>authalic</i> earth radius (<code>meter</code>), <i 
+      class="math">sqrt(area / PI4)</i>.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pygeodesy.triaxials.bases._UnOrderedTriaxialBase-class.html#Rvolumetric" class="summary-name">Rvolumetric</a><br />
+      Get the <i>volumetric</i> earth radius (<code>meter</code>), <i 
+      class="math">(a * b * c)**(1/3)</i>.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
         <a href="pygeodesy.triaxials.bases._UnOrderedTriaxialBase-class.html#a" class="summary-name">a</a><br />
       Get the <code>largest, x</code> semi-axis (<code>meter</code>, 
       conventionally).
@@ -378,6 +398,14 @@
     </td><td class="summary">
         <a href="pygeodesy.triaxials.bases._UnOrderedTriaxialBase-class.html#a2" class="summary-name">a2</a><br />
       Get <code>a**2</code>.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pygeodesy.triaxials.bases._UnOrderedTriaxialBase-class.html#abc3" class="summary-name">abc3</a><br />
+      Get the semi-axes as 3-tuple <code>(a, b, c)</code>.
     </td>
   </tr>
 <tr>
@@ -453,6 +481,15 @@
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
+        <a href="pygeodesy.triaxials.bases._UnOrderedTriaxialBase-class.html#isFlat" class="summary-name">isFlat</a><br />
+      Is this triaxial &quot;flat&quot;, too pro-/oblate 
+      (<code>bool</code>)?
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
         <a href="pygeodesy.triaxials.bases._UnOrderedTriaxialBase-class.html#isOrdered" class="summary-name">isOrdered</a><br />
       Is this triaxial <i>ordered</i> and <i>not spherical</i> 
       (<code>bool</code>)?
@@ -471,7 +508,9 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pygeodesy.triaxials.bases._UnOrderedTriaxialBase-class.html#perimeter4ab" class="summary-name">perimeter4ab</a><br />
-      Get the <code>ab</code> ellipse' perimeter (<code>scalar</code>).
+      DEPRECATED on 2026.02.09, use property <a 
+      href="pygeodesy.ellipses.Ellipse-class.html" 
+      class="link">Ellipse</a><code>(a, b).perimeter2k_</code>.
     </td>
   </tr>
 <tr>
@@ -479,7 +518,9 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pygeodesy.triaxials.bases._UnOrderedTriaxialBase-class.html#perimeter4ac" class="summary-name">perimeter4ac</a><br />
-      Get the <code>ac</code> ellipse' perimeter (<code>scalar</code>).
+      DEPRECATED on 2026.02.09, use property <a 
+      href="pygeodesy.ellipses.Ellipse-class.html" 
+      class="link">Ellipse</a><code>(a, c).perimeter2k_</code>.
     </td>
   </tr>
 <tr>
@@ -487,7 +528,9 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pygeodesy.triaxials.bases._UnOrderedTriaxialBase-class.html#perimeter4bc" class="summary-name">perimeter4bc</a><br />
-      Get the <code>bc</code> ellipse' perimeter (<code>scalar</code>).
+      DEPRECATED on 2026.02.09, use property <a 
+      href="pygeodesy.ellipses.Ellipse-class.html" 
+      class="link">Ellipse</a><code>(b, c).perimeter2k_</code>.
     </td>
   </tr>
 <tr>
@@ -581,30 +624,6 @@
     </ul></dd>
     <dt>Overrides:
         object.__init__
-    </dt>
-  </dl>
-</td></tr></table>
-</div>
-<a name="__str__"></a>
-<div>
-<table class="details" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr><td>
-  <table width="100%" cellpadding="0" cellspacing="0" border="0">
-  <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">__str__</span>&nbsp;(<span class="sig-arg">self</span>)</span>
-    <br /><em class="fname">(Informal representation operator)</em>
-  </h3>
-  </td><td align="right" valign="top"
-    >&nbsp;
-    </td>
-  </tr></table>
-  
-  <p>Default <code>str(self)</code>.</p>
-  <dl class="fields">
-    <dt>Overrides:
-        object.__str__
-        <dd><em class="note">(inherited documentation)</em></dd>
     </dt>
   </dl>
 </td></tr></table>
@@ -800,8 +819,6 @@
           <b><code>x_xyz</code></b> if <code>scalar</code>, ignored 
           otherwise.</li>
         <li><strong class="pname"><code>z</code></strong> - Z component (<code>scalar</code>), like <b><code>y</code></b>.</li>
-        <li><strong class="pname"><code>height</code></strong> - The signed height (<code>scalar</code>, same units as the 
-          triaxial axes).</li>
         <li><strong class="pname"><code>normal</code></strong> - If <code>True</code>, the <b><code>height</code></b> is 
           <i>perpendicular, plumb</i> to the triaxial's surface, otherwise 
           <code>radially</code> to the center of this triaxial 
@@ -1016,6 +1033,110 @@
     <span class="table-header">Property Details</span></td>
 </tr>
 </table>
+<a name="R2"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">R2</h3>
+  <p>Get the <i>authalic</i> earth radius (<code>meter</code>), <i 
+  class="math">sqrt(area / PI4)</i>.</p>
+  <dl class="fields">
+    <dt>Get method:</dt>
+    <dd class="value"><span class="summary-sig">R2(<span class="summary-sig-arg">self</span>)</span>
+        - Get the <i>authalic</i> earth radius (<code>meter</code>), <i 
+class="math">sqrt(area / PI4)</i>.
+    </dd>
+    <dt>Set method:</dt>
+    <dd class="value"><span class="summary-sig">_fset_error(<span class="summary-sig-arg">inst</span>,
+        <span class="summary-sig-arg">val</span>)</span>
+        - Throws an <code>AttributeError</code>, always.
+    </dd>
+    <dt>Delete Method:</dt>
+    <dd class="value"><span class="summary-sig">_fdel(<span class="summary-sig-arg">inst</span>)</span>
+        - Zap the <i>cached/memoized</i> <code>property</code> value.
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="R3"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">R3</h3>
+  <p>Get the <i>volumetric</i> earth radius (<code>meter</code>), <i 
+  class="math">(a * b * c)**(1/3)</i>.</p>
+  <dl class="fields">
+    <dt>Get method:</dt>
+    <dd class="value"><span class="summary-sig">R3(<span class="summary-sig-arg">self</span>)</span>
+        - Get the <i>volumetric</i> earth radius (<code>meter</code>), <i 
+class="math">(a * b * c)**(1/3)</i>.
+    </dd>
+    <dt>Set method:</dt>
+    <dd class="value"><span class="summary-sig">_fset_error(<span class="summary-sig-arg">inst</span>,
+        <span class="summary-sig-arg">val</span>)</span>
+        - Throws an <code>AttributeError</code>, always.
+    </dd>
+    <dt>Delete Method:</dt>
+    <dd class="value"><span class="summary-sig">_fdel(<span class="summary-sig-arg">inst</span>)</span>
+        - Zap the <i>cached/memoized</i> <code>property</code> value.
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="Rauthalic"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">Rauthalic</h3>
+  <p>Get the <i>authalic</i> earth radius (<code>meter</code>), <i 
+  class="math">sqrt(area / PI4)</i>.</p>
+  <dl class="fields">
+    <dt>Get method:</dt>
+    <dd class="value"><span class="summary-sig">R2(<span class="summary-sig-arg">self</span>)</span>
+        - Get the <i>authalic</i> earth radius (<code>meter</code>), <i 
+class="math">sqrt(area / PI4)</i>.
+    </dd>
+    <dt>Set method:</dt>
+    <dd class="value"><span class="summary-sig">_fset_error(<span class="summary-sig-arg">inst</span>,
+        <span class="summary-sig-arg">val</span>)</span>
+        - Throws an <code>AttributeError</code>, always.
+    </dd>
+    <dt>Delete Method:</dt>
+    <dd class="value"><span class="summary-sig">_fdel(<span class="summary-sig-arg">inst</span>)</span>
+        - Zap the <i>cached/memoized</i> <code>property</code> value.
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="Rvolumetric"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">Rvolumetric</h3>
+  <p>Get the <i>volumetric</i> earth radius (<code>meter</code>), <i 
+  class="math">(a * b * c)**(1/3)</i>.</p>
+  <dl class="fields">
+    <dt>Get method:</dt>
+    <dd class="value"><span class="summary-sig">R3(<span class="summary-sig-arg">self</span>)</span>
+        - Get the <i>volumetric</i> earth radius (<code>meter</code>), <i 
+class="math">(a * b * c)**(1/3)</i>.
+    </dd>
+    <dt>Set method:</dt>
+    <dd class="value"><span class="summary-sig">_fset_error(<span class="summary-sig-arg">inst</span>,
+        <span class="summary-sig-arg">val</span>)</span>
+        - Throws an <code>AttributeError</code>, always.
+    </dd>
+    <dt>Delete Method:</dt>
+    <dd class="value"><span class="summary-sig">_fdel(<span class="summary-sig-arg">inst</span>)</span>
+        - Zap the <i>cached/memoized</i> <code>property</code> value.
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
 <a name="a"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
@@ -1053,6 +1174,30 @@ conventionally).
     <dt>Get method:</dt>
     <dd class="value"><span class="summary-sig">a2(<span class="summary-sig-arg">self</span>)</span>
         - Get <code>a**2</code>.
+    </dd>
+    <dt>Set method:</dt>
+    <dd class="value"><span class="summary-sig">_fset_error(<span class="summary-sig-arg">inst</span>,
+        <span class="summary-sig-arg">val</span>)</span>
+        - Throws an <code>AttributeError</code>, always.
+    </dd>
+    <dt>Delete Method:</dt>
+    <dd class="value"><span class="summary-sig">_fdel(<span class="summary-sig-arg">inst</span>)</span>
+        - Zap the <i>cached/memoized</i> <code>property</code> value.
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="abc3"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">abc3</h3>
+  <p>Get the semi-axes as 3-tuple <code>(a, b, c)</code>.</p>
+  <dl class="fields">
+    <dt>Get method:</dt>
+    <dd class="value"><span class="summary-sig">abc3(<span class="summary-sig-arg">self</span>)</span>
+        - Get the semi-axes as 3-tuple <code>(a, b, c)</code>.
     </dd>
     <dt>Set method:</dt>
     <dd class="value"><span class="summary-sig">_fset_error(<span class="summary-sig-arg">inst</span>,
@@ -1268,6 +1413,31 @@ as <b><code>a</code></b>).
   </dl>
 </td></tr></table>
 </div>
+<a name="isFlat"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">isFlat</h3>
+  <p>Is this triaxial &quot;flat&quot;, too pro-/oblate 
+  (<code>bool</code>)?</p>
+  <dl class="fields">
+    <dt>Get method:</dt>
+    <dd class="value"><span class="summary-sig">isFlat(<span class="summary-sig-arg">self</span>)</span>
+        - Is this triaxial &quot;flat&quot;, too pro-/oblate (<code>bool</code>)?
+    </dd>
+    <dt>Set method:</dt>
+    <dd class="value"><span class="summary-sig">_fset_error(<span class="summary-sig-arg">inst</span>,
+        <span class="summary-sig-arg">val</span>)</span>
+        - Throws an <code>AttributeError</code>, always.
+    </dd>
+    <dt>Delete Method:</dt>
+    <dd class="value"><span class="summary-sig">_fdel(<span class="summary-sig-arg">inst</span>)</span>
+        - Zap the <i>cached/memoized</i> <code>property</code> value.
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
 <a name="isOrdered"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
@@ -1324,11 +1494,15 @@ as <b><code>a</code></b>).
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <h3 class="epydoc">perimeter4ab</h3>
-  <p>Get the <code>ab</code> ellipse' perimeter (<code>scalar</code>).</p>
+  <p>DEPRECATED on 2026.02.09, use property <a 
+  href="pygeodesy.ellipses.Ellipse-class.html" 
+  class="link">Ellipse</a><code>(a, b).perimeter2k_</code>.</p>
   <dl class="fields">
     <dt>Get method:</dt>
     <dd class="value"><span class="summary-sig">perimeter4ab(<span class="summary-sig-arg">self</span>)</span>
-        - Get the <code>ab</code> ellipse' perimeter (<code>scalar</code>).
+        - DEPRECATED on 2026.02.09, use property <a 
+href="pygeodesy.ellipses.Ellipse-class.html" 
+class="link">Ellipse</a><code>(a, b).perimeter2k_</code>.
     </dd>
     <dt>Set method:</dt>
     <dd class="value"><span class="summary-sig">_fset_error(<span class="summary-sig-arg">inst</span>,
@@ -1348,11 +1522,15 @@ as <b><code>a</code></b>).
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <h3 class="epydoc">perimeter4ac</h3>
-  <p>Get the <code>ac</code> ellipse' perimeter (<code>scalar</code>).</p>
+  <p>DEPRECATED on 2026.02.09, use property <a 
+  href="pygeodesy.ellipses.Ellipse-class.html" 
+  class="link">Ellipse</a><code>(a, c).perimeter2k_</code>.</p>
   <dl class="fields">
     <dt>Get method:</dt>
     <dd class="value"><span class="summary-sig">perimeter4ac(<span class="summary-sig-arg">self</span>)</span>
-        - Get the <code>ac</code> ellipse' perimeter (<code>scalar</code>).
+        - DEPRECATED on 2026.02.09, use property <a 
+href="pygeodesy.ellipses.Ellipse-class.html" 
+class="link">Ellipse</a><code>(a, c).perimeter2k_</code>.
     </dd>
     <dt>Set method:</dt>
     <dd class="value"><span class="summary-sig">_fset_error(<span class="summary-sig-arg">inst</span>,
@@ -1372,11 +1550,15 @@ as <b><code>a</code></b>).
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <h3 class="epydoc">perimeter4bc</h3>
-  <p>Get the <code>bc</code> ellipse' perimeter (<code>scalar</code>).</p>
+  <p>DEPRECATED on 2026.02.09, use property <a 
+  href="pygeodesy.ellipses.Ellipse-class.html" 
+  class="link">Ellipse</a><code>(b, c).perimeter2k_</code>.</p>
   <dl class="fields">
     <dt>Get method:</dt>
     <dd class="value"><span class="summary-sig">perimeter4bc(<span class="summary-sig-arg">self</span>)</span>
-        - Get the <code>bc</code> ellipse' perimeter (<code>scalar</code>).
+        - DEPRECATED on 2026.02.09, use property <a 
+href="pygeodesy.ellipses.Ellipse-class.html" 
+class="link">Ellipse</a><code>(b, c).perimeter2k_</code>.
     </dd>
     <dt>Set method:</dt>
     <dd class="value"><span class="summary-sig">_fset_error(<span class="summary-sig-arg">inst</span>,
@@ -1474,7 +1656,7 @@ as <b><code>a</code></b>).
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Tue Feb  3 11:00:33 2026
+    Generated by Epydoc 3.0.1 on Sat Feb 14 15:33:23 2026
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

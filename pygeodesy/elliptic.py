@@ -1,427 +1,109 @@
 
 # -*- coding: utf-8 -*-
 
-u'''I{Karney}'s elliptic integrals and elliptic and ellipse functions.
+u'''I{Karney}'s elliptic integrals and elliptic functions in pure Python.
 
 Class L{Elliptic} transcoded from I{Charles Karney}'s C++ class U{EllipticFunction
-<https://GeographicLib.SourceForge.io/C++/doc/classGeographicLib_1_1EllipticFunction.html>}
-to pure Python, including symmetric integrals L{Elliptic.fRC}, L{Elliptic.fRD},
-L{Elliptic.fRF}, L{Elliptic.fRG} and L{Elliptic.fRJ} as C{static methods}.
+<https://GeographicLib.SourceForge.io/C++/doc/classGeographicLib_1_1EllipticFunction.html>},
+including symmetric integrals L{Elliptic.fRC}, L{Elliptic.fRD}, L{Elliptic.fRF},
+L{Elliptic.fRG} and L{Elliptic.fRJ} as C{static methods}.
 
 Python method names follow the C++ member functions, I{except}:
 
- - member functions I{without arguments} are mapped to Python properties
-   prefixed with C{"c"}, for example C{E()} is property C{cE},
+ - member functions I{without arguments} are mapped to Python properties prefixed with
+   C{"c"}, for example C{E()} is property C{cE},
 
- - member functions with 1 or 3 arguments are renamed to Python methods
-   starting with an C{"f"}, example C{E(psi)} to C{fE(psi)} and C{E(sn,
-   cn, dn)} to C{fE(sn, cn, dn)},
+ - member functions with 1 or 3 arguments are renamed to Python methods starting with
+   an C{"f"}, example C{E(psi)} to C{fE(psi)} and C{E(sn, cn, dn)} to C{fE(sn, cn, dn)},
 
- - other Python method names conventionally start with a lower-case
-   letter or an underscore if private.
+ - other Python method names conventionally start with a lower-case letter or an
+   underscore if private.
 
 Following is a copy of I{Karney}'s U{EllipticFunction.hpp
 <https://GeographicLib.SourceForge.io/C++/doc/EllipticFunction_8hpp_source.html>}
 file C{Header}.
 
-Copyright (C) U{Charles Karney<mailto:Karney@Alum.MIT.edu>} (2008-2024)
-and licensed under the MIT/X11 License.  For more information, see the
-U{GeographicLib<https://GeographicLib.SourceForge.io>} documentation.
+Copyright (C) U{Charles Karney<mailto:Karney@Alum.MIT.edu>} (2008-2024) and licensed
+under the MIT/X11 License.  For more information, see the U{GeographicLib
+<https://GeographicLib.SourceForge.io>} documentation.
 
 B{Elliptic integrals and functions.}
 
-This provides the elliptic functions and integrals needed for
-C{Ellipsoid}, C{GeodesicExact}, and C{TransverseMercatorExact}.  Two
-categories of function are provided:
+This provides the elliptic functions and integrals needed for classes C{Ellipsoid},
+C{GeodesicExact}, and C{TransverseMercatorExact}.  Two categories of functions are
+provided:
 
- - functions to compute U{symmetric elliptic integrals
-   <https://DLMF.NIST.gov/19.16.i>}
+ - functions to compute U{symmetric elliptic integrals<https://DLMF.NIST.gov/19.16.i>}
 
- - methods to compute U{Legrendre's elliptic integrals
-   <https://DLMF.NIST.gov/19.2.ii>} and U{Jacobi elliptic
-   functions<https://DLMF.NIST.gov/22.2>}.
+ - methods to compute U{Legrendre's elliptic integrals<https://DLMF.NIST.gov/19.2.ii>}
+   and U{Jacobi elliptic functions<https://DLMF.NIST.gov/22.2>}.
 
-In the latter case, an object is constructed giving the modulus
-C{k} (and optionally the parameter C{alpha}).  The modulus (and
-parameter) are always passed as squares which allows C{k} to be
-pure imaginary.  (Confusingly, Abramowitz and Stegun call C{m = k**2}
-the "parameter" and C{n = alpha**2} the "characteristic".)
+In the latter case, an object is constructed giving the modulus C{k} (and optionally
+the parameter C{alpha}).  The modulus (and parameter) are always passed as squares
+which allows C{k} to be pure imaginary.  (Confusingly, Abramowitz and Stegun call
+C{m = k**2} the "parameter" and C{n = alpha**2} the "characteristic".)
 
-In geodesic applications, it is convenient to separate the incomplete
-integrals into secular and periodic components, e.g.
+In geodesic applications, it is convenient to separate the incomplete integrals into
+secular and periodic components, e.g.
 
 I{C{E(phi, k) = (2 E(k) / pi) [ phi + delta E(phi, k) ]}}
 
-where I{C{delta E(phi, k)}} is an odd periodic function with
-period I{C{pi}}.
+where I{C{delta E(phi, k)}} is an odd periodic function with period I{C{pi}}.
 
-The computation of the elliptic integrals uses the algorithms given
-in U{B. C. Carlson, Computation of real or complex elliptic integrals
-<https://DOI.org/10.1007/BF02198293>} (also available U{here
-<https://ArXiv.org/pdf/math/9409227.pdf>}), Numerical Algorithms 10,
-13--26 (1995) with the additional optimizations given U{here
-<https://DLMF.NIST.gov/19.36.i>}.
+The computation of the elliptic integrals uses the algorithms given in U{B. C. Carlson,
+Computation of real or complex elliptic integrals <https://DOI.org/10.1007/BF02198293>}
+(also available U{here<https://ArXiv.org/pdf/math/9409227.pdf>}), Numerical Algorithms
+10, 13--26 (1995) with the additional optimizations given U{here<https://DLMF.NIST.gov/19.36.i>}.
 
-The computation of the Jacobi elliptic functions uses the algorithm
-given in U{R. Bulirsch, Numerical Calculation of Elliptic Integrals
-and Elliptic Functions<https://DOI.org/10.1007/BF01397975>},
-Numerische Mathematik 7, 78--90 (1965) or optionally the C{Jacobi
-amplitude} in method L{Elliptic.sncndn<pygeodesy.Elliptic.sncndn>}.
+The computation of the Jacobi elliptic functions uses the algorithm given in U{R. Bulirsch, Numerical
+Calculation of Elliptic Integrals and Elliptic Functions<https://DOI.org/10.1007/BF01397975>},
+Numerische Mathematik 7, 78--90 (1965) or optionally the C{Jacobi amplitude} in method
+L{Elliptic.sncndn<pygeodesy.Elliptic.sncndn>}.
 
-The notation follows U{NIST Digital Library of Mathematical Functions
-<https://DLMF.NIST.gov>} chapters U{19<https://DLMF.NIST.gov/19>} and
-U{22<https://DLMF.NIST.gov/22>}.
+The notation follows U{NIST Digital Library of Mathematical Functions <https://DLMF.NIST.gov>}
+chapters U{19<https://DLMF.NIST.gov/19>} and U{22<https://DLMF.NIST.gov/22>}.
 '''
 # make sure int/int division yields float quotient, see .basics
 from __future__ import division as _; del _  # noqa: E702 ;
 
 from pygeodesy.basics import copysign0, map2, neg, neg_
-from pygeodesy.constants import EPS, EPS_2, INF, NAN, PI, PI_2, PI_4, PI2, \
-                               _EPStol as _TolJAC, _0_0, _0_25, _0_5, _1_0, \
-                               _2_0, _3_0, _4_0, _6_0, _8_0, _64_0, _180_0, \
-                               _360_0, _flipsign, _over, _1_over
-from pygeodesy.constants import _10_0, _EPSjam as _TolJAM, MANT_DIG as _DIG53  # PYCHOK used!
-# from pygeodesy.errors import _ValueError  # from .fsums
-from pygeodesy.fmath import favg, Fdot, Fdot_, fhorner, hypot, hypot1, \
-                            zqrt,  _operator
-from pygeodesy.fsums import Fsum, _fsum,  _ValueError
+from pygeodesy.constants import EPS, INF, NAN, PI, PI_2, PI_4, _EPStol as _TolJAC, \
+                               _0_0, _0_25, _0_5, _1_0, _2_0, _3_0, _4_0, _6_0, _8_0, \
+                               _64_0, _180_0, _360_0, _flipsign, _over, _1_over
+from pygeodesy.constants import _EPSjam as _TolJAM  # PYCHOK used!
+# from pygeodesy.ellipsoids import Ellipsoid  # _MODS
+from pygeodesy.errors import _ConvergenceError, _ValueError
+from pygeodesy.fmath import favg, Fdot, Fdot_, hypot1, zqrt,  _operator
+from pygeodesy.fsums import Fsum, _fsum
 from pygeodesy.internals import _Enum, typename
 from pygeodesy.interns import NN, _delta_, _DOT_, _f_, _invalid_, _invokation_, \
                              _negative_, _SPACE_
 from pygeodesy.karney import _K_2_0, _norm180, _signBit, _sincos2
-from pygeodesy.lazily import _ALL_LAZY, _FOR_DOCS
-from pygeodesy.named import callername, _Named, _NamedTuple,  Fmt, unstr
-from pygeodesy.props import _allPropertiesOf_n, Property_RO, property_ROnce, \
-                            _update_all
-# from pygeodesy.streprs import Fmt, unstr  # from .named
+# from pygeodesy.lazily import _ALL_LAZY  # from .utily
+from pygeodesy.named import _Named, _NamedTuple,  unstr
+from pygeodesy.props import _allPropertiesOf_n, Property_RO, _update_all
+# from pygeodesy.streprs import unstr  # from .named
+# from pygeodesy.triaxials import Triaxial_  # _MODS
 from pygeodesy.units import Scalar, Scalar_
-from pygeodesy.utily import atan2  # sincos2 as _sincos2
+from pygeodesy.utily import atan2,  _ALL_LAZY  # sincos2 as _sincos2
 
 from math import asin, asinh, atan, ceil, cosh, fabs, floor, radians, \
                  sin, sinh, sqrt, tan, tanh  # tan as _tan
 # import operator as _operator  # from .fmath
 
 __all__ = _ALL_LAZY.elliptic
-__version__ = '26.01.20'
+__version__ = '26.02.12'
 
 _TolRD  =  zqrt(EPS * 0.002)
 _TolRF  =  zqrt(EPS * 0.030)
 _TolRG0 = _TolJAC   * 2.7
-_MAXIT  =  32  # Max depth, 6-18 sufficient
+_MAXIT  =  32  # ._B4 max depth, 6..18 sufficient
 
 
 class _Cs(_Enum):
     '''(INTERAL) Complete Integrals cache.
     '''
     pass
-
-
-class Elliperim(object):
-    '''Singleton with various methods to compute the perimeter of an ellipse.
-    '''
-    _Ek       =  None
-    _k        = _2_0  # 0 < _k < 1
-    _TOL53    =  sqrt(EPS_2)     # sqrt(pow(_0_5, _DIG53))
-    _TOL53_53 = _TOL53 / _DIG53  # "flat" b/a tolerance, 1.9e-10
-    # assert _DIG53 == 53
-
-    def AGM(self, a, b, maxit=_DIG53):
-        '''Compute the perimeter of an ellipse with semi-axes B{C{a}} and B{C{b}} using the U{AGM
-           <https://PaulBourke.net/geometry/ellipsecirc>} (Arithmetic-Geometric Mean) method.
-
-           @kwarg maxit: Number of iterations (C{int}).
-
-           @return: Perimeter (C{meter}, same units as semi-axes B{C{a}} and B{C{b}}).
-
-           @raise ValueError: Invalid B{C{a}} or B{C{b}} or no convergence for B{C{maxit}} iterations.
-        '''
-        _, p, a, b = self._pab4(a, b)
-        if p is None:
-            t  = self._TOL53
-            m  = -1
-            c  = a + b
-            ds = [c**2]
-            _d = ds.append
-            for _ in range(maxit):  # 4..5 trips
-                b  = sqrt(a * b)
-                a  = c * _0_5
-                c  = a + b
-                d  = a - b
-                m *= 2
-                _d(d**2 * m)
-                if d <= (b * t):
-                    break
-            else:  # PYCHOK no cover
-                raise _convergenceError(maxit, _over(d, b), t)
-            p = _over(_fsum(ds) * PI, c)  # nonfinites=True
-        return p
-
-    def arc(self, a, b, deg2, deg1=0):
-        '''Compute the length of U{elliptic arc<https://www.JohnDCook.com/blog/2022/11/02/elliptic-arc-length/>}
-           C{(B{deg2} - B{deg1})}, both counter-clockwise from semi-axis B{C{a}} to B{C{b}} of the ellipse.
-
-           @arg deg2: End angle of the elliptic arc (C{degrees}).
-           @kwarg deg1: Start angle of the elliptic arc (C{degrees}).
-
-           @return: Arc length, signed (C{meter}, same units as semi-axes B{C{a}} and B{C{b}}).
-
-           @raise ValueError: Invalid B{C{a}} or B{C{b}}.
-        '''
-        return self.arc_(a, b, radians(deg2), (radians(deg1) if deg1 else _0_0))
-
-    def arc_(self, a, b, rad2, rad1=0):
-        '''Compute the length of U{elliptic arc<https://www.JohnDCook.com/blog/2022/11/02/elliptic-arc-length/>}
-           C{(B{rad2} - B{rad1})}, both counter-clockwise from semi-axis B{C{a}} to B{C{b}} of the ellipse.
-
-           @arg rad2: End angle of the elliptic arc (C{radians}).
-           @kwarg rad1: Start angle of the elliptic arc (C{radians}).
-
-           @return: Arc length, signed (C{meter}, same units as semi-axes B{C{a}} and B{C{b}}).
-
-           @raise ValueError: Invalid B{C{a}} or B{C{b}}.
-        '''
-        r, p, a, b = self._pab4(a, b)
-        if p is None:
-            _e = self._ellipe or self._ellipE
-            k  = (b / a)**2
-            r  = PI_2 if r else _0_0
-            p  = self._arc(_e, k, rad2 + r)
-            r += rad1
-            if r:
-                p -= self._arc(_e, k, r)
-            p *= a
-        else:
-            p *= (rad2 - rad1) / PI2
-        return p
-
-    def _arc(self, _e, k, r):
-        t, r = divmod(r, PI2)
-        p = _e(k, r)
-        if t:  # + t * perimeter
-            t *= _e(k) * _4_0
-            p +=  t
-        return p
-
-    def Arc43(self, a, b):
-        '''Compute the perimeter (and arcs) of an ellipse with semi-axes B{C{a}} and B{C{b}}
-           using the U{4-Arc<https://PaulBourke.net/geometry/ellipsecirc>} approximation.
-
-           @return: 3-Tuple C{(p, Ra, Rb)} with perimeter C{p}, arc radius C{Ra} at the
-                    major and arc radius C{Rb} at the minor semi-axis (C{meter}, same
-                    units as semi-axes B{C{a}} and B{C{b}}.
-
-           @raise ValueError: Invalid B{C{a}} or B{C{b}}.
-        '''
-        r, p, a, b = self._pab4(a, b)
-        if p is None:
-            h = hypot(a, b)
-            p = atan2(b, a)
-            s, c = _sincos2(p)
-            L  = (h - (a - b)) * _0_5
-            Ra = _over(L, c)
-            Rb = _over(h - L, s)
-            p  = (p * Rb + (PI_2 - p) * Ra) * _4_0
-        elif a > b:  # flat
-            Ra, Rb = _0_0, _1_over(b)  # INF
-        else:  # circle
-            Ra, Rb =  a, b
-        return (p, Rb, Ra) if r else (p, Ra, Rb)
-
-#   def CR(self, a, b):
-#       '''Compute the perimeter of an ellipse with semi-axes B{C{a}} and B{C{b}} using U{Rackauckas'
-#          <https://www.ChrisRackauckas.com/assets/Papers/ChrisRackauckas-The_Circumference_of_an_Ellipse.pdf>}
-#          approximation, also U{here<https://ExtremeLearning.com.AU/a-formula-for-the-perimeter-of-an-ellipse>}.
-#
-#          @return: Perimeter (C{meter}, same units as semi-axes B{C{a}} and B{C{b}}).
-#
-#          @raise ValueError: Invalid B{C{a}} or B{C{b}}.
-#       '''
-#       _, p, a, b = self._pab4(a, b)
-#       if p is None:
-#           p  =   a + b
-#           h  = ((a - b) / p)**2
-#           p *= (fhorner(h, 135168, -85760,  -5568, 3867) /
-#                 fhorner(h, 135168, -119552, 22208, 345)) * PI
-#       return p
-
-    def E2k(self, a, b):
-        '''Compute the perimeter of an ellipse with semi-axes B{C{a}} and B{C{b}} using L{E(k)
-           <Elliptic.cE>}, the complete C{elliptic} integral of the 2nd kind.
-
-           @return: Perimeter (C{meter}, same units as semi-axes B{C{a}} and B{C{b}}).
-
-           @raise ValueError: Invalid B{C{a}} or B{C{b}}.
-        '''
-        return self._ellip2k(a, b, self._ellipE)
-
-    def e2k(self, a, b, E_ab=None):
-        '''Compute the perimeter of an ellipse with semi-axes B{C{a}} and B{C{b}} using U{SciPy's
-           ellipe<https://www.JohnDCook.com/perimeter_ellipse.html>} function or method
-           C{E_ab}, otherwise C{None}.
-
-           @kwarg E_ab: Alternate C{Elliperim}C{(a, b)} method to use in case C{SciPy's
-                        ellipe} is not available.
-
-           @return: Perimeter (C{meter}, same units as semi-axes B{C{a}} and B{C{b}}).
-
-           @raise ValueError: Invalid B{C{a}} or B{C{b}}.
-        '''
-        p = self._ellipe
-        if callable(p):  # p is not None
-            p = self._ellip2k(a, b, p)
-        elif callable(E_ab):  # and E_ab is not Elliperim.e2k
-            p = E_ab(a, b)
-        return p
-
-    def _ellipE(self, k, phi=None):
-        '''(INTERNAL) Get the in- C{fE(phi, k)} or complete C{cE(k)} integral of the 2nd kind.
-        '''
-        if self._k != k:  # or self._Ek is None
-            self._k = k
-            self._Ek = _Elliptic(k)
-        return self._Ek.cE if phi is None else self._Ek.fE(phi)
-
-    @property_ROnce
-    def _ellipe(self):
-        '''(INTERNAL) Wrap functions C{scipy.special.ellipe} and C{-.ellipeinc}, I{once}.
-        '''
-        try:
-            from scipy.special import ellipe, ellipeinc
-
-            def _ellipe(k, phi=None):
-                m = _1_0 - k
-                p = ellipe(m) if phi is None else ellipeinc(phi, m)
-                return float(p)
-
-        except (AttributeError, ImportError):
-            _ellipe = None
-        return _ellipe  # overwrite property_ROnce
-
-    def _ellip2k(self, a, b, _ellip):
-        '''(INTERNAL) Helper for methods C{E2k} and C{e2k}.
-        '''
-        _, p, a, b = self._pab4(a, b)
-        if p is None:  # see .ellipsoids.Ellipsoid.L
-            k = (b / a)**2
-            p = _ellip(k) * a * _4_0
-        return p
-
-    def GK(self, a, b):
-        '''Compute the perimeter of an ellipse with semi-axes B{C{a}} and B{C{b}} using the U{Gauss-Kummer
-           <https://www.JohnDCook.com/blog/2023/05/28/approximate-ellipse-perimeter>} series, and U{here
-           <https://MathWorld.Wolfram.com/Gauss-KummerSeries.html>}, C{B{b / a} > 0.75}.
-
-           @return: Perimeter (C{meter}, same units as semi-axes B{C{a}} and B{C{b}}).
-
-           @raise ValueError: Invalid B{C{a}} or B{C{b}}.
-        '''
-        p, h = self._ph2(a, b)
-        if h:
-            p *= fhorner(h**2, *self._GKs) * PI
-        return p
-
-    @property_ROnce
-    def _GKs(self):
-        '''(INTERNAL) Compute the Gauss-Kummer coefficients, I{once} from U{numerators
-           <https://OEIS.org/A056981>} and U{denominators<https://OEIS.org/A056982>}.
-        '''
-        return (1, 1 / 4, 1 / 64, 1 / 256, 25 / 16384, 49 / 65536,
-                441 / 1048576, 1089 / 4194304)  # overwrite property_ROnce
-
-    def HG(self, a, b, maxit=_DIG53):
-        '''Compute the perimeter of an ellipse with semi-axes B{C{a}} and B{C{b}} using the U{HG
-           <https://web.Tecnico.ULisboa.PT/~mcasquilho/compute/com/,ellips/PerimeterOfEllipse.pdf>}
-           (HyperGeometric Gauss-Kummer) series.
-
-           @kwarg maxit: Number of iterations (C{int}), sufficient for C{B{b / a} > 0.125}.
-
-           @return: Perimeter (C{meter}, same units as semi-axes B{C{a}} and B{C{b}}).
-
-           @raise ValueError: Invalid B{C{a}} or B{C{b}} or no convergence for B{C{maxit}} iterations.
-        '''
-        p, h = self._ph2(a, b)
-        if h:
-            hs =  self._HGs(h, max(maxit, _DIG53))
-            p *= _fsum(hs) * PI  # nonfinites=True
-        return p
-
-    def _HGs(self, h, maxit):
-        '''(INTERNAL) Yield the C{HG} terms.
-        '''
-        s = _1_0
-        yield s
-        p = t = -1
-        for u in range(-1, maxit * 2, 2):
-            t *= u / (u + 3) * h
-            t2 = t**2
-            s += t2
-            yield t2
-            if s == p:  # 44 trips
-                break
-            p = s
-        else:  # PYCHOK no cover
-            raise _convergenceError(maxit, s, s - t2)
-
-#   def LS(self, a, b):
-#       '''Compute the perimeter of an ellipse with semi-axes B{C{a}} and B{C{b}} using the U{Linderholm-Segal
-#          <https://www.JohnDCook.com/blog/2021/03/24/perimeter-of-an-ellipse>} formula, aka C{3/2 norm}.
-#
-#          @return: Perimeter (C{meter}, same units as semi-axes B{C{a}} and B{C{b}}).
-#
-#          @raise ValueError: Invalid B{C{a}} or B{C{b}}.
-#       '''
-#       _, p, a, b = self._pab4(a, b)
-#       if p is None:
-#           n = pow(a, _1_5) + pow(b, _1_5)
-#           p = pow(n * _0_5, _2_3rd) * PI2
-#       return p
-
-    def _pab4(self, a, b):
-        r = a < b
-        if r:
-            a, b = b, a
-        if a > b:
-            if b > (a * self._TOL53_53):
-                p = None
-            elif b < 0:  # PYCHOK no cover
-                t =  callername()  # underOK=True
-                t = _DOT_(typename(self), t)
-                t =  unstr(t, b, a) if r else \
-                     unstr(t, a, b)
-                raise _ValueError(t)
-            else:  # "flat"
-                p = a * _4_0
-        else:  # circle
-            p = a * PI2
-        return r, p, a, b
-
-    def _ph2(self, a, b):
-        _, p, a, b = self._pab4(a, b)
-        if p is None:
-            p =  a + b
-            h = (a - b) / p
-        else:
-            h =  None
-        return p, h
-
-    def R2(self, a, b):
-        '''Compute the perimeter of an ellipse with semi-axes B{C{a}} and B{C{b}} using U{Ramanujan's
-           2nd<https://PaulBourke.net/geometry/ellipsecirc>} approximation, C{B{b / a} > 0.9}.
-
-           @return: Perimeter (C{meter}, same units as semi-axes B{C{a}} and B{C{b}}).
-
-           @raise ValueError: Invalid B{C{a}} or B{C{b}}.
-        '''
-        p, h = self._ph2(a, b)
-        if h:
-            h *= _3_0 * h
-            h /=  sqrt(_4_0 - h) + _10_0  # /= chokes PyChecker?
-            p *= (h + _1_0) * PI
-        return p
-
-if not _FOR_DOCS:  # PYCHOK force epydoc
-    Elliperim = Elliperim()  # singleton
-del _FOR_DOCS
 
 
 class Elliptic(_Named):
@@ -467,7 +149,7 @@ class Elliptic(_Named):
     def _B3(self, x):
         '''(INTERNAL) Bulirsch' sncndn routine.
         '''
-        # Numerische Mathematik 7, 1965, p 89
+        # Numerische Mathematik 7, 1965, P 89
         # implements DLMF Eqs 22.17.2 - 22.17.4
         c, d, cd, mn = self._B4
         sn, cn = _sincos2(x * cd)
@@ -492,7 +174,7 @@ class Elliptic(_Named):
     def _B4(self):
         '''(INTERNAL) Get Bulirsch' 4-tuple C{(c, d, cd, mn)}.
         '''
-        a = p = _1_0
+        a = P = _1_0
         b,  d =  self.kp2, 0  # kp2 >= 0 always here
         if _signBit(b):  # PYCHOK no cover
             d = a - b
@@ -501,16 +183,16 @@ class Elliptic(_Named):
         mn  = []
         _mn = mn.append
         for i in range(1, _MAXIT):  # GEOGRAPHICLIB_PANIC
-            b = sqrt(p * b)
+            b = sqrt(P * b)
             _mn((a, b))
             c = favg(a,  b)
             r = fabs(a - b)
             if r <= (a * _TolJAC):  # 4..6 trips, quadratic
                 self._iteration += i
                 break
-            p, a = a, c
+            P, a = a, c
         else:  # PYCHOK no cover
-            raise _convergenceError(_MAXIT, _over(r, p), _TolJAC)
+            raise _ConvergenceError(_MAXIT, _over(r, P), _TolJAC)
         cd = (c * d) if d else c
         return c, d, cd, tuple(reversed(mn))
 
@@ -771,7 +453,7 @@ class Elliptic(_Named):
                 self._iteration += i
                 break
         else:  # PYCHOK no cover
-            raise _convergenceError(_MAXIT, d, _TolJAC)
+            raise _ConvergenceError(_MAXIT, d, _TolJAC)
         return Phi.fsum_(n * PI) if n else phi
 
     @Property_RO
@@ -932,7 +614,7 @@ class Elliptic(_Named):
            @note: Legendre expresses the longitude of a point on the
                   geodesic in terms of this combination of elliptic
                   integrals in U{Exercices de Calcul Intégral, Vol 1
-                  (1811), p 181<https://Books.Google.com/books?id=
+                  (1811), P 181<https://Books.Google.com/books?id=
                   riIOAAAAQAAJ&pg=PA181>}.
 
            @see: U{Geodesics in terms of elliptic integrals<https://
@@ -956,7 +638,7 @@ class Elliptic(_Named):
 
            @note: Cayley expresses the longitude difference of a point
                   on the geodesic in terms of this combination of
-                  elliptic integrals in U{Phil. Mag. B{40} (1870), p 333
+                  elliptic integrals in U{Phil. Mag. B{40} (1870), P 333
                   <https://Books.Google.com/books?id=Zk0wAAAAIAAJ&pg=PA333>}.
 
            @see: U{Geodesics in terms of elliptic integrals<https://
@@ -992,8 +674,8 @@ class Elliptic(_Named):
                 R = _RF3(cn2, dn2, _1_0, self)
                 if aX:
                     sn2 = sn**2
-                    p   = sn2 * self.alphap2 + cn2
-                    R += _RJ(cn2, dn2, _1_0, p, _3over(aX, sn2), self)
+                    P   = sn2 * self.alphap2 + cn2
+                    R += _RJ(cn2, dn2, _1_0, P, _3over(aX, sn2), self)
                 R *= fabs(sn)
             else:  # PYCHOK no cover
                 R = _0_0
@@ -1037,11 +719,11 @@ class Elliptic(_Named):
                 r, ac = self._jamac2
                 x    *= r  # phi
                 for a, c in ac:
-                    p = x
+                    P = x
                     a = asin(c * sin(x) / a)
                     x = favg(a, x)
                 if self.k2 < 0:  # Sala Eq. 5.8
-                    x = p - x
+                    x = P - x
             else:  # PYCHOK no cover
                 x = atan(sinh(x))  # gd(x)
         return x
@@ -1067,7 +749,7 @@ class Elliptic(_Named):
             if c <= (a * _TolJAM):  # 7..18 trips, quadratic
                 break
         else:  # PYCHOK no cover
-            raise _convergenceError(_MAXIT, _over(c, a), _TolJAM)
+            raise _ConvergenceError(_MAXIT, _over(c, a), _TolJAM)
         i  = len(ac)
         r *= 2**i * a
         self._iteration += i
@@ -1244,36 +926,37 @@ class Elliptic(_Named):
             raise _ellipticError(Elliptic.fRG, x, y, z, cause=X, txt=t)
 
     @staticmethod
-    def fRJ(x, y, z, p):  # *over
-        '''Symmetric integral of the third kind C{RJ(x, y, z, p)}.
+    def fRJ(x, y, z, P):  # *over
+        '''Symmetric integral of the third kind C{RJ(x, y, z, P)}.
 
-           @return: C{RJ(x, y, z, p)}.
+           @return: C{RJ(x, y, z, P)}.
 
            @see: U{C{RJ} definition<https://DLMF.NIST.gov/19.16.E2>} and
                  U{Carlson<https://ArXiv.org/pdf/math/9409227.pdf>}.
         '''
         try:
-            return float(_RJ(x, y, z, p))
+            return float(_RJ(x, y, z, P))
         except Exception as X:
-            raise _ellipticError(Elliptic.fRJ, x, y, z, p, cause=X)
+            raise _ellipticError(Elliptic.fRJ, x, y, z, P, cause=X)
 
 _allPropertiesOf_n(16, Elliptic)  # PYCHOK assert, see Elliptic.reset
 
 
-class _Elliptic(Elliptic):
-    '''(INTERNAL) Low overhead C{Elliptic} for C{Elliperim._ellipE}.
+class _Ek(Elliptic):
+    '''(INTERNAL) Low-overhead C{Elliptic} for C{Ellipse._Ek}.
     '''
     _alpha2    = _0_0
     _alphap2   = _1_0
     cE         = _0_0  # overide Property_RO
+#   cK         = _0_0  # ditto
     _iteration =  0
 
-    def __init__(self, k):  # k == kp2
-        self._k2 = _1_0 - k
-        self._kp2 = k  # 0 < k < 1
-        # assert self.kp2 and self.k2
-        self.cE = self._cE(k)  # override Property_RO
-#       self.cK = self._cK(k)  # ditto
+    def __init__(self, k2):
+        # assert 0 < k2 < 1
+        self._k2  = k2
+        self._kp2 = kp2 = _1_0 - k2
+        self.cE = self._cE(kp2)
+#       self.cK = self._cK(kp2)
 
 
 class EllipticError(_ValueError):
@@ -1312,7 +995,7 @@ class _List(list):
     '''
     _a0 = None
 
-    def __init__(self, *xyzp):  # x, y, z [, p]
+    def __init__(self, *xyzp):  # x, y, z [, P]
         list.__init__(self, xyzp)
 
     def a0(self, n):
@@ -1327,7 +1010,7 @@ class _List(list):
 
     def amrs4(self, y, Tol, inst=None):
         '''Yield Carlson 4-tuples C{(An, mul, lam, s)} plus sentinel, with
-           C{lam = fdot(sqrt(x), ... (z))} and C{s = (sqrt(x), ... (p))}.
+           C{lam = fdot(sqrt(x), ... (z))} and C{s = (sqrt(x), ... (P))}.
         '''
         L = self
         a = L.a0(5 if y else 3)
@@ -1337,7 +1020,7 @@ class _List(list):
             d = fabs(a * m)
             if d > t:  # 3-6 trips
                 break
-            s =  map2(sqrt, L)  # sqrt(x), sqrt(y), sqrt(z) [, sqrt(p)]
+            s =  map2(sqrt, L)  # sqrt(x), sqrt(y), sqrt(z) [, sqrt(P)]
             Q = _Qdot3(*s)  # (s[0] * s[1], s[1] * s[2], s[2] * s[0])
             a =  Q(a)  # An = sum(An, *Q)) / 4
             L[:] = map(Q, L)  # x = sum(x, *Q) / 4, ...
@@ -1346,7 +1029,7 @@ class _List(list):
                 yield a, m, r, s  # L[2] is next z
             m *= 4
         else:  # PYCHOK no cover
-            raise _convergenceError(_MAXIT, d, t, thresh=True)
+            raise _ConvergenceError(_MAXIT, d, t, thresh=True)
         yield a, m, None, ()  # sentinel: same a, next m, no r and s
         if inst:
             inst._iteration += i
@@ -1408,23 +1091,16 @@ def _abm3(x, y, inst=None):
         d = fabs(a - b)
         if d <= (a * _TolRG0):  # 2..4 trips
             break
-        p = a
-        a = favg(p,  b)
-        b = sqrt(p * b)
+        P = a
+        a = favg(P,  b)
+        b = sqrt(P * b)
         yield a, b, m  # (xi - yi)**2 * m
         m *= 2
     else:  # PYCHOK no cover
-        raise _convergenceError(_MAXIT, _over(d, p), _TolRG0)
+        raise _ConvergenceError(_MAXIT, _over(d, P), _TolRG0)
     if inst:
         inst._iteration += i
     yield a, b, 0  # sentinel: m = 0
-
-
-def _convergenceError(maxit, d, tol, **thresh):
-    '''(INTERNAL) Format a no-convergence Error.
-    '''
-    t = Fmt.no_convergence(d, tol, **thresh)
-    return _ValueError(maxit=maxit, txt=t)
 
 
 def _deltaX(sn, cn, dn, cX, fX):
@@ -1442,28 +1118,6 @@ def _deltaX(sn, cn, dn, cX, fX):
     except Exception as X:
         n = NN(_delta_, typename(fX)[1:])
         raise _ellipticError(n, sn, cn, dn, cause=X)
-
-
-def elliperim(a, b, *deg2_1):
-    '''Compute the perimeter or an arc of an ellipse with semi-axes C{a} and C{b} using
-       method L{Elliperim.e2k}, L{Elliperim.E2k} or L{Elliperim.arc}.
-
-       @arg deg2_1: Optional, arc end and start angle (C{degrees}), see method L{Elliperim.arc}.
-
-       @return: The perimeter or arc length (C{scalar}, same units as C{a} and C{b}).
-    '''
-    return Elliperim.arc(a, b, *deg2_1) if deg2_1 else Elliperim.e2k(a, b, Elliperim.E2k)
-
-
-def elliperim_(a, b, *rad2_1):
-    '''Compute the perimeter or an arc of an ellipse with semi-axes C{a} and C{b} using
-       method L{Elliperim.e2k}, L{Elliperim.E2k} or L{Elliperim.arc_}.
-
-       @arg rad2_1: Optional, arc end and start angle (C{radians}), see method L{Elliperim.arc_}.
-
-       @return: The perimeter or arc length (C{scalar}, same units as C{a} and C{b}).
-    '''
-    return Elliperim.arc_(a, b, *rad2_1) if rad2_1 else Elliperim.e2k(a, b, Elliperim.E2k)
 
 
 def _ellipticError(where, *args, **kwds_cause_txt):
@@ -1615,14 +1269,14 @@ def _rG3(x, y, z):  # 3-arg version
     return R.fover(_2_0)  # float
 
 
-def _RJ(x, y, z, p, over=_0_0, inst=None):
+def _RJ(x, y, z, P, over=_0_0, inst=None):
     '''(INTERNAL) Carlson, eqs 2.17 - 2.25.
     '''
-    def _xyzp(x, y, z, p):
-        return (x + p) * (y + p) * (z + p)
+    def _xyzp(x, y, z, P):
+        return (x + P) * (y + P) * (z + P)
 
-    L = _List(x, y, z, p)
-    n =  neg(_xyzp(x, y, z, -p))
+    L = _List(x, y, z, P)
+    n =  neg(_xyzp(x, y, z, -P))
     S =  Fsum()
     for a, m, _, s in L.amrs4(True, _TolRD, inst):
         if s:
@@ -1638,15 +1292,15 @@ def _RJ(x, y, z, p, over=_0_0, inst=None):
                 return NAN
     m  *= a
     x, y, z = L.rescale(m, x, y, z)
-    p   =  neg(Fsum(x, y, z).fover(_2_0))
-    p2  =  p**2
-    p3  =  p2 * p
+    P   =  neg(Fsum(x, y, z).fover(_2_0))
+    p2  =  P**2
+    p3  =  p2 * P
     E2  = _Rdot(x, y, z, -p2)
-    E2p =  E2 * p
+    E2p =  E2 * P
     xyz =  x * y * z
     return _Hsum(S.fmul(_6_0), sqrt(a) * m, E2,
                  Fsum(p3 * _4_0, xyz, E2p, E2p),
-                 Fsum(p3 * _3_0, E2p, xyz, xyz).fmul(p),
+                 Fsum(p3 * _3_0, E2p, xyz, xyz).fmul(P),
                  p2 * xyz, over)  # Fsum
 
 

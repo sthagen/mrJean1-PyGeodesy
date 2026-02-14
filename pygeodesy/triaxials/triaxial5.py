@@ -46,7 +46,7 @@ from pygeodesy.fsums import fsumf_, fsum1f_
 from pygeodesy.interns import NN, _beta_, _distant_, _DMAIN_, _finite_, _height_, \
                              _inside_, _near_, _negative_, _not_, _null_, _opposite_, \
                              _outside_, _too_, _x_, _y_
-from pygeodesy.lazily import _ALL_LAZY, _FOR_DOCS
+from pygeodesy.lazily import _ALL_LAZY, _ALL_MODS as _MODS, _FOR_DOCS
 from pygeodesy.named import _name__, _Pass
 from pygeodesy.namedTuples import LatLon3Tuple, _NamedTupleTo, Vector2Tuple, \
                                   Vector3Tuple, Vector4Tuple
@@ -63,7 +63,7 @@ from pygeodesy.vector3d import _otherV3d, Vector3d
 # from math import fabs, sqrt  # from .fmath
 
 __all__ = _ALL_LAZY.triaxials_triaxial5
-__version__ = '26.01.14'
+__version__ = '26.02.09'
 
 _omega_ = 'omega'
 _TRIPS  =  359  # Eberly 1074?
@@ -539,7 +539,7 @@ class Conformal(Triaxial):
         '''
         k2, kp2 = self._k2E_kp2E
         # -a2b2 / b2 == (b2 - a2) / b2 == 1 - a2 / b2 == 1 - a2_b2
-        return self._Elliptic(k2, _1_0 - self._a2_b2, kp2, self._a2_b2)
+        return _MODS.elliptic.Elliptic(k2, _1_0 - self._a2_b2, kp2, self._a2_b2)
 
     def xR(self, omega, unit=Radians):
         '''Compute a I{Jacobi Conformal} C{x} projection.
@@ -648,7 +648,7 @@ class Conformal(Triaxial):
         '''
         k2, kp2 = self._k2E_kp2E
         # b2c2 / b2 == (b2 - c2) / b2 == 1 - c2 / b2 == e2bc
-        return self._Elliptic(kp2, self.e2bc, k2, self._c2_b2)
+        return _MODS.elliptic.Elliptic(kp2, self.e2bc, k2, self._c2_b2)
 
     def yR(self, beta, unit=Radians):
         '''Compute a I{Jacobi Conformal} C{y} projection.
@@ -1076,10 +1076,8 @@ def _reverseLatLon3(s, atan2_, v, forward_):
     '''
     x, y, z = s.xyz3
     d = hypot( x, y)
-    a = atan2_(z, d)
-    b = atan2_(y, x)
     h = v.minus_(*forward_(z, d, y, x)).length
-    return a, b, (h or INT0)
+    return atan2_(z, d), atan2_(y, x), (h or INT0)
 
 
 def _rootNd(r, s, u, v, w, g, eps=EPS0):

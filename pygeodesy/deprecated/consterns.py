@@ -1,15 +1,17 @@
 
 # -*- coding: utf-8 -*-
 
-u'''DEPRECATED constants and interns kept for backward compatibility.
+u'''DEPRECATED constants, interns and singletons kept for backward compatibility.
 '''
 
 from pygeodesy.constants import EPS_2, MANT_DIG, _1_0
-from pygeodesy.lazily import _ALL_DEPRECATED
+from pygeodesy.ellipses import Ellipse
+from pygeodesy.lazily import _ALL_DEPRECATED, _FOR_DOCS
+from pygeodesy.props import deprecated_method
 from pygeodesy.units import Float, Int, Str
 
 __all__ = _ALL_DEPRECATED.deprecated_consterns
-__version__ = '25.04.09'
+__version__ = '26.02.12'
 
 
 class _Deprecated_Float(Float):
@@ -26,6 +28,48 @@ class _Deprecated_Str(Str):
     '''DEPRECATED on 2023.09.12, I{don't use}.'''
     pass
 
+
+class Elliperim(object):
+    '''DEPRECATED on 2026.02.06, use class L{Ellipse}.'''
+
+    @deprecated_method
+    def AGM(self, a, b, **unused):  # PYCHOK no cover
+        '''DEPRECATED on 2026.02.12, use property L{Ellipse}{C(a, b).perimeterAGM}.'''
+        return Ellipse(a, b).perimeterAGM
+
+    @deprecated_method
+    def Arc43(self, a, b):  # PYCHOK no cover
+        '''DEPRECATED on 2026.02.12, use property L{Ellipse}{C(a, b).perimeter4Arc3}.'''
+        return Ellipse(a, b).perimeter4Arc3
+
+    @deprecated_method
+    def E2k(self, a, b):  # PYCHOK no cover
+        '''DEPRECATED on 2026.02.12, use property L{Ellipse}{C(a, b).perimeter2k}.'''
+        return Ellipse(a, b).perimeter2k
+
+    @deprecated_method
+    def e2k(self, a, b, **unused):  # PYCHOK no cover
+        '''DEPRECATED on 2026.02.12, use property L{Ellipse}{C(a, b).perimeter2k_}.'''
+        return Ellipse(a, b).perimeter2k_
+
+    @deprecated_method
+    def GK(self, a, b):  # PYCHOK no cover
+        '''DEPRECATED on 2026.02.12, use property L{Ellipse}{C(a, b).perimeterGK}.'''
+        return Ellipse(a, b).perimeterGK
+
+    @deprecated_method
+    def HG(self, a, b, **unused):  # PYCHOK no cover
+        '''DEPRECATED on 2026.02.12, use property L{Ellipse}{C(a, b).perimeterHGK}.'''
+        return Ellipse(a, b).perimeterHGK
+
+    @deprecated_method
+    def R2(self, a, b):  # PYCHOK no cover
+        '''DEPRECATED on 2026.02.12, use property L{Ellipse}{C(a, b).perimeter2R}.'''
+        return Ellipse(a, b).perimeter2R
+
+if not _FOR_DOCS:  # PYCHOK force epydoc
+    Elliperim = Elliperim()  # singleton
+del _FOR_DOCS
 
 EPS1_2 = _Deprecated_Float(EPS1_2=_1_0 - EPS_2)
 MANTIS = _Deprecated_Int(MANTIS=MANT_DIG)

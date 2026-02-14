@@ -69,8 +69,9 @@ from pygeodesy.basics import copysign0, isbool, _isin, isint,  typename
 from pygeodesy.constants import EPS, EPS_2, EPS0, EPS02, EPS1, INF, NINF, \
                                _EPSqrt, PI_2, PI_3, PI2, PI4, R_M, R_MA, R_FM, \
                                _EPStol as _TOL, _floatuple as _T, _isfinite, \
-                               _over, _0_0s, _0_0, _0_5, _1_0, _1_EPS, _2_0, \
-                               _4_0, _90_0, _0_25, _3_0  # PYCHOK used!
+                               _over, _SQRT2, _0_0s, _0_0, _0_5, _1_0, _1_EPS, \
+                               _2_0, _4_0, _90_0, _0_25, _3_0  # PYCHOK used!
+# from pygeodesy.ellipses import Ellipse  # _MODS
 from pygeodesy.errors import _AssertionError, IntersectionError, _ValueError, _xattr, _xkwds_not
 from pygeodesy.fmath import cbrt, cbrt2, fdot, Fhorner, fpowers, hypot, hypot_, \
                             hypot1, hypot2, sqrt3,  Fsum
@@ -96,7 +97,7 @@ from pygeodesy.utily import atan1, atan1d, atan2b, degrees90, m2radians, radians
 from math import asinh, atan, atanh, cos, degrees, exp, fabs, radians, sin, sinh, sqrt, tan  # as _tan
 
 __all__ = _ALL_LAZY.ellipsoids
-__version__ = '26.01.13'
+__version__ = '26.02.14'
 
 _f_0_0    = Float(f =_0_0)  # zero flattening
 _f__0_0   = Float(f_=_0_0)  # zero inverse flattening
@@ -1475,10 +1476,8 @@ class Ellipsoid(_NamedEnumItem):
            @see: C{Rtriaxial}
         '''
         a, b = self.a, self.b
-        if b < a:
-            b  = sqrt(_0_5 + self.b2_a2 * _0_5) * a
-        elif b > a:
-            b *= sqrt(_0_5 + self.a2_b2 * _0_5)
+        if b != a:
+            b = hypot(a, b) / _SQRT2
         return Radius(Rbiaxial=b)
 
     Requatorial = a  # for consistent naming
@@ -1864,6 +1863,13 @@ class Ellipsoid(_NamedEnumItem):
         elif b > q:
             q  = sqrt((self.a2_b2 * _3_0 + _1_0) * _0_25) * b
         return Radius(Rtriaxial=q)
+
+    def toEllipse(self, **name):
+        '''Get this ellipsoid's meridional ellipse L{Ellipse<pygeodesy.Ellipse>}.
+
+           @kwarg name: Optional, unique C{B{name}=NN} (C{str}).
+        '''
+        return _MODS.ellipses.Ellipse(self.a, self.b, **name)
 
     def toEllipsoid2(self, **name):
         '''Get a copy of this ellipsoid as an L{Ellipsoid2}.

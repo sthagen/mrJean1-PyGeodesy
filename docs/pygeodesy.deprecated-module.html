@@ -69,7 +69,7 @@
 
 <hr />
 <div class="fields">      <p><strong>Version:</strong>
-        25.10.25
+        26.02.08
       </p>
 </div><!-- ==================== SUBMODULES ==================== -->
 <a name="section-Submodules"></a>
@@ -85,7 +85,8 @@
         href="pygeodesy.latlonBase-module.html" 
         class="link">pygeodesy.latlonBase</a> instead.</em>    </li>
     <li class="private"> <strong class="uidlink"><a href="pygeodesy.deprecated.classes-module.html" onclick="show_private();">pygeodesy.deprecated.classes</a></strong>: <em class="summary">DEPRECATED classes kept for backward compatibility.</em>    </li>
-    <li class="private"> <strong class="uidlink"><a href="pygeodesy.deprecated.consterns-module.html" onclick="show_private();">pygeodesy.deprecated.consterns</a></strong>: <em class="summary">DEPRECATED constants and interns kept for backward compatibility.</em>    </li>
+    <li class="private"> <strong class="uidlink"><a href="pygeodesy.deprecated.consterns-module.html" onclick="show_private();">pygeodesy.deprecated.consterns</a></strong>: <em class="summary">DEPRECATED constants, interns and singletons kept for backward 
+        compatibility.</em>    </li>
     <li> <strong class="uidlink"><a href="pygeodesy.deprecated.datum-module.html">pygeodesy.deprecated.datum</a></strong>: <em class="summary">DEPRECATED on 2022.09.12, use module <a 
         href="pygeodesy.datums-module.html" 
         class="link">pygeodesy.datums</a> or <a 
@@ -155,6 +156,16 @@
         href="pygeodesy.namedTuples.Forward4Tuple-class.html" 
         class="link">Forward4Tuple</a>, item <code>gamma</code> for 
         <code>convergence</code>.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pygeodesy.deprecated.consterns.Elliperim-class.html" class="summary-name">Elliperim</a><br />
+      DEPRECATED on 2026.02.06, use class <a 
+        href="pygeodesy.ellipses.Ellipse-class.html" 
+        class="link">Ellipse</a>.
     </td>
   </tr>
 <tr>
@@ -917,6 +928,52 @@
           <td><span class="summary-sig"><a href="pygeodesy.deprecated-module.html#decodeEPSG2" class="summary-sig-name">decodeEPSG2</a>(<span class="summary-sig-arg">arg</span>)</span><br />
       DEPRECATED, use function <a href="pygeodesy.epsg-module.html#decode2"
       class="link">epsg.decode2</a>.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="pygeodesy.deprecated-module.html#elliperim" class="summary-sig-name">elliperim</a>(<span class="summary-sig-arg">a</span>,
+        <span class="summary-sig-arg">b</span>,
+        <span class="summary-sig-arg">*deg2_1</span>)</span><br />
+      DEPRECATED on 2026.02.12, use method <a 
+      href="pygeodesy.ellipses.Ellipse-class.html#arc" 
+      class="link">pygeodesy.Ellipse.arc</a> or property <a 
+      href="pygeodesy.ellipses.Ellipse-class.html#perimeter2k_" 
+      class="link">pygeodesy.Ellipse.perimeter2k_</a>.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="pygeodesy.deprecated-module.html#elliperim_" class="summary-sig-name">elliperim_</a>(<span class="summary-sig-arg">a</span>,
+        <span class="summary-sig-arg">b</span>,
+        <span class="summary-sig-arg">*rad2_1</span>)</span><br />
+      DEPRECATED on 2026.02.12, use method <a 
+      href="pygeodesy.ellipses.Ellipse-class.html#arc_" 
+      class="link">pygeodesy.Ellipse.arc_</a> or property <a 
+      href="pygeodesy.ellipses.Ellipse-class.html#perimeter2k_" 
+      class="link">pygeodesy.Ellipse.perimeter2k_</a>.</td>
           <td align="right" valign="top">
             
             
@@ -2247,6 +2304,64 @@ Transforms.WGS84: Transform(name='WGS84', tx=0.0, ty=0.0, tz=0.0, s1=1\
   </dl>
 </td></tr></table>
 </div>
+<a name="elliperim"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">elliperim</span>&nbsp;(<span class="sig-arg">a</span>,
+        <span class="sig-arg">b</span>,
+        <span class="sig-arg">*deg2_1</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>DEPRECATED on 2026.02.12, use method <a 
+  href="pygeodesy.ellipses.Ellipse-class.html#arc" 
+  class="link">pygeodesy.Ellipse.arc</a> or property <a 
+  href="pygeodesy.ellipses.Ellipse-class.html#perimeter2k_" 
+  class="link">pygeodesy.Ellipse.perimeter2k_</a>.</p>
+  <dl class="fields">
+    <dt>Decorators:</dt>
+    <dd><ul class="nomargin-top">
+        <li><code>@deprecated_function</code></li>
+    </ul></dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="elliperim_"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">elliperim_</span>&nbsp;(<span class="sig-arg">a</span>,
+        <span class="sig-arg">b</span>,
+        <span class="sig-arg">*rad2_1</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>DEPRECATED on 2026.02.12, use method <a 
+  href="pygeodesy.ellipses.Ellipse-class.html#arc_" 
+  class="link">pygeodesy.Ellipse.arc_</a> or property <a 
+  href="pygeodesy.ellipses.Ellipse-class.html#perimeter2k_" 
+  class="link">pygeodesy.Ellipse.perimeter2k_</a>.</p>
+  <dl class="fields">
+    <dt>Decorators:</dt>
+    <dd><ul class="nomargin-top">
+        <li><code>@deprecated_function</code></li>
+    </ul></dd>
+  </dl>
+</td></tr></table>
+</div>
 <a name="enStr2"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
@@ -3388,7 +3503,7 @@ Transforms.WGS84: Transform(name='WGS84', tx=0.0, ty=0.0, tz=0.0, s1=1<span clas
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Tue Feb  3 11:00:30 2026
+    Generated by Epydoc 3.0.1 on Sat Feb 14 15:33:19 2026
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

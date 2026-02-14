@@ -26,7 +26,7 @@ except ImportError:  # Python 2-
     _inf, _nan = float(_INF_), float(_NAN_)
 
 __all__ = _ALL_LAZY.constants
-__version__ = '26.01.14'
+__version__ = '26.02.09'
 
 
 def _copysign_0_0(y):
@@ -290,7 +290,7 @@ _2__PI   = _Float(_2__PI  =_2_0 / _pi)    # PYCHOK = 0.636_619_772_367_581_343_0
 _K0_UTM  = _Float(_K0_UTM = 0.9996)       # PYCHOK in .etm, .ktm, .utm, UTM scale at central meridian
 _K0_UPS  = _Float(_K0_UPS = 0.994)        # PYCHOK in .ups, scale factor at central meridian
 OVERFLOW = _Float(OVERFLOW=_1_0 / EPS0)   # PYCHOK = 2.028240960365e+31
-# sqrt(2) <https://WikiPedia.org/wiki/Square_root_of_2>
+_SQRT2   = _Float(_SQRT2  =sqrt(_2_0))    # PYCHOK <https://WikiPedia.org/wiki/Square_root_of_2>
 # 1.414213562373095_048_801_688_724_209_698_078_569_671_875_376_948_073_176_679_737_99
 # _1SQRT2= _Float(_1SQRT2 =sqrt(_2_0) + 1)
 # 0.707106781186547_524_400_844_362_104_849_039_284_835_937_688_474_036_588_339_868_99
