@@ -15,20 +15,20 @@ I{experimental} documentation.
       Geodesics_on_a_triaxial_ellipsoid>} and U{Triaxial coordinate systems and their geometrical
       interpretation<https://OLD.Topo.Auth.GR/wp-content/uploads/sites/111/2021/12/09_Panou.pdf>}.
 
-@var Triaxials.Amalthea: Triaxial(name='Amalthea', a=125000, b=73000, c=64000, e2ab=0.658944, e2bc=0.231375493, e2ac=0.737856, volume=2446253479595252, area=93239507787.490371704, area_p=93212299402.670425415)
-@var Triaxials.Ariel: Triaxial(name='Ariel', a=581100, b=577900, c=577700, e2ab=0.01098327, e2bc=0.000692042, e2ac=0.011667711, volume=812633172614203904, area=4211301462766.580078125, area_p=4211301574065.829589844)
-@var Triaxials.Earth: Triaxial(name='Earth', a=6378173.435, b=6378103.9, c=6356754.399999999, e2ab=0.000021804, e2bc=0.006683418, e2ac=0.006705077, volume=1083208241574987694080, area=510065911057441.0625, area_p=510065915922713.6875)
-@var Triaxials.Enceladus: Triaxial(name='Enceladus', a=256600, b=251400, c=248300, e2ab=0.040119337, e2bc=0.024509841, e2ac=0.06364586, volume=67094551514082248, area=798618496278.596679688, area_p=798619018175.109985352)
-@var Triaxials.Europa: Triaxial(name='Europa', a=1564130, b=1561230, c=1560930, e2ab=0.003704694, e2bc=0.000384275, e2ac=0.004087546, volume=15966575194402123776, area=30663773697323.51953125, area_p=30663773794562.45703125)
-@var Triaxials.Io: Triaxial(name='Io', a=1829400, b=1819300, c=1815700, e2ab=0.011011391, e2bc=0.003953651, e2ac=0.014921506, volume=25313121117889765376, area=41691875849096.7421875, area_p=41691877397441.2109375)
-@var Triaxials.Mars: Triaxial(name='Mars', a=3394600, b=3393300, c=3376300, e2ab=0.000765776, e2bc=0.009994646, e2ac=0.010752768, volume=162907283585817247744, area=144249140795107.4375, area_p=144249144150662.15625)
-@var Triaxials.Mimas: Triaxial(name='Mimas', a=207400, b=196800, c=190600, e2ab=0.09960581, e2bc=0.062015624, e2ac=0.155444317, volume=32587072869017956, area=493855762247.691833496, area_p=493857714107.9375)
-@var Triaxials.Miranda: Triaxial(name='Miranda', a=240400, b=234200, c=232900, e2ab=0.050915557, e2bc=0.011070811, e2ac=0.061422691, volume=54926187094835456, area=698880863325.757080078, area_p=698881306767.950317383)
-@var Triaxials.Moon: Triaxial(name='Moon', a=1735550, b=1735324, c=1734898, e2ab=0.000260419, e2bc=0.000490914, e2ac=0.000751206, volume=21886698675223740416, area=37838824729886.09375, area_p=37838824733332.21875)
-@var Triaxials.Tethys: Triaxial(name='Tethys', a=535600, b=528200, c=525800, e2ab=0.027441672, e2bc=0.009066821, e2ac=0.036259685, volume=623086233855821440, area=3528073490771.394042969, area_p=3528074261832.738769531)
-@var Triaxials.WGS84_3: Triaxial(name='WGS84_3', a=6378171.36, b=6378101.609999999, c=6356751.84, e2ab=0.000021871, e2bc=0.006683505, e2ac=0.00670523, volume=1083207064030173855744, area=510065541435967.4375, area_p=510065546301413.5625)
-@var Triaxials.WGS84_3r: Triaxial(name='WGS84_3r', a=6378172, b=6378102, c=6356752, e2ab=0.00002195, e2bc=0.006683577, e2ac=0.00670538, volume=1083207266220584468480, area=510065604942135.8125, area_p=510065609807745.0)
-@var Triaxials.WGS84_35: Triaxial(name='WGS84_35', a=6378172, b=6378102, c=6356752.314245179, e2ab=0.00002195, e2bc=0.006683478, e2ac=0.006705281, volume=1083207319768789942272, area=510065621722018.125, area_p=510065626587483.3125)
+@var Triaxials.Amalthea: Triaxial(name='Amalthea', a=125000, b=73000, c=64000, e2ab=0.658944, e2bc=0.231375493, e2ac=0.737856, volume=2446253479595252, area=93239507787.490341187, R2=86138.05359954)
+@var Triaxials.Ariel: Triaxial(name='Ariel', a=581100, b=577900, c=577700, e2ab=0.01098327, e2bc=0.000692042, e2ac=0.011667711, volume=812633172614203904, area=4211301462766.580078125, R2=578899.578791275)
+@var Triaxials.Earth: Triaxial(name='Earth', a=6378173.435, b=6378103.9, c=6356754.399999999, e2ab=0.000021804, e2bc=0.006683418, e2ac=0.006705077, volume=1083208241574987694080, area=510065911057440.9375, R2=6371008.987886564)
+@var Triaxials.Enceladus: Triaxial(name='Enceladus', a=256600, b=251400, c=248300, e2ab=0.040119337, e2bc=0.024509841, e2ac=0.06364586, volume=67094551514082248, area=798618496278.596679688, R2=252095.300756832)
+@var Triaxials.Europa: Triaxial(name='Europa', a=1564130, b=1561230, c=1560930, e2ab=0.003704694, e2bc=0.000384275, e2ac=0.004087546, volume=15966575194402123776, area=30663773697323.51953125, R2=1562096.533153486)
+@var Triaxials.Io: Triaxial(name='Io', a=1829400, b=1819300, c=1815700, e2ab=0.011011391, e2bc=0.003953651, e2ac=0.014921506, volume=25313121117889765376, area=41691875849096.734375, R2=1821464.812747882)
+@var Triaxials.Mars: Triaxial(name='Mars', a=3394600, b=3393300, c=3376300, e2ab=0.000765776, e2bc=0.009994646, e2ac=0.010752768, volume=162907283585817247744, area=144249140795107.4375, R2=3388064.624110653)
+@var Triaxials.Mimas: Triaxial(name='Mimas', a=207400, b=196800, c=190600, e2ab=0.09960581, e2bc=0.062015624, e2ac=0.155444317, volume=32587072869017956, area=493855762247.691772461, R2=198241.75359411)
+@var Triaxials.Miranda: Triaxial(name='Miranda', a=240400, b=234200, c=232900, e2ab=0.050915557, e2bc=0.011070811, e2ac=0.061422691, volume=54926187094835456, area=698880863325.757080078, R2=235828.692095158)
+@var Triaxials.Moon: Triaxial(name='Moon', a=1735550, b=1735324, c=1734898, e2ab=0.000260419, e2bc=0.000490914, e2ac=0.000751206, volume=21886698675223740416, area=37838824729886.09375, R2=1735257.329122863)
+@var Triaxials.Tethys: Triaxial(name='Tethys', a=535600, b=528200, c=525800, e2ab=0.027441672, e2bc=0.009066821, e2ac=0.036259685, volume=623086233855821440, area=3528073490771.393554688, R2=529863.348254881)
+@var Triaxials.WGS84_3: Triaxial(name='WGS84_3', a=6378171.36, b=6378101.609999999, c=6356751.84, e2ab=0.000021871, e2bc=0.006683505, e2ac=0.00670523, volume=1083207064030173855744, area=510065541435967.5, R2=6371006.679496506)
+@var Triaxials.WGS84_35: Triaxial(name='WGS84_35', a=6378172, b=6378102, c=6356752.314245179, e2ab=0.00002195, e2bc=0.006683478, e2ac=0.006705281, volume=1083207319768789942272, area=510065621722018.25, R2=6371007.180905545)
+@var Triaxials.WGS84_3r: Triaxial(name='WGS84_3r', a=6378172, b=6378102, c=6356752, e2ab=0.00002195, e2bc=0.006683577, e2ac=0.00670538, volume=1083207266220584468480, area=510065604942135.875, R2=6371007.076110449)
 '''
 # make sure int/int division yields float quotient, see .basics
 from __future__ import division as _; del _  # noqa: E702 ;
@@ -63,7 +63,7 @@ from pygeodesy.vector3d import _otherV3d, Vector3d
 # from math import fabs, sqrt  # from .fmath
 
 __all__ = _ALL_LAZY.triaxials_triaxial5
-__version__ = '26.02.09'
+__version__ = '26.02.15'
 
 _omega_ = 'omega'
 _TRIPS  =  359  # Eberly 1074?
@@ -537,7 +537,7 @@ class Conformal(Triaxial):
     def _xE(self):
         '''(INTERNAL) Get the x-elliptic function.
         '''
-        k2, kp2 = self._k2E_kp2E
+        k2, kp2 = self._k2_kp2E
         # -a2b2 / b2 == (b2 - a2) / b2 == 1 - a2 / b2 == 1 - a2_b2
         return _MODS.elliptic.Elliptic(k2, _1_0 - self._a2_b2, kp2, self._a2_b2)
 
@@ -646,7 +646,7 @@ class Conformal(Triaxial):
     def _yE(self):
         '''(INTERNAL) Get the y-elliptic function.
         '''
-        k2, kp2 = self._k2E_kp2E
+        k2, kp2 = self._k2_kp2E
         # b2c2 / b2 == (b2 - c2) / b2 == 1 - c2 / b2 == e2bc
         return _MODS.elliptic.Elliptic(kp2, self.e2bc, k2, self._c2_b2)
 

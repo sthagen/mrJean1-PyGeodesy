@@ -36,14 +36,14 @@ from __future__ import division as _; del _  # noqa: E702 ;
 
 # from pygeodesy.angles import Ang, isAng  # _MODS
 # from pygeodesy.basics import map1  # from .namedTuples
-from pygeodesy.constants import EPS, EPS0, EPS02, EPS4, _EPS2e4, INT0, \
-                               _isfinite, float0_, NAN, PI2, PI_3, PI4, \
-                               _0_0, _1_0, _N_1_0,  _4_0  # PYCHOK used!
+from pygeodesy.constants import EPS, EPS0, EPS02, EPS4, INT0, NAN, PI_3, PI4, \
+                               _EPS2e4, _isfinite, float0_, _1_over, _0_0, \
+                               _1_0, _N_1_0,   _3_0, _4_0  # PYCHOK used!
 # from pygeodesy.ellipses import Ellipse, _isFlat  # _MODS
 # from pygeodesy.ellipsoids import Ellipsoid, _EWGS84  # _MODS
 # from pygeodesy.elliptic import Elliptic  # _MODS
 # from pygeodesy.errors import _ValueError, _xkwds  # from .utily
-from pygeodesy.fmath import cbrt, fdot_, fmean_, hypot, norm2, sqrt0,  fabs, sqrt
+from pygeodesy.fmath import cbrt, fmean_, hypot, norm2, sqrt0,  fabs, sqrt
 from pygeodesy.fsums import _Fsumf_, fsumf_
 # from pygeodesy.internals import typename  # _MODS
 from pygeodesy.interns import _a_, _b_, _c_, _inside_, _not_, _NOTEQUAL_, _null_, \
@@ -52,20 +52,21 @@ from pygeodesy.lazily import _ALL_DOCS, _ALL_LAZY, _ALL_MODS as _MODS, _FOR_DOCS
 from pygeodesy.named import _NamedEnum, _NamedEnumItem, _NamedTuple, _Pass  # _MODS
 from pygeodesy.namedTuples import Vector4Tuple,  map1
 from pygeodesy.props import Property_RO, property_doc_, property_RO, \
-                            deprecated_property_RO
+                            deprecated_method, deprecated_property_RO
 # from pygeodesy.streprs import Fmt  # _MODS
 from pygeodesy.units import Degrees, Easting, Float, Height, Height_, Meter, \
                             Meter2, Meter3, Northing, Radius_, Scalar
-from pygeodesy.utily import asin1, km2m, m2km,  _ValueError, _xkwds
+from pygeodesy.utily import km2m, m2km,  _ValueError, _xkwds
 from pygeodesy.vector3d import _otherV3d, Vector3d
 
 # from math import fabs, sqrt  # from .fmath
 
 __all__ = _ALL_LAZY.triaxials_bases
-__version__ = '26.02.12'
+__version__ = '26.02.15'
 
 _bet_         = 'bet'  # PYCHOK shared
 _llk_         = 'llk'  # PYCHOK shared
+_KTpFlat      =  1.5849625007
 _MAXIT        =  33  # 20  # PYCHOK shared
 _not_ordered_ = _not_('ordered')
 _omg_         = 'omg'  # PYCHOK shared
@@ -255,25 +256,39 @@ class _UnOrderedTriaxialBase(_NamedEnumItem):
     def area(self):
         '''Get the surface area (C{meter} I{squared}).
         '''
-        c, b, a = sorted(self._abc3)
-        return _OrderedTriaxialBase(a, b, c).area if a > c else \
-                Meter2(area=self.a2 * PI4)  # a == c == b
+        return self.areaKT(_KTpFlat) if self.isFlat else self.areaRG
 
-    def area_p(self, p=1.6075):
-        '''I{Approximate} the surface area (C{meter} I{squared}).
+    def areaKT(self, *p):
+        '''I{Approximate} the surface area using U{Knud Thomson's
+           <https://WikiPedia.org/wiki/Ellipsoid#Approximate_formula>}
+           formula (C{meter} I{squared}).
 
-           @kwarg p: Exponent (C{scalar} > 0), 1.6 for near-spherical or 1.5849625007
-                     for "near-flat" triaxials.
-
-           @see: U{Surface area<https://WikiPedia.org/wiki/Ellipsoid#Approximate_formula>}.
+           @arg p: Exponent (C{scalar} > 0), 1.6075 for near-spherical
+                   or 1.5849625007 for "near-flat" triaxials.
         '''
         a, b, c = self._abc3
         if a == b == c:
             a *= a
         else:
             _p = pow
-            a = _p(fmean_(_p(a * b, p), _p(a * c, p), _p(b * c, p)), _1_0 / p)
-        return Meter2(area_p=a * PI4)
+            p = p[0] if p else (_KTpFlat if self.isFlat else 1.6075)
+            a = _p(fmean_(_p(a * b, p), _p(a * c, p), _p(b * c, p)), _1_over(p))
+        return Meter2(areaKT=a * PI4)
+
+    @deprecated_method
+    def area_p(self, p=1.6075):
+        '''DEPRECATED on 2026-02-15, use method L{areaKT<Triaxial_.areaKT>}.'''
+        return Meter2(area_p=self.areaKT(p))
+
+    @Property_RO
+    def areaRG(self):
+        '''Get the surface area using U{Carlson's symmetric RG
+           <https://WikiPedia.org/wiki/Ellipsoid#Surface_Area>}
+           form (C{meter} I{squared}).
+        '''
+        t =  self.a2, self.b2, self.c2
+        r = _MODS.elliptic._rG3(*map(_1_over, t))
+        return Meter2(areaRG=self.volume * r * _3_0)
 
     @Property_RO
     def b(self):
@@ -375,7 +390,13 @@ class _UnOrderedTriaxialBase(_NamedEnumItem):
         '''
         _f = _MODS.ellipses._isFlat
         c, b, a = sorted(self._abc3)
-        return _f(a, b) or _f(a, c) or _f(b, c)
+        return _f(a, c) or _f(b, c) or _f(a, b)
+
+    @Property_RO
+    def isOblate(self):
+        '''Is this triaxial oblate (C{bool})?
+        '''
+        return not (self.isProlate or self.isSpherical)
 
     @Property_RO
     def isOrdered(self):
@@ -383,6 +404,13 @@ class _UnOrderedTriaxialBase(_NamedEnumItem):
         '''
         a, b, c = self._abc3
         return bool(a >= b > c)  # b > c!
+
+    @Property_RO
+    def isProlate(self):
+        '''Is this triaxial prolate (C{bool})?
+        '''
+        a, b, c = self._abc3
+        return a < b or b < c or a < c
 
     @Property_RO
     def isSpherical(self):
@@ -659,7 +687,7 @@ class _UnOrderedTriaxialBase(_NamedEnumItem):
                 t += C.xyQ2,
                 break
         t += T.volume, T.area, T.R2
-        return self._instr(area_p=self.area_p(), prec=prec, props=t, **name)
+        return self._instr(prec=prec, props=t, **name)
 
     @Property_RO
     def unOrdered(self):
@@ -699,7 +727,7 @@ class _OrderedTriaxialBase(_UnOrderedTriaxialBase):
 
     @Property_RO
     def _a2b2_a2c2(self):
-        '''@see: Methods C{.forwardBetaOmega} and property C{._k2E_kp2E}.
+        '''@see: Methods C{.forwardBetaOmega} and property C{._k2_kp2E}.
         '''
         s = self._a2c2
         if s:
@@ -714,24 +742,36 @@ class _OrderedTriaxialBase(_UnOrderedTriaxialBase):
         '''
         a, b, c = self._abc3
         if a != b and self.e2ac > 0:
-            if _MODS.ellipses._isFlat(a, c):
-                c = _1_0
-            else:
-                kp2, k2 = self._k2E_kp2E  # swapped!
-                aE = _MODS.elliptic.Elliptic(k2, _0_0, kp2, _1_0)
-                s  = sqrt(self.e2ac)  # sin(phi)**2 == 1 - (c/a)**2
-                t  = self._c2_a2 / s  # cos(phi)**2 == (c/a)**2
-                r  = asin1(s)  # phi = atan2(c/a, s) = asin(s)
-                c  = fdot_(aE.fE(r), s,  c / a, c / b,
-                           aE.fF(r), t)
-            a = Meter2(area=a * b * c * PI2)
+            a = _UnOrderedTriaxialBase(self).area
         else:  # a == b > c
             a = _MODS.ellipsoids.Ellipsoid(a, b=c).areax
         return a
 
+#   @Property_RO
+#   def area2k1J(self):
+#       '''Get the surface area using elliptic integrals (C{meter} I{squared}).
+#       '''
+#       a, b, c = self._abc3
+#       if a != b and self.e2ac > 0:
+#           k2, kp2 = t = self._k2_kp2E
+#           if min(t) < 0 or max(t) > _1_0 or self.isFlat:
+#               a = self.areaKT()
+#           else:  # k2, kp2 swapped!
+#               # from pygeodesy import asin1, fdot_, PI2
+#               aE = _MODS.elliptic.Elliptic(kp2, _0_0, k2, _1_0)
+#               s  = sqrt(self.e2ac)  # sin(phi)**2 == 1 - (c/a)**2
+#               t  = self._c2_a2 / s  # cos(phi)**2 == (c/a)**2
+#               r  = asin1(s)  # phi = atan2(c/a, s) = asin(s)
+#               c  = fdot_(aE.fE(r), s,  c / a, c / b,
+#                          aE.fF(r), t)
+#               a = Meter2(area2k1J=a * b * c * PI2)
+#       else:  # a == b > c
+#           a = _MODS.ellipsoids.Ellipsoid(a, b=c).areax
+#       return a
+
     @Property_RO
-    def _k2E_kp2E(self):
-        '''(INTERNAL) Get elliptic C{k2} and C{kp2} for C{._xE}, C{._yE} and C{.area}.
+    def _k2_kp2E(self):
+        '''(INTERNAL) Get elliptic C{k2} and C{kp2} for C{._xE}, C{._yE} and C{.areaE}.
         '''
         # k2  = a2b2 / a2c2 * c2_b2
         # kp2 = b2c2 / a2c2 * a2_b2

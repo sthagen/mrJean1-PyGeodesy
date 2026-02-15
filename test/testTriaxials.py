@@ -110,7 +110,7 @@ class Tests(TestsBase):
         n = J.area.name
         a = J.area
         self.test(n, int(a), '510065604942135', known=int(a * 1e-19) == 510)
-        n = J.area_p.__name__
+        n = J.area_p.__name__  # DEPRECATED, use .areaKT
         p = J.area_p()
         self.test(n, int(p), '510065609807745', known=int(p * 1e-19) == 510)
         e = abs((a - p) / a)

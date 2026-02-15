@@ -92,7 +92,7 @@ from math import asin, asinh, atan, ceil, cosh, fabs, floor, radians, \
 # import operator as _operator  # from .fmath
 
 __all__ = _ALL_LAZY.elliptic
-__version__ = '26.02.12'
+__version__ = '26.02.15'
 
 _TolRD  =  zqrt(EPS * 0.002)
 _TolRF  =  zqrt(EPS * 0.030)
@@ -1258,7 +1258,7 @@ def _rG2(x, y, inst=None, PI_=PI_4):  # 2-args
     return _over(_fsum(rs) * PI_, a + b)  # nonfinites=True, float
 
 
-def _rG3(x, y, z):  # 3-arg version
+def _rG3(x, y, z):  # 3-arg version  # in .triaxials.bases
     '''(INTERNAL) C{x}, C{y} and C{z} all non-zero, see C{.fRG}.
     '''
     R  = _RF3(x, y, z) * z

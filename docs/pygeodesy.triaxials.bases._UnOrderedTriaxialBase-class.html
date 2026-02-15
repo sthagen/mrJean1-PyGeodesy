@@ -117,10 +117,32 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
+          <td><span class="summary-sig"><a href="pygeodesy.triaxials.bases._UnOrderedTriaxialBase-class.html#areaKT" class="summary-sig-name">areaKT</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">*p</span>)</span><br />
+      <i>Approximate</i> the surface area using <a 
+      href="https://WikiPedia.org/wiki/Ellipsoid#Approximate_formula" 
+      target="_top">Knud Thomson's</a> formula (<code>meter</code> 
+      <i>squared</i>).</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
           <td><span class="summary-sig"><a href="pygeodesy.triaxials.bases._UnOrderedTriaxialBase-class.html#area_p" class="summary-sig-name">area_p</a>(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">p</span>=<span class="summary-sig-default">1.6075</span>)</span><br />
-      <i>Approximate</i> the surface area (<code>meter</code> 
-      <i>squared</i>).</td>
+      DEPRECATED on 2026-02-15, use method <a 
+      href="pygeodesy.triaxials.bases._UnOrderedTriaxialBase-class.html#areaKT"
+      class="link">areaKT</a>.</td>
           <td align="right" valign="top">
             
             
@@ -420,6 +442,17 @@
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
+        <a href="pygeodesy.triaxials.bases._UnOrderedTriaxialBase-class.html#areaRG" class="summary-name">areaRG</a><br />
+      Get the surface area using <a 
+      href="https://WikiPedia.org/wiki/Ellipsoid#Surface_Area" 
+      target="_top">Carlson's symmetric RG</a> form (<code>meter</code> 
+      <i>squared</i>).
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
         <a href="pygeodesy.triaxials.bases._UnOrderedTriaxialBase-class.html#b" class="summary-name">b</a><br />
       Get the <code>middle, y</code> semi-axis (<code>meter</code>, same 
       units as <b><code>a</code></b>).
@@ -490,9 +523,25 @@
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
+        <a href="pygeodesy.triaxials.bases._UnOrderedTriaxialBase-class.html#isOblate" class="summary-name">isOblate</a><br />
+      Is this triaxial oblate (<code>bool</code>)?
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
         <a href="pygeodesy.triaxials.bases._UnOrderedTriaxialBase-class.html#isOrdered" class="summary-name">isOrdered</a><br />
       Is this triaxial <i>ordered</i> and <i>not spherical</i> 
       (<code>bool</code>)?
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pygeodesy.triaxials.bases._UnOrderedTriaxialBase-class.html#isProlate" class="summary-name">isProlate</a><br />
+      Is this triaxial prolate (<code>bool</code>)?
     </td>
   </tr>
 <tr>
@@ -628,6 +677,34 @@
   </dl>
 </td></tr></table>
 </div>
+<a name="areaKT"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">areaKT</span>&nbsp;(<span class="sig-arg">self</span>,
+        <span class="sig-arg">*p</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p><i>Approximate</i> the surface area using <a 
+  href="https://WikiPedia.org/wiki/Ellipsoid#Approximate_formula" 
+  target="_top">Knud Thomson's</a> formula (<code>meter</code> 
+  <i>squared</i>).</p>
+  <dl class="fields">
+    <dt>Arguments:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>p</code></strong> - Exponent (<code>scalar</code> &gt; 0), 1.6075 for near-spherical 
+          or 1.5849625007 for &quot;near-flat&quot; triaxials.</li>
+    </ul></dd>
+  </dl>
+</td></tr></table>
+</div>
 <a name="area_p"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
@@ -643,20 +720,16 @@
     </td>
   </tr></table>
   
-  <p><i>Approximate</i> the surface area (<code>meter</code> 
-  <i>squared</i>).</p>
+  <p>DEPRECATED on 2026-02-15, use method <a 
+  href="pygeodesy.triaxials.bases._UnOrderedTriaxialBase-class.html#areaKT"
+  class="link">areaKT</a>.</p>
   <dl class="fields">
-    <dt>Arguments:</dt>
+    <dt>Decorators:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>p</code></strong> - Exponent (<code>scalar</code> &gt; 0), 1.6 for near-spherical or 
-          1.5849625007 for &quot;near-flat&quot; triaxials.</li>
+        <li><code>@deprecated_method</code></li>
     </ul></dd>
   </dl>
-<div class="fields">      <p><strong>See Also:</strong>
-        <a href="https://WikiPedia.org/wiki/Ellipsoid#Approximate_formula" 
-        target="_top">Surface area</a>.
-      </p>
-</div></td></tr></table>
+</td></tr></table>
 </div>
 <a name="hartzell4"></a>
 <div>
@@ -1235,6 +1308,36 @@ conventionally).
   </dl>
 </td></tr></table>
 </div>
+<a name="areaRG"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">areaRG</h3>
+  <p>Get the surface area using <a 
+  href="https://WikiPedia.org/wiki/Ellipsoid#Surface_Area" 
+  target="_top">Carlson's symmetric RG</a> form (<code>meter</code> 
+  <i>squared</i>).</p>
+  <dl class="fields">
+    <dt>Get method:</dt>
+    <dd class="value"><span class="summary-sig">areaRG(<span class="summary-sig-arg">self</span>)</span>
+        - Get the surface area using <a 
+href="https://WikiPedia.org/wiki/Ellipsoid#Surface_Area" 
+target="_top">Carlson's symmetric RG</a> form (<code>meter</code> 
+<i>squared</i>).
+    </dd>
+    <dt>Set method:</dt>
+    <dd class="value"><span class="summary-sig">_fset_error(<span class="summary-sig-arg">inst</span>,
+        <span class="summary-sig-arg">val</span>)</span>
+        - Throws an <code>AttributeError</code>, always.
+    </dd>
+    <dt>Delete Method:</dt>
+    <dd class="value"><span class="summary-sig">_fdel(<span class="summary-sig-arg">inst</span>)</span>
+        - Zap the <i>cached/memoized</i> <code>property</code> value.
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
 <a name="b"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
@@ -1438,6 +1541,30 @@ as <b><code>a</code></b>).
   </dl>
 </td></tr></table>
 </div>
+<a name="isOblate"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">isOblate</h3>
+  <p>Is this triaxial oblate (<code>bool</code>)?</p>
+  <dl class="fields">
+    <dt>Get method:</dt>
+    <dd class="value"><span class="summary-sig">isOblate(<span class="summary-sig-arg">self</span>)</span>
+        - Is this triaxial oblate (<code>bool</code>)?
+    </dd>
+    <dt>Set method:</dt>
+    <dd class="value"><span class="summary-sig">_fset_error(<span class="summary-sig-arg">inst</span>,
+        <span class="summary-sig-arg">val</span>)</span>
+        - Throws an <code>AttributeError</code>, always.
+    </dd>
+    <dt>Delete Method:</dt>
+    <dd class="value"><span class="summary-sig">_fdel(<span class="summary-sig-arg">inst</span>)</span>
+        - Zap the <i>cached/memoized</i> <code>property</code> value.
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
 <a name="isOrdered"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
@@ -1451,6 +1578,30 @@ as <b><code>a</code></b>).
     <dd class="value"><span class="summary-sig">isOrdered(<span class="summary-sig-arg">self</span>)</span>
         - Is this triaxial <i>ordered</i> and <i>not spherical</i> 
 (<code>bool</code>)?
+    </dd>
+    <dt>Set method:</dt>
+    <dd class="value"><span class="summary-sig">_fset_error(<span class="summary-sig-arg">inst</span>,
+        <span class="summary-sig-arg">val</span>)</span>
+        - Throws an <code>AttributeError</code>, always.
+    </dd>
+    <dt>Delete Method:</dt>
+    <dd class="value"><span class="summary-sig">_fdel(<span class="summary-sig-arg">inst</span>)</span>
+        - Zap the <i>cached/memoized</i> <code>property</code> value.
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="isProlate"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">isProlate</h3>
+  <p>Is this triaxial prolate (<code>bool</code>)?</p>
+  <dl class="fields">
+    <dt>Get method:</dt>
+    <dd class="value"><span class="summary-sig">isProlate(<span class="summary-sig-arg">self</span>)</span>
+        - Is this triaxial prolate (<code>bool</code>)?
     </dd>
     <dt>Set method:</dt>
     <dd class="value"><span class="summary-sig">_fset_error(<span class="summary-sig-arg">inst</span>,
@@ -1656,7 +1807,7 @@ class="link">Ellipse</a><code>(b, c).perimeter2k_</code>.
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Sat Feb 14 15:33:23 2026
+    Generated by Epydoc 3.0.1 on Sun Feb 15 14:14:28 2026
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"
