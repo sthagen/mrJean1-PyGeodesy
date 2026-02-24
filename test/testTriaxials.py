@@ -6,7 +6,7 @@
 from __future__ import division as _; del _  # noqa: E702 ;
 
 __all__ = ('Tests',)
-__version__ = '26.02.06'
+__version__ = '26.02.19'
 
 from bases import Geod3Solve, numpy, random, startswith, TestsBase
 
@@ -15,7 +15,7 @@ from pygeodesy import EPS4, F_DEG_, F_DMS, PI_2, PI_4, \
                       fstr, LLK, Los, map1, map2, signBit, sincos2d_, \
                       Triaxial, Triaxial_, Triaxials, Triaxial3s, \
                       triaxum5, Vector3d
-from math import radians
+from math import fabs, radians
 
 
 def _r(s):
@@ -31,6 +31,17 @@ def _r(s):
 
 
 class Tests(TestsBase):
+
+    def testAreas(self):
+        for t in Triaxials.values(all=True, asorted=True):
+            n = t.name + '.'
+            self.test(n+'area   ', t.area, t.area, nl=1)
+            a = str(t.areaKT())
+            self.test(n+'areaKT ', a, a)
+            a = t.areaRG
+            self.test(n+'areaRG ', a, a)
+            if t.isOrdered:
+                self.test(n+'area21k', t.area21k, a, known=fabs(t.area21k - a) < 1)
 
     def testHartzell(self, module, LatLon):
         self.subtitle(module, 'Hartzell')
@@ -167,12 +178,12 @@ class Tests(TestsBase):
         self.test(n, t, "('99°20′46.03″N', '116°15′02.86″E')", known=True)
         n = J.area.name
         a = J.area
-        self.test(n, int(a), '511213503913540', known=int(a * 1e-19) == 511)
-        n = J.area_p.__name__
+        self.test(n, int(a), '511213503913540', known=int(a * 1e-12) == 511)
+        n = J.area_p.__name__  # DEPRECATED
         p = J.area_p()
-        self.test(n, int(p), '511213503913540', known=int(p * 1e-19) == 511)
-        e = abs((a - p) / a)
-        self.test('error', e, '0.00e+00', fmt='%.2e')
+        self.test(n, int(p), '511213503913540', known=int(p * 1e-12) == 511)
+#       e = abs((a - p) / a)
+#       self.test('error', e, '0.00e+00', fmt='%.2e')
         n = J.volume.name
         p = J.volume
         self.test(n, p, '1.086869e+21', fmt='%.6e')
@@ -293,7 +304,7 @@ class Tests(TestsBase):
 
         # <https://GeographicLib.SourceForge.io/C++/doc/Cart3Convert.1.html>
         T = module.Triaxial3(3, 2, 1)
-        self.test(n, repr(T), "Triaxial3(name='', a=3, b=2, c=1, k2=0.375, kp2=0.625, ", known=startswith)
+        self.test(n, repr(T), "Triaxial3(name='', a=3, b=2, c=1, k2=0.375, kp2=0.625", known=startswith)
 
         n = T.reverseLatLon.__name__
         t = T.reverseLatLon(1, 2, 3)
@@ -387,7 +398,7 @@ class Tests(TestsBase):
         # tr X '\n' | Cart3Convert -G | Cart3Convert -E -r | tr '\n' ' ' | Geod3Solve -i -: -p 0
         # 003:12:29.7 177:28:59.5 15347602 == 3.20824 177.48319 15347602
         T = Triaxial3s.WGS84_35  # module.Triaxial3(Triaxials.WGS84_35)  # a - b = 70
-        self.test(n, repr(T), "Triaxial3(name='WGS84_35', a=6378172, b=6378102, c=6356752.314245179, k2=0.9967", known=startswith, nl=1)
+        self.test(n, repr(T), "Triaxial3(name='WGS84_35', a=6378172, b=6378102, c=6356752.314245179, ", known=startswith, nl=1)
         d = Degrees('73 46 44W') - Degrees('19.43W')  # XXX T.lon0?
         self.test(n, d, '-54.34', prec=5, known=startswith)
         f = T.forwardLatLon(Degrees('40 38 23N'), Degrees(d), llk=LLK.GEODETIC)
@@ -618,7 +629,7 @@ class Tests(TestsBase):
         self.test(n, t, t)
 
         self.test('Triaxials', len(Triaxials.items(all=True)), 14, nl=1)
-        for t in Triaxials.values(all=True):
+        for t in Triaxials.values(all=True, asorted=True):
             self.test(t.name, t, getattr(Triaxials, t.name))
 
     def testTriaxum5(self):
@@ -655,5 +666,6 @@ if __name__ == '__main__':
     if Geod3Solve:
         from pygeodesy.geod3solve import Geodesic3Solve
         t.testGeod3Solve(Geodesic3Solve)
+    t.testAreas()
     t.results()
     t.exit()

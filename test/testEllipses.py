@@ -4,11 +4,11 @@
 # Test module L{ellipses}.
 
 __all__ = ('Tests',)
-__version__ = '26.02.14'
+__version__ = '26.02.22'
 
 from bases import startswith, TestsBase
 
-from pygeodesy import Ellipse, Ellipsoids, EPS, PI_4, elliperim
+from pygeodesy import Ellipse, Ellipsoids, EPS, elliperim
 
 
 class Tests(TestsBase):
@@ -28,11 +28,12 @@ class Tests(TestsBase):
                      (a / 4,     '273573'),
                      (a / 8,     '26106'),
                      (EPS,       '25512')):
-            m = 1. - (b / a)**2
-            self.test('a, b, b/a, m', (a, b, (b / a), m), '(6378172.0, ', known=startswith, nl=1)
+            m = 1.0 - (b / a)**2  # e2
+            t = a, b, (b / a), m
+            self.test('a, b, b/a, m', t, '(6378172.0, ', known=startswith, nl=1)
             E = Ellipse(a, b)
             for p, n in ((E.perimeter2k,  '2k'),
-                         (E.perimeter2k_, '2k_'),
+                         (E.perimeter2k_, '2k_'),  # scipy?
                          (E.perimeterAGM, 'AGM'),
                          (E.perimeterHGK, 'HGK'),
                          (E.perimeterGK,  'GK'),
@@ -61,21 +62,41 @@ class Tests(TestsBase):
             self.test(n, x, x, prec=6)
             self.test(n, m(360, 90), x, prec=6)
 
-            x = E.foci
-            self.test(_a('foci'), x, x)
-            self.test(_a('R2'), E.R2, E.R2)
-            x = E.Roc_(PI_4)
-            self.test(_a('Roc_'), x, x)
+            self.test(_a('area'), E.area, E.area)
+            self.test(_a('e '),   E.e, E.e)
+            self.test(_a('c '),   E.c, E.c)
+            self.test(_a('p '),   E.p, E.p)
+            self.test(_a('R2'),   E.R2, E.R2)
+            x = E.Roc(60)
+            self.test(_a('Roc 60'), x, x)
             x = E.sideOf(0, 1)
             self.test(_a('sideOf'), x, x)
+            x = E.slope(60)
+            self.test(_a('slope 60'), x, x)
 
+            x = E.hartzell4(a, b)
+            self.test(_a('hartzell4'), x, x)
+            x = E.height4(a, b)
+            self.test(_a('height4'), x, x)
+            x = E.normal3d(45)
+            self.test(_a('normal3d'), x, x)
+            x = E.normal4(60)
+            self.test(_a('normal4'), x, x, nt=1)
+
+            x = E.toRepr(terse=0)
+            self.test(_a('toRepr(terse=0)', n=-12), x, x)
             x = E.toEllipsoid().toStr()
             self.test(_a('toEllipsoid', n=-12), x, x)
             x = E.toTriaxial_().toStr()
-            self.test(_a('toTriaxial_', n=-12), x, x, nt=1)
+            self.test(_a('toTriaxial_', n=-12), x, x)
 
-            for n, W in Ellipsoids.items(all=True, asorted=True):
-                self.test(n + '.polarimeter/2k', W.polarimeter, W.toEllipse().perimeter2k, prec=6)
+        self.test(_a('isCircular'), E.isCircular, E.isCircular, nl=1)
+        self.test(_a('isFlat'),     E.isFlat, E.isFlat)
+        self.test(_a('isOblate'),   E.isOblate, E.isOblate)
+        self.test(_a('isProlate'),  E.isProlate, E.isProlate, nt=1)
+
+        for n, W in Ellipsoids.items(all=True, asorted=True):
+            self.test(n + '.polarimeter/2k', W.polarimeter, W.toEllipse().perimeter2k, prec=6)
 
 
 if __name__ == '__main__':

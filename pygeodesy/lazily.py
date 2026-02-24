@@ -221,7 +221,7 @@ _ALL_LAZY = _NamedEnum_RO(_name='_ALL_LAZY',
                      ecefLocals=_a(),  # module only
                      elevations=_a('Elevation2Tuple', 'GeoidHeight2Tuple',
                                    'elevation2', 'geoidHeight2'),
-                       ellipses=_a('Ellipse',),
+                       ellipses=_a('Ellipse', 'EllipseError'),
                 ellipsoidalBase=_a(),  # module only
               ellipsoidalBaseDI=_a(),  # module only
                ellipsoidalExact=_a(),  # module only
@@ -528,7 +528,7 @@ class _ALL_MODS(_internals._MODS_Base):
 _internals._MODS = _ALL_MODS = _ALL_MODS()  # PYCHOK singleton
 
 __all__ = _ALL_LAZY.lazily
-__version__ = '26.02.09'
+__version__ = '26.02.18'
 
 
 def _ALL_OTHER(*objs):

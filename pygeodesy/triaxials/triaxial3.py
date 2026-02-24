@@ -13,14 +13,14 @@ Copyright (C) U{Charles Karney<mailto:Karney@Alum.MIT.edu>} (2024-2025) and lice
 License.  For more information, see the U{GeographicLib 2.7 <https://GeographicLib.SourceForge.io/>}
 documentation.
 
-@var Triaxial3s.Amalthea: Triaxial3(name='Amalthea', a=125000, b=73000, c=64000, k2=0.106947697, kp2=0.893052303, volume=2446253479595252, area=93239507787.490341187, R2=86138.05359954)
+@var Triaxial3s.Amalthea: Triaxial3(name='Amalthea', a=125000, b=73000, c=64000, k2=0.106947697, kp2=0.893052303, volume=2446253479595252, area=93239507787.490356445, R2=86138.05359954)
 @var Triaxial3s.Ariel: Triaxial3(name='Ariel', a=581100, b=577900, c=577700, k2=0.05866109, kp2=0.94133891, volume=812633172614203904, area=4211301462766.580078125, R2=578899.578791275)
 @var Triaxial3s.Earth: Triaxial3(name='Earth', a=6378173.435, b=6378103.9, c=6356754.399999999, k2=0.996748146, kp2=0.003251854, volume=1083208241574987694080, area=510065911057440.9375, R2=6371008.987886564)
 @var Triaxial3s.Enceladus: Triaxial3(name='Enceladus', a=256600, b=251400, c=248300, k2=0.369647336, kp2=0.630352664, volume=67094551514082248, area=798618496278.596679688, R2=252095.300756832)
 @var Triaxial3s.Europa: Triaxial3(name='Europa', a=1564130, b=1561230, c=1560930, k2=0.093663002, kp2=0.906336998, volume=15966575194402123776, area=30663773697323.51953125, R2=1562096.533153486)
 @var Triaxial3s.Io: Triaxial3(name='Io', a=1829400, b=1819300, c=1815700, k2=0.262045618, kp2=0.737954382, volume=25313121117889765376, area=41691875849096.734375, R2=1821464.812747882)
 @var Triaxial3s.Mars: Triaxial3(name='Mars', a=3394600, b=3393300, c=3376300, k2=0.92878339, kp2=0.07121661, volume=162907283585817247744, area=144249140795107.4375, R2=3388064.624110653)
-@var Triaxial3s.Mimas: Triaxial3(name='Mimas', a=207400, b=196800, c=190600, k2=0.359218713, kp2=0.640781287, volume=32587072869017956, area=493855762247.691772461, R2=198241.75359411)
+@var Triaxial3s.Mimas: Triaxial3(name='Mimas', a=207400, b=196800, c=190600, k2=0.359218713, kp2=0.640781287, volume=32587072869017956, area=493855762247.691833496, R2=198241.75359411)
 @var Triaxial3s.Miranda: Triaxial3(name='Miranda', a=240400, b=234200, c=232900, k2=0.171062751, kp2=0.828937249, volume=54926187094835456, area=698880863325.757080078, R2=235828.692095158)
 @var Triaxial3s.Moon: Triaxial3(name='Moon', a=1735550, b=1735324, c=1734898, k2=0.653331685, kp2=0.346668315, volume=21886698675223740416, area=37838824729886.09375, R2=1735257.329122863)
 @var Triaxial3s.Tethys: Triaxial3(name='Tethys', a=535600, b=528200, c=525800, k2=0.243190549, kp2=0.756809451, volume=623086233855821440, area=3528073490771.393554688, R2=529863.348254881)
@@ -58,7 +58,7 @@ from pygeodesy.vector3d import Vector3d,  _ALL_LAZY
 from random import random
 
 __all__ = _ALL_LAZY.triaxials_triaxial3
-__version__ = '26.02.15'
+__version__ = '26.02.20'
 
 _alp_  = 'alp'
 _NAN3d =  Vector3d(NAN, NAN, NAN)
@@ -930,6 +930,9 @@ def _v_h_llk_name_NOIDAL(x_ct, y, z, **h_llk_name):
 
 
 class Triaxial3s(_TriaxialsBase):
+    '''(INTERNAL) L{Triaxial3} registry, I{must} be a sub-class
+       to accommodate the L{_LazyNamedEnumItem} properties.
+    '''
     _Triaxial = Triaxial3
 
 Triaxial3s = Triaxial3s(Triaxial3, Triaxial3B)  # PYCHOK singleton

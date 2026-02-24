@@ -15,14 +15,14 @@ I{experimental} documentation.
       Geodesics_on_a_triaxial_ellipsoid>} and U{Triaxial coordinate systems and their geometrical
       interpretation<https://OLD.Topo.Auth.GR/wp-content/uploads/sites/111/2021/12/09_Panou.pdf>}.
 
-@var Triaxials.Amalthea: Triaxial(name='Amalthea', a=125000, b=73000, c=64000, e2ab=0.658944, e2bc=0.231375493, e2ac=0.737856, volume=2446253479595252, area=93239507787.490341187, R2=86138.05359954)
+@var Triaxials.Amalthea: Triaxial(name='Amalthea', a=125000, b=73000, c=64000, e2ab=0.658944, e2bc=0.231375493, e2ac=0.737856, volume=2446253479595252, area=93239507787.490356445, R2=86138.05359954)
 @var Triaxials.Ariel: Triaxial(name='Ariel', a=581100, b=577900, c=577700, e2ab=0.01098327, e2bc=0.000692042, e2ac=0.011667711, volume=812633172614203904, area=4211301462766.580078125, R2=578899.578791275)
 @var Triaxials.Earth: Triaxial(name='Earth', a=6378173.435, b=6378103.9, c=6356754.399999999, e2ab=0.000021804, e2bc=0.006683418, e2ac=0.006705077, volume=1083208241574987694080, area=510065911057440.9375, R2=6371008.987886564)
 @var Triaxials.Enceladus: Triaxial(name='Enceladus', a=256600, b=251400, c=248300, e2ab=0.040119337, e2bc=0.024509841, e2ac=0.06364586, volume=67094551514082248, area=798618496278.596679688, R2=252095.300756832)
 @var Triaxials.Europa: Triaxial(name='Europa', a=1564130, b=1561230, c=1560930, e2ab=0.003704694, e2bc=0.000384275, e2ac=0.004087546, volume=15966575194402123776, area=30663773697323.51953125, R2=1562096.533153486)
 @var Triaxials.Io: Triaxial(name='Io', a=1829400, b=1819300, c=1815700, e2ab=0.011011391, e2bc=0.003953651, e2ac=0.014921506, volume=25313121117889765376, area=41691875849096.734375, R2=1821464.812747882)
 @var Triaxials.Mars: Triaxial(name='Mars', a=3394600, b=3393300, c=3376300, e2ab=0.000765776, e2bc=0.009994646, e2ac=0.010752768, volume=162907283585817247744, area=144249140795107.4375, R2=3388064.624110653)
-@var Triaxials.Mimas: Triaxial(name='Mimas', a=207400, b=196800, c=190600, e2ab=0.09960581, e2bc=0.062015624, e2ac=0.155444317, volume=32587072869017956, area=493855762247.691772461, R2=198241.75359411)
+@var Triaxials.Mimas: Triaxial(name='Mimas', a=207400, b=196800, c=190600, e2ab=0.09960581, e2bc=0.062015624, e2ac=0.155444317, volume=32587072869017956, area=493855762247.691833496, R2=198241.75359411)
 @var Triaxials.Miranda: Triaxial(name='Miranda', a=240400, b=234200, c=232900, e2ab=0.050915557, e2bc=0.011070811, e2ac=0.061422691, volume=54926187094835456, area=698880863325.757080078, R2=235828.692095158)
 @var Triaxials.Moon: Triaxial(name='Moon', a=1735550, b=1735324, c=1734898, e2ab=0.000260419, e2bc=0.000490914, e2ac=0.000751206, volume=21886698675223740416, area=37838824729886.09375, R2=1735257.329122863)
 @var Triaxials.Tethys: Triaxial(name='Tethys', a=535600, b=528200, c=525800, e2ab=0.027441672, e2bc=0.009066821, e2ac=0.036259685, volume=623086233855821440, area=3528073490771.393554688, R2=529863.348254881)
@@ -41,7 +41,7 @@ from pygeodesy.constants import EPS, EPS0, EPS02, _EPS2e4, INT0, \
 from pygeodesy.datums import Datum, _spherical_datum, _WGS84,  Fmt
 # from pygeodesy.elliptic import Elliptic  # _MODS
 from pygeodesy.errors import _AssertionError, _ValueError, _xkwds_pop2
-from pygeodesy.fmath import Fdot, fdot, hypot, hypot_,  fabs, sqrt
+from pygeodesy.fmath import fdot, hypot, hypot_,  fabs, sqrt
 from pygeodesy.fsums import fsumf_, fsum1f_
 from pygeodesy.interns import NN, _beta_, _distant_, _DMAIN_, _finite_, _height_, \
                              _inside_, _near_, _negative_, _not_, _null_, _opposite_, \
@@ -63,7 +63,7 @@ from pygeodesy.vector3d import _otherV3d, Vector3d
 # from math import fabs, sqrt  # from .fmath
 
 __all__ = _ALL_LAZY.triaxials_triaxial5
-__version__ = '26.02.15'
+__version__ = '26.02.20'
 
 _omega_ = 'omega'
 _TRIPS  =  359  # Eberly 1074?
@@ -787,11 +787,6 @@ def _hartzell3(pov, los, Tun):  # in .Ellipsoid.hartzell4, .formy.hartzell
     ux, vy, wz = u3.times_(p3).xyz3
     u2, v2, w2 = u3.x2y2z23  # u3.times_(u3).xyz3
 
-    t = (p2 * c2),  c2, b2
-    m = fdot(t, u2, v2, w2)  # a2 factored out
-    if m < EPS0:  # zero or near-null LOS vector
-        raise _ValueError(_near_(_null_))
-
     r = fsumf_(b2 * w2,      c2 * v2,      -v2 * z2,      vy * wz * 2,
               -w2 * y2,     -u2 * y2 * q2, -u2 * z2 * p2, ux * wz * 2 * p2,
               -w2 * x2 * p2, b2 * u2 * q2, -v2 * x2 * q2, ux * vy * 2 * q2)
@@ -800,8 +795,12 @@ def _hartzell3(pov, los, Tun):  # in .Ellipsoid.hartzell4, .formy.hartzell
     elif r < 0:  # LOS pointing away from or missing the triaxial
         raise _ValueError(_opposite_ if max(ux, vy, wz) > 0 else _outside_)
 
-    d = Fdot(t, ux, vy, wz).fadd_(r).fover(m)  # -r for antipode, a2 factored out
-    if d > 0:  # POV inside or LOS outside or missing the triaxial
+    t = (p2 * c2), c2, b2
+    d = _over(fdot(t, ux, vy, wz) + r,  # -r for antipode
+              fdot(t, u2, v2, w2))  # a2 factored out
+    if not _isfinite(d):  # zero or near-null LOS vector
+        raise _ValueError(_near_(_null_))  # XXX or T.isFlat?
+    elif d > 0:  # POV inside or LOS outside or missing the triaxial
         s = fsumf_(_N_1_0, _over(x2, a2), _over(y2, b2), _over(z2, c2))  # like _sideOf
         raise _ValueError(_outside_ if s > 0 else _inside_)
     elif fsum1f_(x2, y2, z2, -d*d) < 0:  # d past triaxial's center
@@ -821,8 +820,8 @@ def hartzell4(pov, los=False, tri_biax=_WGS84, **name):
        @kwarg los: Line-Of-Sight, I{direction} to the tri-/biaxial (L{Los}, L{Vector3d})
                    or C{True} for the I{normal, perpendicular, plumb} to the surface of
                    the tri-/biaxial or C{False} or C{None} to point to its center.
-       @kwarg tri_biax: A triaxial (L{Triaxial}, L{Triaxial_}, L{Conformal} or
-                        L{ConformalSphere}) or biaxial ellipsoid (L{Datum},
+       @kwarg tri_biax: A triaxial (L{Triaxial}, L{Triaxial_}, L{Triaxial3}, L{Triaxial3B},
+                        L{Conformal} or L{ConformalSphere}) or biaxial ellipsoid (L{Datum},
                         L{Ellipsoid}, L{Ellipsoid2}, L{a_f2Tuple}) or spherical earth
                         radius (C{scalar}, conventionally in C{meter}).
        @kwarg name: Optional name (C{str}), overriding C{B{name}="hartzell4"}.
@@ -859,6 +858,10 @@ def height4(x_xyz, y=None, z=None, tri_biax=_WGS84, normal=True, eps=EPS, **name
        @kwarg y: Y component (C{scalar}), required if B{C{x_xyz}} if C{scalar}, ignored
                  otherwise.
        @kwarg z: Z component (C{scalar}), like B{C{y}}.
+       @kwarg tri_biax: A triaxial (L{Triaxial}, L{Triaxial_}, L{Triaxial3}, L{Triaxial3B},
+                        L{Conformal} or L{ConformalSphere}) or biaxial ellipsoid (L{Datum},
+                        L{Ellipsoid}, L{Ellipsoid2}, L{a_f2Tuple}) or spherical earth
+                        radius (C{scalar}, conventionally in C{meter}).
        @kwarg normal: If C{True}, the projection is the I{perpendicular, plumb} to the
                       tri-/biaxial's surface, otherwise the C{radial} line to the center
                       of the tri-/biaxial (C{bool}).
@@ -1143,6 +1146,9 @@ def _validate(a, b, c, d, T, x, y, z, val):
 
 
 class Triaxials(_TriaxialsBase):
+    '''(INTERNAL) L{Triaxial} registry, I{must} be a sub-class
+       to accommodate the L{_LazyNamedEnumItem} properties.
+    '''
     _Triaxial = Triaxial
 
 Triaxials = Triaxials(Triaxial, Triaxial_)  # PYCHOK singleton

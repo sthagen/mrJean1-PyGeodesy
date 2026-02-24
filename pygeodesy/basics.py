@@ -15,7 +15,7 @@ if not division:
 del division
 
 # from pygeodesy.cartesianBase import CartesianBase  # _MODS
-# from pygeodesy.constants import isneg0, NEG0  # _MODS
+# from pygeodesy.constants import NEG0  # _MODS
 from pygeodesy.errors import _AttributeError, _ImportError, _NotImplementedError, \
                              _TypeError, _TypesError, _ValueError, _xAssertionError, \
                              _xkwds_get1
@@ -37,7 +37,7 @@ from math import copysign as _copysign
 # import inspect as _inspect  # _MODS
 
 __all__ = _ALL_LAZY.basics
-__version__ = '25.12.02'
+__version__ = '26.02.22'
 
 _below_           = 'below'
 _list_tuple_types = (list, tuple)

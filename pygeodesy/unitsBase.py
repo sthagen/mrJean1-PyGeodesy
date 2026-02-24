@@ -5,18 +5,19 @@ u'''Basic C{Float}, C{Int} and C{Str}ing units classes.
 '''
 
 from pygeodesy.basics import _isin, isstr, issubclassof, _xsubclassof,  typename
+# from pygeodesy.constants import isneg0  # _MODS
 from pygeodesy.errors import _IsnotError, _UnexpectedError, UnitError, _XError
 # from pygeodesy.internals import typename  # from .basics
 from pygeodesy.interns import NN, _degrees_, _degrees2_, _invalid_, _meter_, \
                              _radians_, _radians2_, _radius_, _UNDER_, _units_, \
                              _std_  # PYCHOK used!
 from pygeodesy.lazily import _ALL_DOCS, _ALL_LAZY, _ALL_MODS as _MODS
-from pygeodesy.named import modulename, _Named,  property_doc_
-# from pygeodesy.props import property_doc_  # from .named
+from pygeodesy.named import modulename, _Named,  property_doc_, property_RO
+# from pygeodesy.props import property_doc_, property_RO  # from .named
 from pygeodesy.streprs import Fmt, fstr
 
 __all__ = _ALL_LAZY.unitsBase
-__version__ = '25.04.14'
+__version__ = '26.02.22'
 
 
 class _NamedUnit(_Named):
@@ -153,6 +154,12 @@ class Float(float, _NamedUnit):
         # float.__repr__(self) shows DIG decimals in python2.7!
         # return super(Float, self).__repr__()  # see .testCss.py
         return float.__str__(self)  # always _std_str_
+
+    @property_RO
+    def isneg0(self):
+        '''Is this value L{NEG0<pygeodesy.NEG0>}, C{-0.0} or C{-0}? (C{bool}).
+        '''
+        return _MODS.constants.isneg0(self)
 
     def toRepr(self, std=False, **prec_fmt_ints):  # PYCHOK prec=8, ...
         '''Return a representation of this C{Float}.

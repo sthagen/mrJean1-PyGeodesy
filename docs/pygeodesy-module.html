@@ -290,7 +290,7 @@
     command line: <code>epydoc --html --no-private --no-source 
     --name=pygeodesy --url=... -v pygeodesy</code>).</p>
   <h1 class="heading">Tests</h1>
-    <p>The tests ran with Python 3.14.2 (with <a 
+    <p>The tests ran with Python 3.14.3 (with <a 
     href="https://PyPI.org/project/geographiclib" 
     target="_top">geographiclib</a> 2.1), Python 3.13.11 (with <a 
     href="https://PyPI.org/project/geographiclib" 
@@ -331,7 +331,7 @@
     href="https://GeographicLib.SourceForge.io/C++/doc/utilities.html" 
     target="_top">IntersectTool</a> 2.7 and <a 
     href="https://GeographicLib.SourceForge.io/C++/doc/utilities.html" 
-    target="_top">RhumbSolve</a> 2.7), all in 64-bit on macOS 26.2 
+    target="_top">RhumbSolve</a> 2.7), all in 64-bit on macOS 26.3 
     Tahoe.</p>
     <p>All tests ran with and without <code>lazy import</code> for Python 3
     and with command line option <code>-W default</code> and env variable 
@@ -339,16 +339,16 @@
     results of those tests are included in the distribution files.</p>
     <p>Test coverage has been measured with <a 
     href="https://PyPI.org/project/coverage" target="_top">coverage</a> 
-    7.10.7 using Python 3.14.2, 3.13.11 and 3.12.10.  The complete coverage
+    7.10.7 using Python 3.14.3, 3.13.11 and 3.12.10.  The complete coverage
     report in HTML and a PDF summary are included in the distribution 
     files.</p>
-    <p>Python 3.14.2, 3.13.11, 3.12.10 and 3.11.9 run on Apple Si M4 
+    <p>Python 3.14.3, 3.13.11, 3.12.10 and 3.11.9 run on Apple Si M4 
     (<code>arm64</code>), <i>natively</i>.  Python 2.7.18 runs on Intel 
     (<code>x86_64</code>) or Intel <i>emulation</i> 
     (&quot;<code>arm64_x86_64</code>&quot;, see function <a 
     href="pygeodesy.internals-module.html#machine" 
     class="link">machine</a>).</p>
-    <p>The tests also ran with Python 3.14.2 (and <a 
+    <p>The tests also ran with Python 3.14.3 (and <a 
     href="https://PyPI.org/project/geographiclib" 
     target="_top">geographiclib</a> 2.1) on <a 
     href="https://Cirrus-CI.com/github/mrJean1/PyGeodesy/master" 
@@ -412,7 +412,7 @@
     href="https://PyPI.org/project/pycodestyle" 
     target="_top">PyCodeStyle</a> (formerly Pep8) and <a 
     href="https://PyPI.org/project/mccabe" target="_top">McCabe</a> using 
-    Python 2.7.18, both in 64-bit on macOS 26.2 Tahoe.</p>
+    Python 2.7.18, both in 64-bit on macOS 26.3 Tahoe.</p>
     <p>For a summary of all <i>Karney</i>-based functionality in 
     <code>pygeodesy</code>, see module <a 
     href="https://mrJean1.GitHub.io/PyGeodesy/docs/pygeodesy.karney-module.html"
@@ -612,7 +612,7 @@
 
 <hr />
 <div class="fields">      <p><strong>Version:</strong>
-        26.02.16
+        26.02.26
       </p>
 </div><!-- ==================== SUBMODULES ==================== -->
 <a name="section-Submodules"></a>
@@ -2266,8 +2266,16 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pygeodesy.ellipses.Ellipse-class.html" class="summary-name">Ellipse</a><br />
-      Class to compute attributes of a 2-D ellipse, like perimeter, area 
-        and arcs.
+      Class to compute various attributes of a 2-D ellipse.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pygeodesy.ellipses.EllipseError-class.html" class="summary-name">EllipseError</a><br />
+      Raised for any <a href="pygeodesy.ellipses.Ellipse-class.html" 
+        class="link">Ellipse</a> or <code>ellipses</code> issue.
     </td>
   </tr>
 <tr>
@@ -9855,7 +9863,7 @@
         <span class="summary-sig-arg">seed</span>=<span class="summary-sig-default">None</span>,
         <span class="summary-sig-arg">units</span>=<span class="summary-sig-default">''</span>,
         <span class="summary-sig-arg">distance</span>=<span class="summary-sig-default">None</span>,
-        <span class="summary-sig-arg">point</span>=<span class="summary-sig-default">&lt;function _point at 0x7fc6b054bb50&gt;</span>)</span><br />
+        <span class="summary-sig-arg">point</span>=<span class="summary-sig-default">&lt;function _point at 0x7feb783931d0&gt;</span>)</span><br />
       Compute the <code>directed</code> or <code>symmetric</code> <a 
       href="https://WikiPedia.org/wiki/Hausdorff_distance" 
       target="_top">Hausdorff</a> distance between 2 sets of points with or
@@ -15103,7 +15111,7 @@
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a name="version"></a><span class="summary-name">version</span> = <code title="'26.2.16'">'26.2.16'</code><br />
+        <a name="version"></a><span class="summary-name">version</span> = <code title="'26.2.26'">'26.2.26'</code><br />
       Normalized <code>pygeodesy</code> version (<code>str</code>).
     </td>
   </tr>
@@ -15114,7 +15122,8 @@
         <a href="pygeodesy-module.html#Conics" class="summary-name">Conics</a> = <code title="Conics.WRF_Lb: Conic(name='WRF_Lb', lat0=40, lon0=-97, par1=33, par2=4\
 5, E0=0, N0=0, k0=1, SP=2, datum=Datum(name='WGS84', ellipsoid=Ellipso\
 ids.WGS84, transform=Transforms.WGS84))">Conics.WRF_Lb: Conic(name='WRF_Lb', lat0=40, lon0=-97<code class="variable-ellipsis">...</code></code><br />
-      Registered, predefined conics (<code>enum-like</code>).
+      Registered, predefined <a href="pygeodesy.lcc.Conic-class.html" 
+      class="link">conics</a> (<code>enum-like</code>).
     </td>
   </tr>
 <tr>
@@ -15139,7 +15148,8 @@ nsform=Transforms.OSGB36),
 Datums.WGS84: Datum(name='WGS84', ellipsoid=Ellipsoids.WGS84, transfor\
 m=Transforms.WGS84),
 ...">Datums.Sphere: Datum(name='Sphere', ellipsoid=Ellipso<code class="variable-ellipsis">...</code></code><br />
-      Registered, predefined datums (<code>enum-like</code>).
+      Registered, predefined <a href="pygeodesy.datums.Datum-class.html" 
+      class="link">datums</a> (<code>enum-like</code>).
     </td>
   </tr>
 <tr>
@@ -15232,7 +15242,9 @@ Ellipsoids.WGS84: Ellipsoid(name='WGS84', a=6378137, f=0.00335281, f_=\
 298.25722356, b=6356752.31424518),
 Ellipsoids.Airy1830: Ellipsoid(name='Airy1830', a=6377563.396, f=0.003\
 34085, f_=299.3249646, b=6356256.90923729)">Ellipsoids.Sphere: Ellipsoid(name='Sphere', a=637<code class="variable-ellipsis">...</code></code><br />
-      Registered, predefined ellipsoids (<code>enum-like</code>).
+      Registered, predefined <a 
+      href="pygeodesy.ellipsoids.Ellipsoid-class.html" 
+      class="link">ellipsoids</a> (<code>enum-like</code>).
     </td>
   </tr>
 <tr>
@@ -15836,7 +15848,8 @@ RS80),
 RefFrames.ETRF92: RefFrame(name='ETRF92', epoch=1992, datum=Datums.GRS\
 80),
 ...">RefFrames.ETRF89: RefFrame(name='ETRF89', epoch=19<code class="variable-ellipsis">...</code></code><br />
-      Registered, predefined reference frames (<code>enum-like</code>).
+      Registered, predefined <a href="pygeodesy.trf.RefFrame-class.html" 
+      class="link">reference frames</a> (<code>enum-like</code>).
     </td>
   </tr>
 <tr>
@@ -15912,7 +15925,9 @@ Transforms.NAD83: Transform(name='NAD83', tx=1.004, ty=-1.91, tz=-0.51\
 Transforms.WGS84: Transform(name='WGS84', tx=0.0, ty=0.0, tz=0.0, s1=1\
 .0, rx=0.0, ry=0.0, rz=0.0, s=0.0, sx=0.0, sy=0.0, sz=0.0),
 ...">Transforms.OSGB36: Transform(name='OSGB36', tx=-4<code class="variable-ellipsis">...</code></code><br />
-      Registered, predefined transforms (<code>enum-like</code>).
+      Registered, predefined <a 
+      href="pygeodesy.datums.Transform-class.html" 
+      class="link">transforms</a> (<code>enum-like</code>).
     </td>
   </tr>
 <tr>
@@ -15921,7 +15936,10 @@ Transforms.WGS84: Transform(name='WGS84', tx=0.0, ty=0.0, tz=0.0, s1=1\
     </td><td class="summary">
         <a href="pygeodesy-module.html#Triaxial3s" class="summary-name">Triaxial3s</a> = <code title="Triaxial3s.WGS84_3r: Triaxial3(name='WGS84_3r', a=6378172, b=6378102, \
 c=6356752, k2=0.996726547, kp2=0.003273453, volume=1083207266220584468\
-480, area=510065604942135.9375, R2=6371007.076110449)">Triaxial3s.WGS84_3r: Triaxial3(name='WGS84_3r', a<code class="variable-ellipsis">...</code></code>
+480, area=510065604942135.875, R2=6371007.076110449)">Triaxial3s.WGS84_3r: Triaxial3(name='WGS84_3r', a<code class="variable-ellipsis">...</code></code><br />
+      Registered, predefined <a 
+      href="pygeodesy.triaxials.triaxial3.Triaxial3-class.html" 
+      class="link">triaxial3 ellipsoids</a> (<code>enum-like</code>).
     </td>
   </tr>
 <tr>
@@ -15929,7 +15947,9 @@ c=6356752, k2=0.996726547, kp2=0.003273453, volume=1083207266220584468\
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a name="Triaxials"></a><span class="summary-name">Triaxials</span> = <code title=""></code><br />
-      Registered, predefined triaxial ellipsoids (<code>enum-like</code>).
+      Registered, predefined <a 
+      href="pygeodesy.triaxials.triaxial5.Triaxial-class.html" 
+      class="link">triaxial ellipsoids</a> (<code>enum-like</code>).
     </td>
   </tr>
 <tr>
@@ -23530,6 +23550,10 @@ c=6356752, k2=0.996726547, kp2=0.003273453, volume=1083207266220584468\
           class="link">Triaxial</a>, <a 
           href="pygeodesy.triaxials.triaxial5.Triaxial_-class.html" 
           class="link">Triaxial_</a>, <a 
+          href="pygeodesy.triaxials.triaxial3.Triaxial3-class.html" 
+          class="link">Triaxial3</a>, <a 
+          href="pygeodesy.triaxials.triaxial3.Triaxial3B-class.html" 
+          class="link">Triaxial3B</a>, <a 
           href="pygeodesy.triaxials.triaxial5.Conformal-class.html" 
           class="link">Conformal</a> or <a 
           href="pygeodesy.triaxials.triaxial5.ConformalSphere-class.html" 
@@ -23591,7 +23615,7 @@ c=6356752, k2=0.996726547, kp2=0.003273453, volume=1083207266220584468\
         <span class="sig-arg">seed</span>=<span class="sig-default">None</span>,
         <span class="sig-arg">units</span>=<span class="sig-default">''</span>,
         <span class="sig-arg">distance</span>=<span class="sig-default">None</span>,
-        <span class="sig-arg">point</span>=<span class="sig-default">&lt;function _point at 0x7fc6b054bb50&gt;</span>)</span>
+        <span class="sig-arg">point</span>=<span class="sig-default">&lt;function _point at 0x7feb783931d0&gt;</span>)</span>
   </h3>
   </td><td align="right" valign="top"
     >&nbsp;
@@ -23835,6 +23859,27 @@ c=6356752, k2=0.996726547, kp2=0.003273453, volume=1083207266220584468\
           <b><code>x_xyz</code></b> if <code>scalar</code>, ignored 
           otherwise.</li>
         <li><strong class="pname"><code>z</code></strong> - Z component (<code>scalar</code>), like <b><code>y</code></b>.</li>
+        <li><strong class="pname"><code>tri_biax</code></strong> - A triaxial (<a 
+          href="pygeodesy.triaxials.triaxial5.Triaxial-class.html" 
+          class="link">Triaxial</a>, <a 
+          href="pygeodesy.triaxials.triaxial5.Triaxial_-class.html" 
+          class="link">Triaxial_</a>, <a 
+          href="pygeodesy.triaxials.triaxial3.Triaxial3-class.html" 
+          class="link">Triaxial3</a>, <a 
+          href="pygeodesy.triaxials.triaxial3.Triaxial3B-class.html" 
+          class="link">Triaxial3B</a>, <a 
+          href="pygeodesy.triaxials.triaxial5.Conformal-class.html" 
+          class="link">Conformal</a> or <a 
+          href="pygeodesy.triaxials.triaxial5.ConformalSphere-class.html" 
+          class="link">ConformalSphere</a>) or biaxial ellipsoid (<a 
+          href="pygeodesy.datums.Datum-class.html" class="link">Datum</a>, 
+          <a href="pygeodesy.ellipsoids.Ellipsoid-class.html" 
+          class="link">Ellipsoid</a>, <a 
+          href="pygeodesy.ellipsoids.Ellipsoid2-class.html" 
+          class="link">Ellipsoid2</a>, <a 
+          href="pygeodesy.ellipsoids.a_f2Tuple-class.html" 
+          class="link">a_f2Tuple</a>) or spherical earth radius 
+          (<code>scalar</code>, conventionally in <code>meter</code>).</li>
         <li><strong class="pname"><code>normal</code></strong> - If <code>True</code>, the projection is the <i>perpendicular, 
           plumb</i> to the tri-/biaxial's surface, otherwise the 
           <code>radial</code> line to the center of the tri-/biaxial 
@@ -34146,7 +34191,8 @@ c=6356752, k2=0.996726547, kp2=0.003273453, volume=1083207266220584468\
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <h3 class="epydoc">Conics</h3>
-  Registered, predefined conics (<code>enum-like</code>).
+  Registered, predefined <a href="pygeodesy.lcc.Conic-class.html" 
+  class="link">conics</a> (<code>enum-like</code>).
   <dl class="fields">
   </dl>
   <dl class="fields">
@@ -34166,7 +34212,8 @@ ids.WGS84, transform=Transforms.WGS84))
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <h3 class="epydoc">Datums</h3>
-  Registered, predefined datums (<code>enum-like</code>).
+  Registered, predefined <a href="pygeodesy.datums.Datum-class.html" 
+  class="link">datums</a> (<code>enum-like</code>).
   <dl class="fields">
   </dl>
   <dl class="fields">
@@ -34192,7 +34239,9 @@ m=Transforms.WGS84),
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <h3 class="epydoc">Ellipsoids</h3>
-  Registered, predefined ellipsoids (<code>enum-like</code>).
+  Registered, predefined <a 
+  href="pygeodesy.ellipsoids.Ellipsoid-class.html" 
+  class="link">ellipsoids</a> (<code>enum-like</code>).
   <dl class="fields">
   </dl>
   <dl class="fields">
@@ -34217,7 +34266,8 @@ Ellipsoids.Airy1830: Ellipsoid(name='Airy1830', a=6377563.396, f=0.003<span clas
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <h3 class="epydoc">RefFrames</h3>
-  Registered, predefined reference frames (<code>enum-like</code>).
+  Registered, predefined <a href="pygeodesy.trf.RefFrame-class.html" 
+  class="link">reference frames</a> (<code>enum-like</code>).
   <dl class="fields">
   </dl>
   <dl class="fields">
@@ -34243,7 +34293,8 @@ RefFrames.ETRF92: RefFrame(name='ETRF92', epoch=1992, datum=Datums.GRS<span clas
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <h3 class="epydoc">Transforms</h3>
-  Registered, predefined transforms (<code>enum-like</code>).
+  Registered, predefined <a href="pygeodesy.datums.Transform-class.html" 
+  class="link">transforms</a> (<code>enum-like</code>).
   <dl class="fields">
   </dl>
   <dl class="fields">
@@ -34269,7 +34320,9 @@ Transforms.WGS84: Transform(name='WGS84', tx=0.0, ty=0.0, tz=0.0, s1=1<span clas
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <h3 class="epydoc">Triaxial3s</h3>
-  
+  Registered, predefined <a 
+  href="pygeodesy.triaxials.triaxial3.Triaxial3-class.html" 
+  class="link">triaxial3 ellipsoids</a> (<code>enum-like</code>).
   <dl class="fields">
   </dl>
   <dl class="fields">
@@ -34277,7 +34330,7 @@ Transforms.WGS84: Transform(name='WGS84', tx=0.0, ty=0.0, tz=0.0, s1=1<span clas
       <dd><table><tr><td><pre class="variable">
 Triaxial3s.WGS84_3r: Triaxial3(name='WGS84_3r', a=6378172, b=6378102, <span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
 c=6356752, k2=0.996726547, kp2=0.003273453, volume=1083207266220584468<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-480, area=510065604942135.9375, R2=6371007.076110449)
+480, area=510065604942135.875, R2=6371007.076110449)
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -34315,7 +34368,7 @@ c=6356752, k2=0.996726547, kp2=0.003273453, volume=1083207266220584468<span clas
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Sun Feb 15 14:14:25 2026
+    Generated by Epydoc 3.0.1 on Mon Feb 23 17:47:08 2026
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

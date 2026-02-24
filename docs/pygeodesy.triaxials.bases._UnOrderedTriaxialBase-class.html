@@ -117,6 +117,23 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
+          <td><span class="summary-sig"><a href="pygeodesy.triaxials.bases._UnOrderedTriaxialBase-class.html#__repr__" class="summary-sig-name">__repr__</a>(<span class="summary-sig-arg">self</span>)</span><br />
+      Default <code>repr(self)</code>.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
           <td><span class="summary-sig"><a href="pygeodesy.triaxials.bases._UnOrderedTriaxialBase-class.html#areaKT" class="summary-sig-name">areaKT</a>(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">*p</span>)</span><br />
       <i>Approximate</i> the surface area using <a 
@@ -231,8 +248,8 @@
         <span class="summary-sig-arg">z</span>=<span class="summary-sig-default">None</span>,
         <span class="summary-sig-arg">height</span>=<span class="summary-sig-default">0</span>,
         <span class="summary-sig-arg">normal</span>=<span class="summary-sig-default">True</span>)</span><br />
-      Compute a cartesian at a height above or below this triaxial's 
-      surface.</td>
+      Compute a cartesian at a <b><code>height</code></b> above or below 
+      this triaxial's surface.</td>
           <td align="right" valign="top">
             
             
@@ -311,6 +328,7 @@
         <tr>
           <td><span class="summary-sig"><a href="pygeodesy.triaxials.bases._UnOrderedTriaxialBase-class.html#toStr" class="summary-sig-name">toStr</a>(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">prec</span>=<span class="summary-sig-default">9</span>,
+        <span class="summary-sig-arg">terse</span>=<span class="summary-sig-default">-3</span>,
         <span class="summary-sig-arg">**name</span>)</span><br />
       Return this <code>Triaxial</code> as a string.</td>
           <td align="right" valign="top">
@@ -328,7 +346,6 @@
       <code><a href="pygeodesy.named._NamedEnumItem-class.html#unregister">unregister</a></code>
       </p>
     <p class="indent-wrapped-lines"><b>Inherited from <code><a href="pygeodesy.named._NamedBase-class.html">named._NamedBase</a></code></b>:
-      <code><a href="pygeodesy.named._NamedBase-class.html#__repr__">__repr__</a></code>,
       <code><a href="pygeodesy.named._NamedBase-class.html#__str__">__str__</a></code>,
       <code><a href="pygeodesy.named._NamedBase-class.html#others">others</a></code>,
       <code><a href="pygeodesy.named._NamedBase-class.html#toRepr">toRepr</a></code>
@@ -443,10 +460,10 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pygeodesy.triaxials.bases._UnOrderedTriaxialBase-class.html#areaRG" class="summary-name">areaRG</a><br />
-      Get the surface area using <a 
+      Get the surface area using Carlson's <a 
       href="https://WikiPedia.org/wiki/Ellipsoid#Surface_Area" 
-      target="_top">Carlson's symmetric RG</a> form (<code>meter</code> 
-      <i>squared</i>).
+      target="_top">symmetric RG</a> form (<code>meter</code> 
+      <i>squared</i>), see also <code>Elliptic.fRG</code>
     </td>
   </tr>
 <tr>
@@ -677,6 +694,29 @@
   </dl>
 </td></tr></table>
 </div>
+<a name="__repr__"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">__repr__</span>&nbsp;(<span class="sig-arg">self</span>)</span>
+    <br /><em class="fname">(Representation operator)</em>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Default <code>repr(self)</code>.</p>
+  <dl class="fields">
+    <dt>Overrides:
+        object.__repr__
+    </dt>
+  </dl>
+</td></tr></table>
+</div>
 <a name="areaKT"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
@@ -873,8 +913,8 @@
     </td>
   </tr></table>
   
-  <p>Compute a cartesian at a height above or below this triaxial's 
-  surface.</p>
+  <p>Compute a cartesian at a <b><code>height</code></b> above or below 
+  this triaxial's surface.</p>
   <dl class="fields">
     <dt>Arguments:</dt>
     <dd><ul class="nomargin-top">
@@ -896,8 +936,6 @@
           <i>perpendicular, plumb</i> to the triaxial's surface, otherwise 
           <code>radially</code> to the center of this triaxial 
           (<code>bool</code>).</li>
-        <li><strong class="pname"><code>name</code></strong> - Optional <code><b>name</b>=&quot;normal4&quot;</code> 
-          (<code>str</code>).</li>
     </ul></dd>
     <dt>Returns:</dt>
         <dd><a href="pygeodesy.namedTuples.Vector4Tuple-class.html" 
@@ -1073,6 +1111,7 @@
   <tr valign="top"><td>
   <h3 class="epydoc"><span class="sig"><span class="sig-name">toStr</span>&nbsp;(<span class="sig-arg">self</span>,
         <span class="sig-arg">prec</span>=<span class="sig-default">9</span>,
+        <span class="sig-arg">terse</span>=<span class="sig-default">-3</span>,
         <span class="sig-arg">**name</span>)</span>
   </h3>
   </td><td align="right" valign="top"
@@ -1085,6 +1124,8 @@
     <dt>Arguments:</dt>
     <dd><ul class="nomargin-top">
         <li><strong class="pname"><code>prec</code></strong> - Precision, number of decimal digits (0..9).</li>
+        <li><strong class="pname"><code>terse</code></strong> - Limit the number of items (<code>int</code>, 3..11), use 
+          <code><b>terse</b>=0</code> or <code>=None</code> for all.</li>
         <li><strong class="pname"><code>name</code></strong> - Optional name (<code>str</code>), to override or 
           <code>None</code> to exclude this triaxial's name.</li>
     </ul></dd>
@@ -1314,17 +1355,17 @@ conventionally).
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <h3 class="epydoc">areaRG</h3>
-  <p>Get the surface area using <a 
+  <p>Get the surface area using Carlson's <a 
   href="https://WikiPedia.org/wiki/Ellipsoid#Surface_Area" 
-  target="_top">Carlson's symmetric RG</a> form (<code>meter</code> 
-  <i>squared</i>).</p>
+  target="_top">symmetric RG</a> form (<code>meter</code> <i>squared</i>), 
+  see also <code>Elliptic.fRG</code></p>
   <dl class="fields">
     <dt>Get method:</dt>
     <dd class="value"><span class="summary-sig">areaRG(<span class="summary-sig-arg">self</span>)</span>
-        - Get the surface area using <a 
+        - Get the surface area using Carlson's <a 
 href="https://WikiPedia.org/wiki/Ellipsoid#Surface_Area" 
-target="_top">Carlson's symmetric RG</a> form (<code>meter</code> 
-<i>squared</i>).
+target="_top">symmetric RG</a> form (<code>meter</code> <i>squared</i>), 
+see also <code>Elliptic.fRG</code>
     </dd>
     <dt>Set method:</dt>
     <dd class="value"><span class="summary-sig">_fset_error(<span class="summary-sig-arg">inst</span>,
@@ -1807,7 +1848,7 @@ class="link">Ellipse</a><code>(b, c).perimeter2k_</code>.
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Sun Feb 15 14:14:28 2026
+    Generated by Epydoc 3.0.1 on Mon Feb 23 17:47:12 2026
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"
