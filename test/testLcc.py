@@ -4,7 +4,7 @@
 # Test L{lcc} module.
 
 __all__ = ('Tests',)
-__version__ = '26.07.21'
+__version__ = '26.07.24'
 
 from bases import startswith, TestsBase
 
@@ -15,17 +15,35 @@ class Tests(TestsBase):
 
     def testBeLb(self):
 
-        c = Conics.Be72Lb
-        r = c.reverse(155762.6, 133883.2)
-        self.test(c.name, r, "(50.516251, 4.448737, 0, Datum(name='ED50', ", known=startswith, nl=1)
-        f = c.forward(r)
-        self.test(c.name, f.toRepr(prec=2), '[E:155762.6, N:133883.2]')
-
         c = Conics.Be08Lb
-        r = c.reverse(655766.5, 633884.6)
+        r = c.reverse4(655766.5, 633884.6)
         self.test(c.name, r, "(50.515697, 4.45, 0, Datum(name='GRS80', ", known=startswith, nl=1)
-        f = c.forward(r)
-        self.test(c.name, f.toRepr(prec=2), '[E:655766.5, N:633884.6]')
+        f = c.forward3(r)
+        self.test(c.name, f, '(655766.5, 633884.599999, 0)')
+
+        c = Conics.Be72Lb
+        r = c.reverse4(155763.88, 132693.38)
+        self.test(c.name, r, "(50.505555, 4.448737, 0, Datum(name='ED50', ", known=startswith, nl=1)
+        f = c.forward3(r)
+        self.test(c.name, f, '(155763.88, 132693.379999, 0)')
+
+        c = Conics.Be72NLb
+        r = c.reverse4(155762.6, 133883.2)
+        self.test(c.name, r, "(50.516251, 4.448737, 0, Datum(name='ED50', ", known=startswith, nl=1)
+        f = c.forward3(r)
+        self.test(c.name, f, '(155762.6, 133883.199999, 0)')
+
+        c = Conics.Be72RLb
+        r = c.reverse4(156512.08, 132694.21)
+        self.test(c.name, r, "(50.505555, 4.448737, 0, Datum(name='ED50', ", known=startswith, nl=1)
+        f = c.forward3(r)
+        self.test(c.name, f, '(156512.08, 132694.209999, 0)')
+
+        c = Conics.Be50Lb
+        r = c.reverse4(155818.9, 132543.24)
+        self.test(c.name, r, "(50.505, 4.449512, 0, Datum(name='ED50', ", known=startswith, nl=1)
+        f = c.forward3(r)
+        self.test(c.name, f, '(155818.9, 132543.239999, 0)')
 
     def testConic(self, module, n=''):
 

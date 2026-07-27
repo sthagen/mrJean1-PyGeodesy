@@ -4,7 +4,7 @@
 # Test L{named} module.
 
 __all__ = ('Tests',)
-__version__ = '26.04.27'
+__version__ = '26.06.26'
 
 from bases import endswith, TestsBase
 from pygeodesy import angles, geohash, Datum, Datums, ltpTuples, \
@@ -199,7 +199,7 @@ class Tests(TestsBase):
 
         self.test('Conics', len(Conics), 1, known=True)
         t = tuple(Conics.items(all=True, asorted=True))
-        self.test('Conics', len(Conics), 8)
+        self.test('Conics', len(Conics), 12)
         for n, c in t:
             c.unregister()  # coverage _NamedEnum.unregister
             self.test('Conics.' + n + '.unregister', getattr(Conics, n, None), None)

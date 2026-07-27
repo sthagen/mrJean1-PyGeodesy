@@ -31,7 +31,7 @@ from pygeodesy.units import Band, Bearing, Degrees, Degrees2, Easting, FIx, \
 # from math import fabs  # from .constants
 
 __all__ = _ALL_LAZY.namedTuples
-__version__ = '26.07.09'
+__version__ = '26.07.25'
 
 # __DUNDER gets mangled in class
 _closest_     = 'closest'
@@ -58,13 +58,17 @@ class Bounds2Tuple(_NamedTuple):  # .geohash.py, .latlonBase.py, .points.py
 
 class Bounds4Tuple(_NamedTuple):  # .geohash.py, .points.py
     '''4-Tuple C{(latS, lonW, latN, lonE)} with the bounds' lower-left
-       C{(LatS, LowW)} and upper-right C{(latN, lonE)} corner lat- and
+       C{(LatS, LonW)} and upper-right C{(latN, lonE)} corner lat- and
        longitudes.
     '''
     _Names_ = ('latS', 'lonW', 'latN', 'lonE')
     _Units_ = ( Lat,    Lon,    Lat,    Lon)
 
-    def enclosures(self, S_other, *W_N_E):
+    def _dupof(self, which, *args, **name):
+        kwds = name or dict(name=self.name or typename(which))
+        return self.classof(*args, **kwds)
+
+    def enclosures(self, S_other, *W_N_E, **name):
         '''Get the enclosures of this around an other L{Bounds4Tuple}.
 
            @arg S_other: Bottom C{latS} (C{scalar}) or an other
@@ -78,9 +82,10 @@ class Bounds4Tuple(_NamedTuple):  # .geohash.py, .points.py
                     if not or zero if abutting.
         '''
         s, w, n, e, \
-        S, W, N, E = self._plus_other8(S_other, W_N_E)
-        return self.classof(map1(float, S - s, W - w, n - N, e - E),  # *map1
-                            name=typename(Bounds4Tuple.enclosures))
+        S, W, N, E = self._8_tuple(S_other, W_N_E)
+        return self._dupof(Bounds4Tuple.enclosures,
+                           map1(float, S - s, W - w,
+                                       n - N, e - E), **name)
 
     def isinside(self, lat, lon, eps=0):
         '''Are B{C{lat}} and B{C{lon}} both inside these bounds?
@@ -119,7 +124,7 @@ class Bounds4Tuple(_NamedTuple):  # .geohash.py, .points.py
         '''
         return Lon(lonZ=self.lonE - self.lonW)
 
-    def overlap(self, S_other, *W_N_E):
+    def overlap(self, S_other, *W_N_E, **name):
         '''Intersect this with an other L{Bounds4Tuple}.
 
            @arg S_other: Bottom C{latS} (C{scalar}) or an other
@@ -131,18 +136,11 @@ class Bounds4Tuple(_NamedTuple):  # .geohash.py, .points.py
                     the intersection of both as a L{Bounds4Tuple}.
         '''
         s, w, n, e, \
-        S, W, N, E = self._plus_other8(S_other, W_N_E)
+        S, W, N, E = self._8_tuple(S_other, W_N_E)
         return None if s > N or n < S or w > E or e < W else \
-               self.classof(max(s, S), max(w, W), min(n, N), min(e, E),
-                            name=typename(Bounds4Tuple.overlap))
-
-    def _plus_other8(self, S_other, W_N_E):
-        # return this (s, w, n, e) + other (S, W, N, E)
-        if W_N_E:
-            S_other = map1(float, S_other, *W_N_E)
-        else:
-            _xinstanceof(Bounds4Tuple, S_other=S_other)
-        return self + S_other
+               self._dupof(Bounds4Tuple.overlap,
+                           max(s, S), max(w, W),
+                           min(n, N), min(e, E), **name)
 
     def resize(self, eps):
         '''Get these bounds, over- or undersize by C{B{eps}}.
@@ -153,6 +151,30 @@ class Bounds4Tuple(_NamedTuple):  # .geohash.py, .points.py
                     with all 4 bounds resized.
         '''
         return _resize4(self, Degrees(eps=eps))
+
+    def _8_tuple(self, S_other, W_N_E):
+        # return 8-tuple this (s, w, n, e) + other (S, W, N, E)
+        if W_N_E:
+            S_other = Bounds4Tuple(S_other, *W_N_E)
+        else:
+            _xinstanceof(Bounds4Tuple, S_other=S_other)
+        return tuple(self) + S_other.toUnits()
+
+    def union(self, S_other, *W_N_E, **name):
+        '''Union of this and an other L{Bounds4Tuple}.
+
+           @arg S_other: Bottom C{latS} (C{scalar}) or an other
+                         L{Bounds4Tuple} instance.
+           @arg W_N_E: Left C{lonW}, top C{latN} and right C{lonE},
+                       each a (C{scalar}) for C{scalar B{S_other}}.
+
+           @return: The C{union} a L{Bounds4Tuple}.
+        '''
+        s, w, n, e, \
+        S, W, N, E = self._8_tuple(S_other, W_N_E)
+        return self._dupof(Bounds4Tuple.union,
+                           min(s, S), min(w, W),
+                           max(n, N), max(e, E), **name)
 
 
 class Circle4Tuple(_NamedTuple):
@@ -659,8 +681,8 @@ class RD4Tuple(_NamedTuple):  # .ltp, pyrdnap
            @return: C{False} if B{C{RDx}} or B{C{RDy}} is outsize
                     these C{RD} bounds or C{NAN}, C{True} otherwise.
         '''
-        return _isinside(Meter(RDx=RDx), Meter(RDy=RDy),
-                         Meter(eps=eps) if eps else 0, self)
+        z = Meter(eps=eps) if eps else 0
+        return _isinside(Meter(RDx=RDx), Meter(RDy=RDy), z, self)
 
     def resize(self, eps):
         '''Get these bounds, over- or undersize by C{B{eps}}.
@@ -915,20 +937,23 @@ class Vector4Tuple(_NamedTuple):  # .nvector.py
         return tuple(self[:3])
 
 
-def _isinside(x, y, eps, bounds4):
+def _isinside(x, y, eps, bounds4):  # in pybelbg.__pygeodesy, pybelbg.belbgs
     '''(INTERNAL) Is C{x} and C{y} inside a bounds 4-tuple?
+
+       @return: C{False} if C{lat} or C{lon} outside or NAN,
+                C{True} otherwise.
     '''
-    # _xinstanceof(Bounds4Tuple, RD4Tuple, bounds4=bound4)
+    # _xinstanceof(Bounds4Tuple, LB4Tuple, RD4Tuple, bounds4=bound4)
     L, B, R, T = bounds4
     return ((L - x) <= eps and (x - R) <= eps and
             (B - y) <= eps and (y - T) <= eps) if eps else \
             (L <= x <= R   and B <= y <= T)
 
 
-def _resize4(bounds4, eps):
+def _resize4(bounds4, eps):  # in pybelbg.__pygeodesy
     '''(INTERNAL) Resize a bounds 4-tuple.
     '''
-    # _xinstanceof(Bounds4Tuple, RD4Tuple, bounds4=bounds4)
+    # _xinstanceof(Bounds4Tuple, LB4Tuple, RD4Tuple, bounds4=bounds4)
     L, B, R, T = bounds4
     if eps:
         L -= eps

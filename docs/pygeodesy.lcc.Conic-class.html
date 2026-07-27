@@ -91,7 +91,7 @@
         <tr>
           <td><span class="summary-sig"><a href="pygeodesy.lcc.Conic-class.html#__init__" class="summary-sig-name">__init__</a>(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">latlon0</span>,
-        <span class="summary-sig-arg">par1</span>,
+        <span class="summary-sig-arg">par1</span>=<span class="summary-sig-default">None</span>,
         <span class="summary-sig-arg">par2</span>=<span class="summary-sig-default">None</span>,
         <span class="summary-sig-arg">E0</span>=<span class="summary-sig-default">0</span>,
         <span class="summary-sig-arg">N0</span>=<span class="summary-sig-default">0</span>,
@@ -135,7 +135,7 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="pygeodesy.lcc.Conic-class.html#forward" class="summary-sig-name">forward</a>(<span class="summary-sig-arg">self</span>,
+          <td><span class="summary-sig"><a href="pygeodesy.lcc.Conic-class.html#forward3" class="summary-sig-name">forward3</a>(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">latlon</span>,
         <span class="summary-sig-arg">lon</span>=<span class="summary-sig-default">None</span>,
         <span class="summary-sig-arg">**height_name</span>)</span><br />
@@ -156,7 +156,7 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="pygeodesy.lcc.Conic-class.html#reverse" class="summary-sig-name">reverse</a>(<span class="summary-sig-arg">self</span>,
+          <td><span class="summary-sig"><a href="pygeodesy.lcc.Conic-class.html#reverse4" class="summary-sig-name">reverse4</a>(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">enh</span>,
         <span class="summary-sig-arg">n</span>=<span class="summary-sig-default">None</span>,
         <span class="summary-sig-arg">**height_name</span>)</span><br />
@@ -429,7 +429,7 @@
   <tr valign="top"><td>
   <h3 class="epydoc"><span class="sig"><span class="sig-name">__init__</span>&nbsp;(<span class="sig-arg">self</span>,
         <span class="sig-arg">latlon0</span>,
-        <span class="sig-arg">par1</span>,
+        <span class="sig-arg">par1</span>=<span class="sig-default">None</span>,
         <span class="sig-arg">par2</span>=<span class="sig-default">None</span>,
         <span class="sig-arg">E0</span>=<span class="sig-default">0</span>,
         <span class="sig-arg">N0</span>=<span class="sig-default">0</span>,
@@ -449,7 +449,7 @@
     <dt>Arguments:</dt>
     <dd><ul class="nomargin-top">
         <li><strong class="pname"><code>latlon0</code></strong> - Origin with (ellipsoidal) datum (<code>LatLon</code>).</li>
-        <li><strong class="pname"><code>par1</code></strong> - First standard parallel (<code>degrees90</code>).</li>
+        <li><strong class="pname"><code>par1</code></strong> - Optional, first standard parallel (<code>degrees90</code>).</li>
         <li><strong class="pname"><code>par2</code></strong> - Optional, second standard parallel (<code>degrees90</code>).</li>
         <li><strong class="pname"><code>E0</code></strong> - Optional, false easting (<code>meter</code>).</li>
         <li><strong class="pname"><code>N0</code></strong> - Optional, false northing (<code>meter</code>).</li>
@@ -501,14 +501,14 @@
   </dl>
 </td></tr></table>
 </div>
-<a name="forward"></a>
+<a name="forward3"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">forward</span>&nbsp;(<span class="sig-arg">self</span>,
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">forward3</span>&nbsp;(<span class="sig-arg">self</span>,
         <span class="sig-arg">latlon</span>,
         <span class="sig-arg">lon</span>=<span class="sig-default">None</span>,
         <span class="sig-arg">**height_name</span>)</span>
@@ -523,7 +523,7 @@
   <dl class="fields">
     <dt>Arguments:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>latlonh</code></strong> - Either a <code>LatLon</code>, <a 
+        <li><strong class="pname"><code>latlon</code></strong> - Either a <code>LatLon</code>, <a 
           href="pygeodesy.lcc.Lcc-class.html" class="link">Lcc</a> or 
           <code>scalar</code> (geodetic) latitude (<code>degrees</code>).</li>
         <li><strong class="pname"><code>lon</code></strong> - The <code>scalar</code> (geodetic) longitude 
@@ -534,9 +534,9 @@
           <code><b>name</b>=NN</code> (<code>str</code>).</li>
     </ul></dd>
     <dt>Returns:</dt>
-        <dd>An <a href="pygeodesy.lcc.Lcc-class.html" 
-          class="link">Lcc</a><code>(easting, northing, ...)</code> with 
-          this <code>conic</code>,.</dd>
+        <dd>An <a href="pygeodesy.namedTuples.EasNor3Tuple-class.html" 
+          class="link">EasNor3Tuple</a><code>(easting, northing, 
+          height)</code>.</dd>
     <dt>Raises:</dt>
     <dd><ul class="nomargin-top">
         <li><code><strong class='fraise'><a href="pygeodesy.lcc.LCCError-class.html">LCCError</a></strong></code> - If <b><code>latlonh</code></b> not <code>LatLon</code> <a 
@@ -549,14 +549,14 @@
   </dl>
 </td></tr></table>
 </div>
-<a name="reverse"></a>
+<a name="reverse4"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">reverse</span>&nbsp;(<span class="sig-arg">self</span>,
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">reverse4</span>&nbsp;(<span class="sig-arg">self</span>,
         <span class="sig-arg">enh</span>,
         <span class="sig-arg">n</span>=<span class="sig-default">None</span>,
         <span class="sig-arg">**height_name</span>)</span>
@@ -1108,7 +1108,7 @@ class="link">PhiLam2Tuple</a><code>(phi, lam)</code>).
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Tue Jul 21 14:54:32 2026
+    Generated by Epydoc 3.0.1 on Sun Jul 26 20:29:01 2026
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

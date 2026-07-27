@@ -4,7 +4,7 @@
 # Test L{ltp} I{local tangent plane} classes.
 
 __all__ = ('Tests',)
-__version__ = '26.07.17'
+__version__ = '26.07.26'
 
 from bases import startswith, TestsBase
 
@@ -161,6 +161,11 @@ class Tests(TestsBase):
         self.test('name', c.name, 'Test')
         t = c.toRepr()
         self.test('toStr', t, c.classname, known=True)
+
+        t = c.bounds4()
+        self.test('bounds4', t.toRepr(), 'RD bounds (latS=50.75, lonW=2.539333, latN=55.765, lonE=7.22)')
+        t = c.bounds4(asRD=True)
+        self.test('bounds4RD', t.toRepr(), 'RD bounds (minRDx=', known=startswith)  # coverage
 
         t = c.region4()
         self.test('region4', t.toRepr(), 'RD region (latS=50.0, lonW=2.0, latN=56.0, lonE=8.0)')

@@ -73,13 +73,16 @@
   target="_top">Lambert Conformal Conic to Geographic Transformation 
   Formulae</a>, <a 
   href="https://MathWorld.Wolfram.com/LambertConformalConicProjection.html"
-  target="_top">Lambert Conformal Conic Projection</a> and John P. Snyder 
-  <a href="https://Pubs.USGS.gov/pp/1395/report.pdf" target="_top">'Map 
+  target="_top">Lambert Conformal Conic Projection</a>, <a 
+  href="https://EPSG.io/9801-method" target="_top">Lambert Conic Conformal 
+  (1SP)</a>, <a href="https://EPSG.io/9802-method" target="_top">Lambert 
+  Conic Conformal (2SP)</a> and John P. Snyder <a 
+  href="https://Pubs.USGS.gov/pp/1395/report.pdf" target="_top">'Map 
   Projections - A Working Manual'</a>, 1987, pp 107-109.</p>
 
 <hr />
 <div class="fields">      <p><strong>Version:</strong>
-        26.07.21
+        26.07.26
       </p>
 </div><!-- ==================== CLASSES ==================== -->
 <a name="section-Classes"></a>
@@ -177,9 +180,20 @@ ids.WGS84, transform=Transforms.WGS84))">Conics.WRF_Lb: Conic(name='WRF_Lb', lat
     </td><td class="summary">
         <a name="Conics.Be08Lb"></a><span class="summary-name">Conics.Be08Lb</span><br />
       Conic(name='Be08Lb', lat0=50.797815, lon0=4.35921583, 
-      par1=49.8333339, par2=51.1666672, E0=649328, N0=665262, k0=1, SP=2, 
+      par1=49.83333333, par2=51.16666667, E0=649328, N0=665262, k0=1, SP=2,
       datum=Datum(name='GRS80', ellipsoid=Ellipsoids.GRS80, 
-      transform=Transforms.WGS84),
+      transform=Transforms.WGS84))
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="Conics.Be50Lb"></a><span class="summary-name">Conics.Be50Lb</span><br />
+      Conic(name='Be50Lb', lat0=90, lon0=4.36748667, par1=49.83333333, 
+      par2=51.16666667, E0=150000, N0=5400000, k0=1, SP=2, 
+      datum=Datum(name='ED50', ellipsoid=Ellipsoids.Intl1924, 
+      transform=Transforms.ED50))
     </td>
   </tr>
 <tr>
@@ -187,10 +201,32 @@ ids.WGS84, transform=Transforms.WGS84))">Conics.WRF_Lb: Conic(name='WRF_Lb', lat
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a name="Conics.Be72Lb"></a><span class="summary-name">Conics.Be72Lb</span><br />
-      Conic(name='Be72Lb', lat0=90, lon0=4.3674867, par1=49.8333339, 
-      par2=51.1666672, E0=150000.013, N0=5400088.438, k0=1, SP=2, 
-      datum=Datum(name='NAD83', ellipsoid=Ellipsoids.GRS80, 
-      transform=Transforms.NAD83),
+      Conic(name='Be72Lb', lat0=90, lon0=4.36748667, par1=51.16666723, 
+      par2=49.8333339, E0=150000.013, N0=5400088.438, k0=1, SP=2, 
+      datum=Datum(name='ED50', ellipsoid=Ellipsoids.Intl1924, 
+      transform=Transforms.ED50))
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="Conics.Be72NLb"></a><span class="summary-name">Conics.Be72NLb</span><br />
+      Conic(name='Be72NLb', lat0=50.79936222, lon0=4.36748667, 
+      par1=51.16666723, par2=49.8333339, E0=150000.013, N0=165372.956, 
+      k0=1, SP=2, datum=Datum(name='ED50', ellipsoid=Ellipsoids.Intl1924, 
+      transform=Transforms.ED50))
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="Conics.Be72RLb"></a><span class="summary-name">Conics.Be72RLb</span><br />
+      Conic(name='Be72RLb', lat0=90, lon0=4.35693972, par1=49.83333333, 
+      par2=51.16666667, E0=150000.01256, N0=5400088.4378, k0=1, SP=2, 
+      datum=Datum(name='ED50', ellipsoid=Ellipsoids.Intl1924, 
+      transform=Transforms.ED50))
     </td>
   </tr>
 <tr>
@@ -200,7 +236,7 @@ ids.WGS84, transform=Transforms.WGS84))">Conics.WRF_Lb: Conic(name='WRF_Lb', lat
         <a name="Conics.Fr93Lb"></a><span class="summary-name">Conics.Fr93Lb</span><br />
       Conic(name='Fr93Lb', lat0=46.5, lon0=3, par1=49, par2=44, E0=700000, 
       N0=6600000, k0=1, SP=2, datum=Datum(name='WGS84', 
-      ellipsoid=Ellipsoids.WGS84, transform=Transforms.WGS84),
+      ellipsoid=Ellipsoids.WGS84, transform=Transforms.WGS84))
     </td>
   </tr>
 <tr>
@@ -208,9 +244,19 @@ ids.WGS84, transform=Transforms.WGS84))">Conics.WRF_Lb: Conic(name='WRF_Lb', lat
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a name="Conics.MaNLb"></a><span class="summary-name">Conics.MaNLb</span><br />
-      Conic(name='MaNLb', lat0=33.3, lon0=-5.4, par1=31.73, par2=34.87, 
-      E0=500000, N0=300000, k0=1, SP=2, datum=Datum(name='NTF', 
-      ellipsoid=Ellipsoids.Clarke1880IGN, transform=Transforms.NTF),
+      Conic(name='MaNLb', lat0=33.3, lon0=-5.4, par1=33.3, E0=500000, 
+      N0=300000, k0=0.99962577, SP=1, datum=Datum(name='NTF', 
+      ellipsoid=Ellipsoids.Clarke1880IGN, transform=Transforms.NTF))
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="Conics.MaSLb"></a><span class="summary-name">Conics.MaSLb</span><br />
+      Conic(name='MaSLb', lat0=29.7, lon0=-5.4, par1=29.7, E0=500000, 
+      N0=300000, k0=0.9996156, SP=1, datum=Datum(name='NTF', 
+      ellipsoid=Ellipsoids.Clarke1880IGN, transform=Transforms.NTF))
     </td>
   </tr>
 <tr>
@@ -220,7 +266,7 @@ ids.WGS84, transform=Transforms.WGS84))">Conics.WRF_Lb: Conic(name='WRF_Lb', lat
         <a name="Conics.MxLb"></a><span class="summary-name">Conics.MxLb</span><br />
       Conic(name='MxLb', lat0=12, lon0=-102, par1=17.5, par2=29.5, 
       E0=2500000, N0=0, k0=1, SP=2, datum=Datum(name='WGS84', 
-      ellipsoid=Ellipsoids.WGS84, transform=Transforms.WGS84),
+      ellipsoid=Ellipsoids.WGS84, transform=Transforms.WGS84))
     </td>
   </tr>
 <tr>
@@ -231,7 +277,7 @@ ids.WGS84, transform=Transforms.WGS84))">Conics.WRF_Lb: Conic(name='WRF_Lb', lat
       Conic(name='PyT_Lb', lat0=46.8, lon0=2.33722917, par1=45.8989389, 
       par2=47.6960144, E0=600000, N0=200000, k0=1, SP=2, 
       datum=Datum(name='NTF', ellipsoid=Ellipsoids.Clarke1880IGN, 
-      transform=Transforms.NTF),
+      transform=Transforms.NTF))
     </td>
   </tr>
 <tr>
@@ -241,7 +287,7 @@ ids.WGS84, transform=Transforms.WGS84))">Conics.WRF_Lb: Conic(name='WRF_Lb', lat
         <a name="Conics.USA_Lb"></a><span class="summary-name">Conics.USA_Lb</span><br />
       Conic(name='USA_Lb', lat0=23, lon0=-96, par1=33, par2=45, E0=0, N0=0,
       k0=1, SP=2, datum=Datum(name='WGS84', ellipsoid=Ellipsoids.WGS84, 
-      transform=Transforms.WGS84),
+      transform=Transforms.WGS84))
     </td>
   </tr>
 <tr>
@@ -251,7 +297,7 @@ ids.WGS84, transform=Transforms.WGS84))">Conics.WRF_Lb: Conic(name='WRF_Lb', lat
         <a name="Conics.WRF_Lb"></a><span class="summary-name">Conics.WRF_Lb</span><br />
       Conic(name='WRF_Lb', lat0=40, lon0=-97, par1=33, par2=45, E0=0, N0=0,
       k0=1, SP=2, datum=Datum(name='WGS84', ellipsoid=Ellipsoids.WGS84, 
-      transform=Transforms.WGS84)
+      transform=Transforms.WGS84))
     </td>
   </tr>
 </table>
@@ -375,7 +421,7 @@ ids.WGS84, transform=Transforms.WGS84))
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Tue Jul 21 14:54:29 2026
+    Generated by Epydoc 3.0.1 on Sun Jul 26 20:28:59 2026
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

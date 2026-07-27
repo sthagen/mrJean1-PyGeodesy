@@ -43,7 +43,7 @@ from pygeodesy.vector3d import _ALL_LAZY, Vector3d
 # from math import fabs, floor as _floor  # from .fmath, .fsums
 
 __all__ = _ALL_LAZY.ltp
-__version__ = '26.07.17'
+__version__ = '26.07.24'
 
 _GRS80    =  Datums.GRS80
 _height0_ = _height_ + _0_
@@ -748,6 +748,36 @@ class LqRD(Ltp):
         '''
         Ltp.__init__(self, latlonh0, **_xkwds(other_Ltp_kwds, ecef=None, name=LqRD.Amersfoort.name))
 
+    def _asRD(self, b4):  # bounds of C{r} as C{RD4Tuple}
+        _xinstanceof(Bounds4Tuple, b4=b4)
+        S, W, N, E = b4
+        b = self.forward(S, W)
+        t = self.forward(N, E)
+        # assert b.x < t.x and b.y < t.y
+        return RD4Tuple(b.x, b.y, t.x, t.y, name=b4.name)
+
+    def bounds4(self, asRD=False):
+        '''Get the South, West, North and East bounds of the Netherlands' U{EEZ
+           <http://MarineRegions.org/mrgid/5668>} and U{EPSG:28992<https://EPSG.io/28992>}.
+
+           @kwarg asRd: Use C{B{asRD}=True} for the bounds in C{meter}, otherwise in
+                        C{degrees} (C{bool}).
+
+           @return: A L{Bounds4Tuple}C{(latS, lonW, latN, lonE)} with lat- and longitudes
+                    in C{degrees} or an L{RD4Tuple}C{(minRDx, minRDy, maxRDx, maxRDy)} with
+                    the C{quasi-RD} bounds in C{meter}.
+
+           @see: U{EEZ<https://NL.WikiPedia.org/wiki/Nederlandse_Exclusieve_Economische_Zone>}
+        '''
+        b = self._bounds4
+        return self._asRD(b) if asRD else b
+
+    @property_ROver
+    def _bounds4(self):  # as RD-Bessel L{Bounds4Tuple}
+        b = Bounds4Tuple('51 19 48.6', '2 32 21.6', '55 45 54', '7 12 37')  # EEZ
+        b = b.toUnits().union(50.75, 3.2, 53.7, 7.22)  # EPSG:28992
+        return b.toUnits(name='RD bounds ')
+
     def forward(self, lat_latlonh, lon=None, height=0, **M_name):  # PYCHOK signature
         '''Convert I{geodetic} C{(lat, lon, height)} to I{local} C{quasi-RD (x, y, z)}.
 
@@ -780,12 +810,7 @@ class LqRD(Ltp):
                     maxRDx, maxRDy)} with the C{quasi-RD} bounds in C{meter}.
         '''
         r = self._region4
-        if asRD:
-            S, W, N, E = r
-            b = self.forward(S, W)
-            t = self.forward(N, E)
-            r = RD4Tuple(b.x, b.y, t.x, t.y, name=r.name)
-        return r
+        return self._asRD(r) if asRD else r
 
 #   @property_ROver
 #   def _region4ETRS(self):  # as ETRS (ETRS89) L{Bounds4Tuple}
