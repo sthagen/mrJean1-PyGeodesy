@@ -61,24 +61,20 @@
 <!-- ==================== CLASS DESCRIPTION ==================== -->
 <h1 class="epydoc">Class Vector4Tuple</h1><p class="nomargin-top"></p>
 <pre class="base-tree">
-   object --+        
-            |        
-        tuple --+    
-                |    
-   object --+   |    
-            |   |    
- <a href="pygeodesy.named._Named-class.html">named._Named</a> --+    
-                |    
-<a href="pygeodesy.named._NamedTuple-class.html">named._NamedTuple</a> --+
-                    |
-                   <strong class="uidshort">Vector4Tuple</strong>
+   object --+            
+            |            
+        tuple --+        
+                |        
+   object --+   |        
+            |   |        
+ <a href="pygeodesy.named._Named-class.html">named._Named</a> --+        
+                |        
+<a href="pygeodesy.named._NamedTuple-class.html">named._NamedTuple</a> --+    
+                    |    
+          _xyzh_Tuple --+
+                        |
+                       <strong class="uidshort">Vector4Tuple</strong>
 </pre>
-
-<dl><dt>Known Subclasses:</dt>
-<dd>
-      <ul class="subclass-list">
-<li><a href="pygeodesy.triaxials.triaxial3.Cartesian5Tuple-class.html">triaxials.triaxial3.Cartesian5Tuple</a></li>  </ul>
-</dd></dl>
 
 <hr />
 <p>4-Tuple <code>(x, y, z, h)</code> of (geocentric) components, all in 
@@ -92,47 +88,12 @@
   <td align="left" colspan="2" class="table-header">
     <span class="table-header">Instance Methods</span></td>
 </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a href="pygeodesy.namedTuples.Vector4Tuple-class.html#to3Tuple" class="summary-sig-name">to3Tuple</a>(<span class="summary-sig-arg">self</span>)</span><br />
-      Reduce this <a href="pygeodesy.namedTuples.Vector4Tuple-class.html" 
-      class="link">Vector4Tuple</a> to a <a 
-      href="pygeodesy.namedTuples.Vector3Tuple-class.html" 
-      class="link">Vector3Tuple</a>.</td>
-          <td align="right" valign="top">
-            
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a href="pygeodesy.namedTuples.Vector4Tuple-class.html#toCartesian" class="summary-sig-name">toCartesian</a>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">Cartesian</span>,
-        <span class="summary-sig-arg">**Cartesian_kwds</span>)</span><br />
-      Return this <code>Vector4Tuple</code> as a <code>Cartesian</code>.</td>
-          <td align="right" valign="top">
-            
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
   <tr>
     <td colspan="2" class="summary">
+    <p class="indent-wrapped-lines"><b>Inherited from <code>_xyzh_Tuple</code></b>:
+      <code>to3Tuple</code>,
+      <code>toCartesian</code>
+      </p>
     <p class="indent-wrapped-lines"><b>Inherited from <code><a href="pygeodesy.named._NamedTuple-class.html">named._NamedTuple</a></code></b>:
       <code><a href="pygeodesy.named._NamedTuple-class.html#__delattr__">__delattr__</a></code>,
       <code><a href="pygeodesy.named._NamedTuple-class.html#__getattr__">__getattr__</a></code>,
@@ -217,26 +178,12 @@
   <td align="left" colspan="2" class="table-header">
     <span class="table-header">Properties</span></td>
 </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-        <a href="pygeodesy.namedTuples.Vector4Tuple-class.html#xyz" class="summary-name">xyz</a><br />
-      Get X, Y and Z components (<a 
-      href="pygeodesy.namedTuples.Vector3Tuple-class.html" 
-      class="link">Vector3Tuple</a>).
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-        <a href="pygeodesy.namedTuples.Vector4Tuple-class.html#xyz3" class="summary-name">xyz3</a><br />
-      Get X, Y and Z components as <code>3-tuple</code>.
-    </td>
-  </tr>
   <tr>
     <td colspan="2" class="summary">
+    <p class="indent-wrapped-lines"><b>Inherited from <code>_xyzh_Tuple</code></b>:
+      <code>xyz</code>,
+      <code>xyz3</code>
+      </p>
     <p class="indent-wrapped-lines"><b>Inherited from <code><a href="pygeodesy.named._Named-class.html">named._Named</a></code></b>:
       <code><a href="pygeodesy.named._Named-class.html#classname">classname</a></code>,
       <code><a href="pygeodesy.named._Named-class.html#classnaming">classnaming</a></code>,
@@ -255,131 +202,6 @@
     </td>
   </tr>
 </table>
-<!-- ==================== METHOD DETAILS ==================== -->
-<a name="section-MethodDetails"></a>
-<table class="details" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr bgcolor="#70b0f0" class="table-header">
-  <td align="left" colspan="2" class="table-header">
-    <span class="table-header">Method Details</span></td>
-</tr>
-</table>
-<a name="to3Tuple"></a>
-<div>
-<table class="details" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr><td>
-  <table width="100%" cellpadding="0" cellspacing="0" border="0">
-  <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">to3Tuple</span>&nbsp;(<span class="sig-arg">self</span>)</span>
-  </h3>
-  </td><td align="right" valign="top"
-    >&nbsp;
-    </td>
-  </tr></table>
-  
-  <p>Reduce this <a href="pygeodesy.namedTuples.Vector4Tuple-class.html" 
-  class="link">Vector4Tuple</a> to a <a 
-  href="pygeodesy.namedTuples.Vector3Tuple-class.html" 
-  class="link">Vector3Tuple</a>.</p>
-  <dl class="fields">
-    <dt>Returns:</dt>
-        <dd>A <a href="pygeodesy.namedTuples.Vector3Tuple-class.html" 
-          class="link">Vector3Tuple</a><code>(x, y, z)</code>.</dd>
-  </dl>
-</td></tr></table>
-</div>
-<a name="toCartesian"></a>
-<div>
-<table class="details" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr><td>
-  <table width="100%" cellpadding="0" cellspacing="0" border="0">
-  <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">toCartesian</span>&nbsp;(<span class="sig-arg">self</span>,
-        <span class="sig-arg">Cartesian</span>,
-        <span class="sig-arg">**Cartesian_kwds</span>)</span>
-  </h3>
-  </td><td align="right" valign="top"
-    >&nbsp;
-    </td>
-  </tr></table>
-  
-  <p>Return this <code>Vector4Tuple</code> as a <code>Cartesian</code>.</p>
-  <dl class="fields">
-    <dt>Arguments:</dt>
-    <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>Cartesian</code></strong> - The <code>Cartesian</code> class to use.</li>
-        <li><strong class="pname"><code>Cartesian_kwds</code></strong> - Optional, additional <code>Cartesian</code> keyword arguments.</li>
-    </ul></dd>
-    <dt>Returns:</dt>
-        <dd>The <code><b>Cartesian</b></code> instance.</dd>
-  </dl>
-</td></tr></table>
-</div>
-<br />
-<!-- ==================== PROPERTY DETAILS ==================== -->
-<a name="section-PropertyDetails"></a>
-<table class="details" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr bgcolor="#70b0f0" class="table-header">
-  <td align="left" colspan="2" class="table-header">
-    <span class="table-header">Property Details</span></td>
-</tr>
-</table>
-<a name="xyz"></a>
-<div>
-<table class="details" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr><td>
-  <h3 class="epydoc">xyz</h3>
-  <p>Get X, Y and Z components (<a 
-  href="pygeodesy.namedTuples.Vector3Tuple-class.html" 
-  class="link">Vector3Tuple</a>).</p>
-  <dl class="fields">
-    <dt>Get method:</dt>
-    <dd class="value"><span class="summary-sig">xyz(<span class="summary-sig-arg">self</span>)</span>
-        - Get X, Y and Z components (<a 
-href="pygeodesy.namedTuples.Vector3Tuple-class.html" 
-class="link">Vector3Tuple</a>).
-    </dd>
-    <dt>Set method:</dt>
-    <dd class="value"><span class="summary-sig">_fset_error(<span class="summary-sig-arg">inst</span>,
-        <span class="summary-sig-arg">val</span>)</span>
-        - Throws an <code>AttributeError</code>, always.
-    </dd>
-    <dt>Delete Method:</dt>
-    <dd class="value"><span class="summary-sig">_fdel(<span class="summary-sig-arg">inst</span>)</span>
-        - Zap the <i>cached/memoized</i> <code>property</code> value.
-    </dd>
-  </dl>
-</td></tr></table>
-</div>
-<a name="xyz3"></a>
-<div>
-<table class="details" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr><td>
-  <h3 class="epydoc">xyz3</h3>
-  <p>Get X, Y and Z components as <code>3-tuple</code>.</p>
-  <dl class="fields">
-    <dt>Get method:</dt>
-    <dd class="value"><span class="summary-sig">xyz3(<span class="summary-sig-arg">self</span>)</span>
-        - Get X, Y and Z components as <code>3-tuple</code>.
-    </dd>
-    <dt>Set method:</dt>
-    <dd class="value"><span class="summary-sig">_fset_error(<span class="summary-sig-arg">inst</span>,
-        <span class="summary-sig-arg">val</span>)</span>
-        - Throws an <code>AttributeError</code>, always.
-    </dd>
-    <dt>Delete Method:</dt>
-    <dd class="value"><span class="summary-sig">_fdel(<span class="summary-sig-arg">inst</span>)</span>
-        - Zap the <i>cached/memoized</i> <code>property</code> value.
-    </dd>
-  </dl>
-</td></tr></table>
-</div>
-<br />
 <!-- ==================== NAVIGATION BAR ==================== -->
 <table class="navbar" border="0" width="100%" cellpadding="0"
        bgcolor="#a0c0ff" cellspacing="0">
@@ -411,7 +233,7 @@ class="link">Vector3Tuple</a>).
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Sun Jul 26 20:29:01 2026
+    Generated by Epydoc 3.0.1 on Mon Aug 10 09:00:01 2026
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

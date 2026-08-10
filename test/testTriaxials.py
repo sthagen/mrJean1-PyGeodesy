@@ -6,7 +6,7 @@
 from __future__ import division as _; del _  # noqa: E702 ;
 
 __all__ = ('Tests',)
-__version__ = '26.03.12'
+__version__ = '26.08.06'
 
 from bases import Geod3Solve, numpy, random, startswith, TestsBase
 
@@ -314,6 +314,13 @@ class Tests(TestsBase):
         # <https://GeographicLib.SourceForge.io/C++/doc/Cart3Convert.1.html>
         T = module.Triaxial3(3, 2, 1)
         self.test(n, repr(T), "Triaxial3(name='', a=3, b=2, c=1, k2=0.375, kp2=0.625", known=startswith)
+
+        n = T.reverse.__name__
+        t = T.reverse(1, 2, 3)  # LatLonAzi5Tuple(lat=68.626017, lon=73.851827, azimuth=0, h=2.391078, llk='GEODETIC_LON0')
+        self.test(n, t.toRepr(prec=3), "LatLonAzi5Tuple(lat=68.626, lon=73.852, azimuth=0, h=2.391, llk='GEODETIC_LON0')")
+        n = T.forward.__name__
+        t = T.forward(t.lat, t.lon, h=t.h)  # Cartesian5Tuple(x=0.757634, y=1.162944, z=0.773377, h=0, llk='GEODETIC_LON0')
+        self.test(n, t.toRepr(prec=3), "Cartesian5Tuple(x=0.758, y=1.163, z=0.773, h=0, llk='GEODETIC_LON0')", nt=1)
 
         n = T.reverseLatLon.__name__
         t = T.reverseLatLon(1, 2, 3)

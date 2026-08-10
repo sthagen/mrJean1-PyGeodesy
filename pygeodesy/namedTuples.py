@@ -17,7 +17,7 @@ from pygeodesy.errors import _TypeError, _xattr, _xkwds, _xkwds_not, _xkwds_pop2
 from pygeodesy.interns import NN, _1_, _2_, _a_, _A_, _area_, _angle_, _b_, _B_, \
                              _band_, _beta_, _c_, _C_, _D_, _datum_, _distance_, \
                              _E_, _easting_, _end_, _fi_, _gamma_, _h_, _height_, \
-                             _hemipole_, _initial_, _j_, _lam_, _lat_, _lon_, \
+                             _hemipole_, _initial_, _j_, _lam_, _lat_, _lon_, _N_, \
                              _n_, _northing_, _number_, _outside_, _phi_, _point_, \
                              _precision_, _points_, _radius_, _scale_, _start_, \
                              _x_, _y_, _z_, _zone_
@@ -31,7 +31,7 @@ from pygeodesy.units import Band, Bearing, Degrees, Degrees2, Easting, FIx, \
 # from math import fabs  # from .constants
 
 __all__ = _ALL_LAZY.namedTuples
-__version__ = '26.07.25'
+__version__ = '26.08.06'
 
 # __DUNDER gets mangled in class
 _closest_     = 'closest'
@@ -94,8 +94,8 @@ class Bounds4Tuple(_NamedTuple):  # .geohash.py, .points.py
            @arg lon: Longitude (C{degrees}, scalar or C{str}).
            @kwarg eps: Over-/undersize the C{RD} bounds (C{degrees}).
 
-           @return: C{None} if B{C{lat}} or B{C{lon}} is NAN, C{False}
-                    if outside these bounds, C{True} otherwise.
+           @return: C{False} if B{C{lat}} or B{C{lon}} is C{NAN} or
+                    outside these bounds, C{True} otherwise.
         '''
         return _isinside(Lat(lat, clip=0), Lon(lon, clip=0),
                          Degrees(eps=eps) if eps else 0, self)
@@ -445,6 +445,13 @@ class LatLonDatum5Tuple(LatLonDatum3Tuple, _Convergence):  # .ups.py, .utm.py, .
     _Units_ = LatLonDatum3Tuple._Units_ + ( Degrees, Scalar)
 
 
+class LatLonNheight3Tuple(_NamedTuple):  # pyxqg, pybelbg
+    '''3-Tuple C{(lat, lon, N)} with geoid height C{N} in C{meter}, conventionally.
+    '''
+    _Names_ = (_lat_, _lon_, _N_)
+    _Units_ = ( Lat,   Lon,   Height)
+
+
 class LatLonPrec3Tuple(_NamedTuple):  # .gars.py, .wgrs.py
     '''3-Tuple C{(lat, lon, precision)} in C{degrees}, C{degrees}
        and C{int}.
@@ -678,8 +685,8 @@ class RD4Tuple(_NamedTuple):  # .ltp, pyrdnap
            @arg RDy: Y coordinate (C{meter}).
            @kwarg eps: Over-/undersize the C{RD} bounds (C{meter}).
 
-           @return: C{False} if B{C{RDx}} or B{C{RDy}} is outsize
-                    these C{RD} bounds or C{NAN}, C{True} otherwise.
+           @return: C{False} if B{C{RDx}} or B{C{RDy}} is C{NAN} or
+                    outsize these C{RD} bounds, C{True} otherwise.
         '''
         z = Meter(eps=eps) if eps else 0
         return _isinside(Meter(RDx=RDx), Meter(RDy=RDy), z, self)
@@ -899,15 +906,16 @@ class Vector3Tuple(_NamedTuple):
         return tuple(self)
 
 
-class Vector4Tuple(_NamedTuple):  # .nvector.py
-    '''4-Tuple C{(x, y, z, h)} of (geocentric) components, all
-       in C{meter} or the same C{units}.
+class _xyzh_Tuple(_NamedTuple):  # .nvector.py, pyaxqg
+    '''(INTERNAL) Base 4/5-Tuple for C{Vector4Tuple},
+       C{triaxials.triaxials3.Cartesian5Tuple} and
+       C{pyaxqg.__pygeodesy.Hector4Tuple}.
     '''
     _Names_ = (_x_,    _y_,    _z_,    _h_)
     _Units_ = ( Scalar, Scalar, Scalar, Height)
 
     def toCartesian(self, Cartesian, **Cartesian_kwds):
-        '''Return this C{Vector4Tuple} as a C{Cartesian}.
+        '''Return this tuple as a C{Cartesian}.
 
            @arg Cartesian: The C{Cartesian} class to use.
            @kwarg Cartesian_kwds: Optional, additional C{Cartesian}
@@ -918,7 +926,7 @@ class Vector4Tuple(_NamedTuple):  # .nvector.py
         return _v2Cls(self, Cartesian, Cartesian_kwds)
 
     def to3Tuple(self):
-        '''Reduce this L{Vector4Tuple} to a L{Vector3Tuple}.
+        '''Reduce this tuple to a L{Vector3Tuple}.
 
            @return: A L{Vector3Tuple}C{(x, y, z)}.
         '''
@@ -928,7 +936,7 @@ class Vector4Tuple(_NamedTuple):  # .nvector.py
     def xyz(self):
         '''Get X, Y and Z components (L{Vector3Tuple}).
         '''
-        return Vector3Tuple(*self.xyz)
+        return Vector3Tuple(*self.xyz3)
 
     @property_RO
     def xyz3(self):
@@ -937,11 +945,18 @@ class Vector4Tuple(_NamedTuple):  # .nvector.py
         return tuple(self[:3])
 
 
+class Vector4Tuple(_xyzh_Tuple):  # .nvector.py
+    '''4-Tuple C{(x, y, z, h)} of (geocentric) components, all
+       in C{meter} or the same C{units}.
+    '''
+    _Names_ = _xyzh_Tuple._Names_
+    _Units_ = _xyzh_Tuple._Units_
+
+
 def _isinside(x, y, eps, bounds4):  # in pybelbg.__pygeodesy, pybelbg.belbgs
     '''(INTERNAL) Is C{x} and C{y} inside a bounds 4-tuple?
 
-       @return: C{False} if C{lat} or C{lon} outside or NAN,
-                C{True} otherwise.
+       @return: C{False} if C{x} or C{y} is C{NAN} or outside, C{True} otherwise.
     '''
     # _xinstanceof(Bounds4Tuple, LB4Tuple, RD4Tuple, bounds4=bound4)
     L, B, R, T = bounds4

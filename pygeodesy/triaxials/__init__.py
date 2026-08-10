@@ -18,14 +18,14 @@ from pygeodesy.lazily import _ALL_LAZY, _ALL_OTHER, _lazy_import_as, _unLazy0
 # from pygeodesy.triaxials.bases import TriaxialError  # likewise
 
 __all__ = _ALL_LAZY.triaxials  # _triaxial5  # likewise
-__version__ = '26.02.06'
+__version__ = '26.08.06'
 
 if _unLazy0:  # or _isfrozen
     from pygeodesy.triaxials.bases import LLK, TriaxialError
     from pygeodesy.triaxials.conformal3 import BetOmgGam5Tuple, Conformal3, Conformal3B, \
                                                Conformal3Sphere, Conformal5Tuple
-    from pygeodesy.triaxials.triaxial3 import BetOmgAlp5Tuple, Cartesian5Tuple, PhiLamZet5Tuple, \
-                                              Triaxial3, Triaxial3B, Triaxial3s
+    from pygeodesy.triaxials.triaxial3 import BetOmgAlp5Tuple, Cartesian5Tuple, LatLonAzi5Tuple, \
+                                              PhiLamZet5Tuple, Triaxial3, Triaxial3B, Triaxial3s
     from pygeodesy.triaxials.triaxial5 import BetaOmega2Tuple, BetaOmega3Tuple, \
                                               Conformal, ConformalSphere, Conformal2Tuple, \
                                               Triaxial, Triaxial_, Triaxials, \
@@ -34,8 +34,8 @@ if _unLazy0:  # or _isfrozen
     __all__ += _ALL_OTHER(LLK, TriaxialError,
                           BetOmgGam5Tuple, Conformal3, Conformal3B, ConformalSphere,
                           Conformal5Tuple,
-                          BetOmgAlp5Tuple, Cartesian5Tuple, PhiLamZet5Tuple,
-                          Triaxial3, Triaxial3B, Triaxial3s,
+                          BetOmgAlp5Tuple, Cartesian5Tuple, LatLonAzi5Tuple,
+                          PhiLamZet5Tuple, Triaxial3, Triaxial3B, Triaxial3s,
                           BetaOmega2Tuple, BetaOmega3Tuple,
                           Conformal, Conformal3Sphere, Conformal2Tuple, Triaxial,
                           Triaxial_, Triaxials, hartzell4, height4)

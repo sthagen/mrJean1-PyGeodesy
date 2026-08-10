@@ -40,17 +40,18 @@ from pygeodesy.constants import EPS, EPS_2, EPS02, EPS8, INT0, NAN, \
 from pygeodesy.errors import _xattr, _xkwds, _xkwds_get, _xkwds_pop2
 from pygeodesy.fmath import cbrt2, fdot, hypot, hypot2, norm2,  fabs, sqrt
 from pygeodesy.fsums import Fsum, fsumf_,  Fmt
-from pygeodesy.interns import NN, _DMAIN_, _h_, _lam_, _phi_
+from pygeodesy.interns import NN, _azimuth_, _DMAIN_, _h_, _lam_, _lat_, \
+                             _lon_, _phi_
 # from pygeodesy.lazily import _ALL_LAZY  # from .vector3d
 # from pygeodesy.named import _Pass  # from .namedTuples
-from pygeodesy.namedTuples import Vector4Tuple,  _Pass
-# from pygeodesy.props import Property_RO  # from .units
+from pygeodesy.namedTuples import _NamedTuple, _xyzh_Tuple,  _Pass, Property_RO
+# from pygeodesy.props import Property_RO  # from .namedTuples
 # from pygeodesy.streprs import Fmt  # from .fsums
 from pygeodesy.triaxials.bases import _bet_, _HeightINT0, LLK, _llk_, \
                                       _MAXIT, _omg_, _otherV3d_, _sqrt0, \
                                       _Triaxial3Base, TriaxialError, \
                                       _TriaxialsBase
-from pygeodesy.units import Degrees, Radians, Radius_,  Property_RO
+from pygeodesy.units import Degrees, Lat, Lon, Meter, Radians, Radius_
 # from pygeodesy.utily import atan2, sincos2  # from .triaxials.angles
 from pygeodesy.vector3d import Vector3d,  _ALL_LAZY
 
@@ -58,7 +59,7 @@ from pygeodesy.vector3d import Vector3d,  _ALL_LAZY
 from random import random
 
 __all__ = _ALL_LAZY.triaxials_triaxial3
-__version__ = '26.02.20'
+__version__ = '26.08.06'
 
 _alp_  = 'alp'
 _NAN3d =  Vector3d(NAN, NAN, NAN)
@@ -78,18 +79,18 @@ class BetOmgAlp5Tuple(_Ang3Tuple):
     _Units_ = ( Ang,   Ang,  _Pass, _HeightINT0, _Pass)
 
 
-class Cartesian5Tuple(Vector4Tuple):
-    '''5-Tuple C{(x, y, z, h, llk)} with I{cartesian} C{x},
-       C{y} and C{z} coordinates on and height C{h} above
-       or below the triaxial's surface and kind C{llk} set
-       to the original C{LLK} or C{None}.
+class Cartesian5Tuple(_xyzh_Tuple):
+    '''5-Tuple C{(x, y, z, h, llk)} with I{cartesian} C{x}, C{y}
+       and C{z} coordinates on and height C{h} above or below the
+       triaxial's surface and kind C{llk} set to the original
+       C{LLK} or C{None}.
     '''
-    _Names_ = Vector4Tuple._Names_ + (_llk_,)
-    _Units_ = Vector4Tuple._Units_ + (_Pass,)
+    _Names_ = _xyzh_Tuple._Names_ +            (_llk_,)
+    _Units_ = (Meter, Meter, Meter, _HeightINT0, _Pass)
 
     def __new__(cls, x, y, z, h=0, llk=None, **kwds):  # **iteration_name
         args = x, y, z, (h or INT0), llk
-        return Vector4Tuple.__new__(cls, args, **kwds)
+        return _xyzh_Tuple.__new__(cls, args, **kwds)
 
 
 class _Fp2(object):
@@ -120,14 +121,36 @@ class _Fp2(object):
         return (f + fc), fp
 
 
+class LatLonAzi5Tuple(_NamedTuple):
+    '''5-Tuple C{(lat, lon, azimuth, h, llk)} with triaxial
+       C{lat}-, C{lon}gitude and C{azimuth}, all in C{degrees},
+       height C{h} off the triaxial's surface and kind C{llk}
+       either C{LLK.GEODETIC} or C{LLK.GEODESIC_LON0}.
+    '''
+    _Names_ = (_lat_, _lon_, _azimuth_, _h_,         _llk_)
+    _Units_ = ( Lat,   Lon,  _Pass,     _HeightINT0, _Pass)
+
+
 class PhiLamZet5Tuple(_Ang3Tuple):
-    '''5-Tuple C{(phi, lam, zet, h, llk)} with trixial lat-
+    '''5-Tuple C{(phi, lam, zet, h, llk)} with triaxial lat-
        lat- C{phi}, longitude C{lam} and azimuth C{zet}, all
        in L{Ang}les on and height C{h} off the triaxial's
        surface and kind C{llk} set to an C{LLK}.
     '''
     _Names_ = (_phi_, _lam_, _zet_, _h_,         _llk_)
     _Units_ = ( Ang,   Ang,  _Pass, _HeightINT0, _Pass)
+
+    def toLatLonAzi5(self, **name):
+        '''Return this tuple as L{LatLonAzi5Tuple} with
+           C{lat}, C{lon} and C{azimuth} in C{degrees} or
+           C{azimuth} C{INT0}.
+        '''
+        u =  self  # .toUnits(Error=TriaxialError)
+        n = _xkwds_get(name, name=u.name)
+        z =  u.zet  # None or isAng with turns
+        z =  INT0 if z is None else z.degrees
+        t =  u.phi.degrees0, u.lam.degrees0, z, u.h, u.llk
+        return LatLonAzi5Tuple(t, name=n or NN)
 
 
 class Triaxial3(_Triaxial3Base):
@@ -160,6 +183,26 @@ class Triaxial3(_Triaxial3Base):
             e = e._roty(False)  # -1
             n = n._roty(False)  # -1
         return n, e
+
+    def forward(self, lat, lon, **height_unit_name):
+        '''Convert a I{geodetic} lat- and longitude to a cartesian
+           on this triaxial's surface.
+
+           @arg lat: Geodetic latitude (C{degrees} or B{C{unit}}).
+           @arg lon: Geodetic longitude (C{degrees} or B{C{unit}}).
+           @kwarg height_unit_name: Optional C{B{height}=0} (C{meter}),
+                         scalar C{B{unit}=}L{Radians} (or L{Degrees})
+                         and C{B{name}=NN} (C{str}).
+
+           @return: A L{Cartesian5Tuple}C{(x, y, z, h, llk)} with
+                    C{h=B{height}} and kind C{llk=LLK.GEODETIC} or
+                    C{llk=LLK.GEODETIC_LON0}.
+
+           @see: Methods L{Triaxial3.forwardPhiLam} and L{Triaxial3.reverse}.
+        '''
+        llk = LLK.GEODETIC_LON0 if self.Lon0 else LLK.GEODETIC
+        height_unit_name = _xkwds(height_unit_name, unit=Degrees)
+        return self.forwardPhiLam(lat, lon, llk=llk, **height_unit_name)
 
     def forwardBetOmg(self, bet, omg, height=0, **unit_name):  # elliptocart2
         '''Convert an I{ellipsoidal} lat- and longitude to a cartesian
@@ -320,8 +363,8 @@ class Triaxial3(_Triaxial3Base):
            @kwarg unit_name: Optional C{B{name}=NN} (C{str}) and scalar C{B{unit}=}L{Radians}
                              (or L{Degrees}).
 
-           @return: A L{Cartesian5Tuple}C{(x, y, z, h, llk)} with height C{h=0} and kind
-                    C{llk=B{llk}}.
+           @return: A L{Cartesian5Tuple}C{(x, y, z, h, llk)} with height C{h=B{height}} and
+                    kind C{llk=B{llk}}.
 
            @note: Longitude C{B{lam} -= Lon0} if C{B{llk} is LLK.GEODETIC_LON0}.
 
@@ -332,7 +375,7 @@ class Triaxial3(_Triaxial3Base):
 
     def forwardPhiLamZet2(self, phi, lam, zet, height=0, llk=LLK.GEODETIC, **unit_name):  # generictocart2
         '''Convert a lat-, longitude and heading to a cartesian and a direction
-           on this trixial's surface.
+           on this  triaxial's surface.
 
            @arg phi: Latitude (C{Ang} or B{C{unit}}).
            @arg lam: Longitude (C{Ang} or B{C{unit}}).
@@ -355,7 +398,7 @@ class Triaxial3(_Triaxial3Base):
         unit, name = _xkwds_pop2(unit_name, unit=Radians)
         try:
             sa, ca = _SinCos2(phi, unit)
-            if llk is LLK.GEODETIC_LON0:
+            if llk is LLK.GEODETIC_LON0 and self.Lon0:
                 lam  = Ang.fromScalar(lam, unit=unit)
                 lam -= self.Lon0
             sb, cb = _SinCos2(lam, unit)
@@ -441,6 +484,26 @@ class Triaxial3(_Triaxial3Base):
                 dir3d = _NAN3d
             dir3d.name = ct.name
         return ct, dir3d
+
+    def reverse(self, x_ct, y=None, z=None, **name):
+        '''Convert a cartesian I{on this triaxial's surface} to I{geodetic} lat-
+           and longitude.
+
+           @arg x_ct: X component (C{scalar}) or a cartesian (L{Cartesian5Tuple} or
+                      any C{Cartesian}, L{Ecef9Tuple}, L{Vector3d}, L{Vector3Tuple}
+                      or L{Vector4Tuple}).
+           @kwarg y: Y component (C{scalar}), required if B{C{x_xyz}} is C{scalar},
+                     ignored otherwise.
+           @kwarg z: Z component (C{scalar}), like B{C{y}}.
+           @kwarg name: Optional C{B{name}=NN} (C{str}).
+
+           @return: A L{LatLonAzi5Tuple}C{(lat, lon, azimuth, h, llk)} with C{azimuth}
+                    usually C{INT0}, height C{h} off this triaxial's surface in C{meter}
+                    or C{INT0} and C{llk} either C{LLK.GEODETIC} or C{LLK.GEODETIC_LON0}.
+        '''
+        llk = LLK.GEODETIC_LON0 if self.Lon0 else LLK.GEODETIC
+        r = self.reversePhiLamZet(x_ct, y, z, llk=llk, **name)
+        return r.toLatLonAzi5(name=r.name)
 
     def reverseBetOmg(self, x_ct, y=None, z=None, **llk_name):  # Cartesian3.carttoellip
         '''Convert a cartesian I{on this triaxial's surface} to an I{ellipsoidal}
@@ -669,7 +732,7 @@ class Triaxial3(_Triaxial3Base):
                         dir3d.dot(n), **name)
         else:
             raise TriaxialError(dir3d=dir3d)
-        if llk is LLK.GEODETIC_LON0:
+        if llk is LLK.GEODETIC_LON0 and self.Lon0:
             lam += self.Lon0
         return PhiLamZet5Tuple(phi, lam, zet, h, llk, **name)
 

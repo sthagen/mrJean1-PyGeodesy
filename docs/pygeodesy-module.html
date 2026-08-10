@@ -608,7 +608,7 @@
 
 <hr />
 <div class="fields">      <p><strong>Version:</strong>
-        26.07.27
+        26.08.08
       </p>
 </div><!-- ==================== SUBMODULES ==================== -->
 <a name="section-Submodules"></a>
@@ -3913,6 +3913,18 @@
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
+        <a href="pygeodesy.triaxials.triaxial3.LatLonAzi5Tuple-class.html" class="summary-name">LatLonAzi5Tuple</a><br />
+      5-Tuple <code>(lat, lon, azimuth, h, llk)</code> with triaxial 
+        <code>lat</code>-, <code>lon</code>gitude and <code>azimuth</code>,
+        all in <code>degrees</code>, height <code>h</code> off the 
+        triaxial's surface and kind <code>llk</code> either 
+        <code>LLK.GEODETIC</code> or <code>LLK.GEODESIC_LON0</code>.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
         <a href="pygeodesy.css.LatLonAziRk4Tuple-class.html" class="summary-name">LatLonAziRk4Tuple</a><br />
       4-Tuple <code>(lat, lon, azimuth, reciprocal)</code>, all in 
         <code>degrees</code> where <code>azimuth</code> is the azimuth of 
@@ -3980,6 +3992,15 @@
       DEPRECATED on 2021.02.10, use (INTERNAL) class <a 
         href="pygeodesy.latlonBase.LatLonBase-class.html" 
         class="link">pygeodesy.latlonBase.LatLonBase</a>.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pygeodesy.namedTuples.LatLonNheight3Tuple-class.html" class="summary-name">LatLonNheight3Tuple</a><br />
+      3-Tuple <code>(lat, lon, N)</code> with geoid height <code>N</code>
+        in <code>meter</code>, conventionally.
     </td>
   </tr>
 <tr>
@@ -4519,8 +4540,8 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pygeodesy.triaxials.triaxial3.PhiLamZet5Tuple-class.html" class="summary-name">PhiLamZet5Tuple</a><br />
-      5-Tuple <code>(phi, lam, zet, h, llk)</code> with trixial lat- lat-
-        <code>phi</code>, longitude <code>lam</code> and azimuth 
+      5-Tuple <code>(phi, lam, zet, h, llk)</code> with triaxial lat- 
+        lat- <code>phi</code>, longitude <code>lam</code> and azimuth 
         <code>zet</code>, all in <a href="pygeodesy.angles.Ang-class.html" 
         class="link">Ang</a>les on and height <code>h</code> off the 
         triaxial's surface and kind <code>llk</code> set to an 
@@ -5207,7 +5228,7 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pygeodesy.triaxials.bases.TriaxialError-class.html" class="summary-name">TriaxialError</a><br />
-      Raised for any triaxial issue.
+      Raised for any <code>triaxial</code> issue.
     </td>
   </tr>
 <tr>
@@ -9885,7 +9906,7 @@
         <span class="summary-sig-arg">seed</span>=<span class="summary-sig-default">None</span>,
         <span class="summary-sig-arg">units</span>=<span class="summary-sig-default">''</span>,
         <span class="summary-sig-arg">distance</span>=<span class="summary-sig-default">None</span>,
-        <span class="summary-sig-arg">point</span>=<span class="summary-sig-default">&lt;function _point at 0x7fef90484b50&gt;</span>)</span><br />
+        <span class="summary-sig-arg">point</span>=<span class="summary-sig-default">&lt;function _point at 0x7fa8c0346150&gt;</span>)</span><br />
       Compute the <code>directed</code> or <code>symmetric</code> <a 
       href="https://WikiPedia.org/wiki/Hausdorff_distance" 
       target="_top">Hausdorff</a> distance between 2 sets of points with or
@@ -15182,7 +15203,7 @@
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a name="version"></a><span class="summary-name">version</span> = <code title="'26.7.27'">'26.7.27'</code><br />
+        <a name="version"></a><span class="summary-name">version</span> = <code title="'26.8.8'">'26.8.8'</code><br />
       Normalized <code>pygeodesy</code> version (<code>str</code>).
     </td>
   </tr>
@@ -16007,7 +16028,7 @@ Transforms.WGS84: Transform(name='WGS84', tx=0.0, ty=0.0, tz=0.0, s1=1\
     </td><td class="summary">
         <a href="pygeodesy-module.html#Triaxial3s" class="summary-name">Triaxial3s</a> = <code title="Triaxial3s.WGS84_3r: Triaxial3(name='WGS84_3r', a=6378172, b=6378102, \
 c=6356752, k2=0.996726547, kp2=0.003273453, volume=1083207266220584468\
-480, area=510065604942135.875, R2=6371007.076110449)">Triaxial3s.WGS84_3r: Triaxial3(name='WGS84_3r', a<code class="variable-ellipsis">...</code></code><br />
+480, area=510065604942135.875, R2=6371007.076110449, Lon0=-14.93)">Triaxial3s.WGS84_3r: Triaxial3(name='WGS84_3r', a<code class="variable-ellipsis">...</code></code><br />
       Registered, predefined <a 
       href="pygeodesy.triaxials.triaxial3.Triaxial3-class.html" 
       class="link">triaxial3 ellipsoids</a> (<code>enum-like</code>).
@@ -23719,7 +23740,7 @@ c=6356752, k2=0.996726547, kp2=0.003273453, volume=1083207266220584468\
         <span class="sig-arg">seed</span>=<span class="sig-default">None</span>,
         <span class="sig-arg">units</span>=<span class="sig-default">''</span>,
         <span class="sig-arg">distance</span>=<span class="sig-default">None</span>,
-        <span class="sig-arg">point</span>=<span class="sig-default">&lt;function _point at 0x7fef90484b50&gt;</span>)</span>
+        <span class="sig-arg">point</span>=<span class="sig-default">&lt;function _point at 0x7fa8c0346150&gt;</span>)</span>
   </h3>
   </td><td align="right" valign="top"
     >&nbsp;
@@ -34547,7 +34568,7 @@ Transforms.WGS84: Transform(name='WGS84', tx=0.0, ty=0.0, tz=0.0, s1=1<span clas
       <dd><table><tr><td><pre class="variable">
 Triaxial3s.WGS84_3r: Triaxial3(name='WGS84_3r', a=6378172, b=6378102, <span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
 c=6356752, k2=0.996726547, kp2=0.003273453, volume=1083207266220584468<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-480, area=510065604942135.875, R2=6371007.076110449)
+480, area=510065604942135.875, R2=6371007.076110449, Lon0=-14.93)
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -34585,7 +34606,7 @@ c=6356752, k2=0.996726547, kp2=0.003273453, volume=1083207266220584468<span clas
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Sun Jul 26 20:28:59 2026
+    Generated by Epydoc 3.0.1 on Mon Aug 10 08:59:58 2026
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

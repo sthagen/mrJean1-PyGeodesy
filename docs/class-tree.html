@@ -330,7 +330,7 @@
       <em class="summary">Error raised for triangle, intersection or resection issues.</em>
     </li>
     <li> <strong class="uidlink"><a href="pygeodesy.triaxials.bases.TriaxialError-class.html">pygeodesy.triaxials.bases.TriaxialError</a></strong>:
-      <em class="summary">Raised for any triaxial issue.</em>
+      <em class="summary">Raised for any <code>triaxial</code> issue.</em>
     </li>
     <li> <strong class="uidlink"><a href="pygeodesy.ups.UPSError-class.html">pygeodesy.ups.UPSError</a></strong>:
       <em class="summary">Universal Polar Stereographic (UPS) parse or other <a 
@@ -932,14 +932,6 @@
         href="pygeodesy.ellipsoidalGeodSolve.LatLon-class.html" 
         class="link">LatLon</a> points.</em>
     </li>
-    <li> <strong class="uidlink"><a href="pygeodesy.ellipsoidalNvector.Cartesian-class.html">pygeodesy.ellipsoidalNvector.Cartesian</a></strong>:
-      <em class="summary">Extended to convert geocentric, <a 
-        href="pygeodesy.ellipsoidalNvector.Cartesian-class.html" 
-        class="link">Cartesian</a> points to <code>Nvector</code> and 
-        n-vector-based, geodetic <a 
-        href="pygeodesy.ellipsoidalNvector.LatLon-class.html" 
-        class="link">LatLon</a>.</em>
-    </li>
     <li> <strong class="uidlink"><a href="pygeodesy.ellipsoidalKarney.Cartesian-class.html">pygeodesy.ellipsoidalKarney.Cartesian</a></strong>:
       <em class="summary">Extended to convert <code>Karney</code>-based <a 
         href="pygeodesy.ellipsoidalKarney.Cartesian-class.html" 
@@ -952,6 +944,14 @@
         href="pygeodesy.ellipsoidalVincenty.Cartesian-class.html" 
         class="link">Cartesian</a> points to Vincenty-based, ellipsoidal, 
         geodetic <a href="pygeodesy.ellipsoidalVincenty.LatLon-class.html" 
+        class="link">LatLon</a>.</em>
+    </li>
+    <li> <strong class="uidlink"><a href="pygeodesy.ellipsoidalNvector.Cartesian-class.html">pygeodesy.ellipsoidalNvector.Cartesian</a></strong>:
+      <em class="summary">Extended to convert geocentric, <a 
+        href="pygeodesy.ellipsoidalNvector.Cartesian-class.html" 
+        class="link">Cartesian</a> points to <code>Nvector</code> and 
+        n-vector-based, geodetic <a 
+        href="pygeodesy.ellipsoidalNvector.LatLon-class.html" 
         class="link">LatLon</a>.</em>
     </li>
     </ul>
@@ -1031,13 +1031,6 @@
         initial and final bearing (azimuths) between two given points or 
         the destination point given a start point and an (initial) bearing.</em>
     </li>
-    <li> <strong class="uidlink"><a href="pygeodesy.ellipsoidalVincenty.LatLon-class.html">pygeodesy.ellipsoidalVincenty.LatLon</a></strong>:
-      <em class="summary">New point on an (oblate) ellipsoidal earth model, using the 
-        formulae devised by <a 
-        href="https://WikiPedia.org/wiki/Vincenty's_formulae" 
-        target="_top"><i>Thaddeus Vincenty</i></a> (1975) to compute 
-        geodesic distances, bearings (azimuths), etc.</em>
-    </li>
     <li> <strong class="uidlink"><a href="pygeodesy.ellipsoidalKarney.LatLon-class.html">pygeodesy.ellipsoidalKarney.LatLon</a></strong>:
       <em class="summary">An ellipsoidal <a 
         href="pygeodesy.ellipsoidalKarney.LatLon-class.html" 
@@ -1048,6 +1041,13 @@
         href="https://PyPI.org/project/geographiclib" 
         target="_top">geographiclib</a> to compute geodesic distances, 
         bearings (azimuths), etc.</em>
+    </li>
+    <li> <strong class="uidlink"><a href="pygeodesy.ellipsoidalVincenty.LatLon-class.html">pygeodesy.ellipsoidalVincenty.LatLon</a></strong>:
+      <em class="summary">New point on an (oblate) ellipsoidal earth model, using the 
+        formulae devised by <a 
+        href="https://WikiPedia.org/wiki/Vincenty's_formulae" 
+        target="_top"><i>Thaddeus Vincenty</i></a> (1975) to compute 
+        geodesic distances, bearings (azimuths), etc.</em>
     </li>
     </ul>
     </li>
@@ -1440,13 +1440,6 @@
         initial and final bearing (azimuths) between two given points or 
         the destination point given a start point and an (initial) bearing.</em>
     </li>
-    <li> <strong class="uidlink"><a href="pygeodesy.ellipsoidalVincenty.LatLon-class.html">pygeodesy.ellipsoidalVincenty.LatLon</a></strong>:
-      <em class="summary">New point on an (oblate) ellipsoidal earth model, using the 
-        formulae devised by <a 
-        href="https://WikiPedia.org/wiki/Vincenty's_formulae" 
-        target="_top"><i>Thaddeus Vincenty</i></a> (1975) to compute 
-        geodesic distances, bearings (azimuths), etc.</em>
-    </li>
     <li> <strong class="uidlink"><a href="pygeodesy.ellipsoidalKarney.LatLon-class.html">pygeodesy.ellipsoidalKarney.LatLon</a></strong>:
       <em class="summary">An ellipsoidal <a 
         href="pygeodesy.ellipsoidalKarney.LatLon-class.html" 
@@ -1457,6 +1450,13 @@
         href="https://PyPI.org/project/geographiclib" 
         target="_top">geographiclib</a> to compute geodesic distances, 
         bearings (azimuths), etc.</em>
+    </li>
+    <li> <strong class="uidlink"><a href="pygeodesy.ellipsoidalVincenty.LatLon-class.html">pygeodesy.ellipsoidalVincenty.LatLon</a></strong>:
+      <em class="summary">New point on an (oblate) ellipsoidal earth model, using the 
+        formulae devised by <a 
+        href="https://WikiPedia.org/wiki/Vincenty's_formulae" 
+        target="_top"><i>Thaddeus Vincenty</i></a> (1975) to compute 
+        geodesic distances, bearings (azimuths), etc.</em>
     </li>
     </ul>
     </li>
@@ -1590,14 +1590,6 @@
         href="pygeodesy.ellipsoidalGeodSolve.LatLon-class.html" 
         class="link">LatLon</a> points.</em>
     </li>
-    <li> <strong class="uidlink"><a href="pygeodesy.ellipsoidalNvector.Cartesian-class.html">pygeodesy.ellipsoidalNvector.Cartesian</a></strong>:
-      <em class="summary">Extended to convert geocentric, <a 
-        href="pygeodesy.ellipsoidalNvector.Cartesian-class.html" 
-        class="link">Cartesian</a> points to <code>Nvector</code> and 
-        n-vector-based, geodetic <a 
-        href="pygeodesy.ellipsoidalNvector.LatLon-class.html" 
-        class="link">LatLon</a>.</em>
-    </li>
     <li> <strong class="uidlink"><a href="pygeodesy.ellipsoidalKarney.Cartesian-class.html">pygeodesy.ellipsoidalKarney.Cartesian</a></strong>:
       <em class="summary">Extended to convert <code>Karney</code>-based <a 
         href="pygeodesy.ellipsoidalKarney.Cartesian-class.html" 
@@ -1610,6 +1602,14 @@
         href="pygeodesy.ellipsoidalVincenty.Cartesian-class.html" 
         class="link">Cartesian</a> points to Vincenty-based, ellipsoidal, 
         geodetic <a href="pygeodesy.ellipsoidalVincenty.LatLon-class.html" 
+        class="link">LatLon</a>.</em>
+    </li>
+    <li> <strong class="uidlink"><a href="pygeodesy.ellipsoidalNvector.Cartesian-class.html">pygeodesy.ellipsoidalNvector.Cartesian</a></strong>:
+      <em class="summary">Extended to convert geocentric, <a 
+        href="pygeodesy.ellipsoidalNvector.Cartesian-class.html" 
+        class="link">Cartesian</a> points to <code>Nvector</code> and 
+        n-vector-based, geodetic <a 
+        href="pygeodesy.ellipsoidalNvector.LatLon-class.html" 
         class="link">LatLon</a>.</em>
     </li>
     </ul>
@@ -2666,6 +2666,13 @@
     </li>
     </ul>
     </li>
+    <li> <strong class="uidlink"><a href="pygeodesy.triaxials.triaxial3.LatLonAzi5Tuple-class.html">pygeodesy.triaxials.triaxial3.LatLonAzi5Tuple</a></strong>:
+      <em class="summary">5-Tuple <code>(lat, lon, azimuth, h, llk)</code> with triaxial 
+        <code>lat</code>-, <code>lon</code>gitude and <code>azimuth</code>,
+        all in <code>degrees</code>, height <code>h</code> off the 
+        triaxial's surface and kind <code>llk</code> either 
+        <code>LLK.GEODETIC</code> or <code>LLK.GEODESIC_LON0</code>.</em>
+    </li>
     <li> <strong class="uidlink"><a href="pygeodesy.css.LatLonAziRk4Tuple-class.html">pygeodesy.css.LatLonAziRk4Tuple</a></strong>:
       <em class="summary">4-Tuple <code>(lat, lon, azimuth, reciprocal)</code>, all in 
         <code>degrees</code> where <code>azimuth</code> is the azimuth of 
@@ -2684,6 +2691,10 @@
         <code>degrees</code> and <code>float</code>.</em>
     </li>
     </ul>
+    </li>
+    <li> <strong class="uidlink"><a href="pygeodesy.namedTuples.LatLonNheight3Tuple-class.html">pygeodesy.namedTuples.LatLonNheight3Tuple</a></strong>:
+      <em class="summary">3-Tuple <code>(lat, lon, N)</code> with geoid height <code>N</code>
+        in <code>meter</code>, conventionally.</em>
     </li>
     <li> <strong class="uidlink"><a href="pygeodesy.namedTuples.LatLonPrec3Tuple-class.html">pygeodesy.namedTuples.LatLonPrec3Tuple</a></strong>:
       <em class="summary">3-Tuple <code>(lat, lon, precision)</code> in <code>degrees</code>,
@@ -2962,19 +2973,6 @@
       <em class="summary">3-Tuple <code>(x, y, z)</code> of (geocentric) components, all in 
         <code>meter</code> or the same <code>units</code>.</em>
     </li>
-    <li> <strong class="uidlink"><a href="pygeodesy.namedTuples.Vector4Tuple-class.html">pygeodesy.namedTuples.Vector4Tuple</a></strong>:
-      <em class="summary">4-Tuple <code>(x, y, z, h)</code> of (geocentric) components, all 
-        in <code>meter</code> or the same <code>units</code>.</em>
-    <ul>
-    <li> <strong class="uidlink"><a href="pygeodesy.triaxials.triaxial3.Cartesian5Tuple-class.html">pygeodesy.triaxials.triaxial3.Cartesian5Tuple</a></strong>:
-      <em class="summary">5-Tuple <code>(x, y, z, h, llk)</code> with <i>cartesian</i> 
-        <code>x</code>, <code>y</code> and <code>z</code> coordinates on 
-        and height <code>h</code> above or below the triaxial's surface and
-        kind <code>llk</code> set to the original <code>LLK</code> or 
-        <code>None</code>.</em>
-    </li>
-    </ul>
-    </li>
     <li> <strong class="uidlink">pygeodesy.ltpTuples._Abc4Tuple</strong>:
       <em class="summary">(INTERNAL) Base class for <code>Aer4Tuple</code>, 
         <code>Enu4Tuple</code>, <code>Ned4Tuple</code> and 
@@ -3020,8 +3018,8 @@
         <code>LLK.CONFORMAL</code>.</em>
     </li>
     <li> <strong class="uidlink"><a href="pygeodesy.triaxials.triaxial3.PhiLamZet5Tuple-class.html">pygeodesy.triaxials.triaxial3.PhiLamZet5Tuple</a></strong>:
-      <em class="summary">5-Tuple <code>(phi, lam, zet, h, llk)</code> with trixial lat- lat-
-        <code>phi</code>, longitude <code>lam</code> and azimuth 
+      <em class="summary">5-Tuple <code>(phi, lam, zet, h, llk)</code> with triaxial lat- 
+        lat- <code>phi</code>, longitude <code>lam</code> and azimuth 
         <code>zet</code>, all in <a href="pygeodesy.angles.Ang-class.html" 
         class="link">Ang</a>les on and height <code>h</code> off the 
         triaxial's surface and kind <code>llk</code> set to an 
@@ -3217,6 +3215,24 @@
     </ul>
     </li>
     </ul>
+    </li>
+    </ul>
+    </li>
+    <li> <strong class="uidlink">pygeodesy.namedTuples._xyzh_Tuple</strong>:
+      <em class="summary">(INTERNAL) Base 4/5-Tuple for <code>Vector4Tuple</code>, 
+        <code>triaxials.triaxials3.Cartesian5Tuple</code> and 
+        <code>pyaxqg.__pygeodesy.Hector4Tuple</code>.</em>
+    <ul>
+    <li> <strong class="uidlink"><a href="pygeodesy.triaxials.triaxial3.Cartesian5Tuple-class.html">pygeodesy.triaxials.triaxial3.Cartesian5Tuple</a></strong>:
+      <em class="summary">5-Tuple <code>(x, y, z, h, llk)</code> with <i>cartesian</i> 
+        <code>x</code>, <code>y</code> and <code>z</code> coordinates on 
+        and height <code>h</code> above or below the triaxial's surface and
+        kind <code>llk</code> set to the original <code>LLK</code> or 
+        <code>None</code>.</em>
+    </li>
+    <li> <strong class="uidlink"><a href="pygeodesy.namedTuples.Vector4Tuple-class.html">pygeodesy.namedTuples.Vector4Tuple</a></strong>:
+      <em class="summary">4-Tuple <code>(x, y, z, h)</code> of (geocentric) components, all 
+        in <code>meter</code> or the same <code>units</code>.</em>
     </li>
     </ul>
     </li>
@@ -4211,6 +4227,13 @@ dict(**kwargs) -&gt; new dictionary initialized with the name=value pairs
     </li>
     </ul>
     </li>
+    <li> <strong class="uidlink"><a href="pygeodesy.triaxials.triaxial3.LatLonAzi5Tuple-class.html">pygeodesy.triaxials.triaxial3.LatLonAzi5Tuple</a></strong>:
+      <em class="summary">5-Tuple <code>(lat, lon, azimuth, h, llk)</code> with triaxial 
+        <code>lat</code>-, <code>lon</code>gitude and <code>azimuth</code>,
+        all in <code>degrees</code>, height <code>h</code> off the 
+        triaxial's surface and kind <code>llk</code> either 
+        <code>LLK.GEODETIC</code> or <code>LLK.GEODESIC_LON0</code>.</em>
+    </li>
     <li> <strong class="uidlink"><a href="pygeodesy.css.LatLonAziRk4Tuple-class.html">pygeodesy.css.LatLonAziRk4Tuple</a></strong>:
       <em class="summary">4-Tuple <code>(lat, lon, azimuth, reciprocal)</code>, all in 
         <code>degrees</code> where <code>azimuth</code> is the azimuth of 
@@ -4229,6 +4252,10 @@ dict(**kwargs) -&gt; new dictionary initialized with the name=value pairs
         <code>degrees</code> and <code>float</code>.</em>
     </li>
     </ul>
+    </li>
+    <li> <strong class="uidlink"><a href="pygeodesy.namedTuples.LatLonNheight3Tuple-class.html">pygeodesy.namedTuples.LatLonNheight3Tuple</a></strong>:
+      <em class="summary">3-Tuple <code>(lat, lon, N)</code> with geoid height <code>N</code>
+        in <code>meter</code>, conventionally.</em>
     </li>
     <li> <strong class="uidlink"><a href="pygeodesy.namedTuples.LatLonPrec3Tuple-class.html">pygeodesy.namedTuples.LatLonPrec3Tuple</a></strong>:
       <em class="summary">3-Tuple <code>(lat, lon, precision)</code> in <code>degrees</code>,
@@ -4507,19 +4534,6 @@ dict(**kwargs) -&gt; new dictionary initialized with the name=value pairs
       <em class="summary">3-Tuple <code>(x, y, z)</code> of (geocentric) components, all in 
         <code>meter</code> or the same <code>units</code>.</em>
     </li>
-    <li> <strong class="uidlink"><a href="pygeodesy.namedTuples.Vector4Tuple-class.html">pygeodesy.namedTuples.Vector4Tuple</a></strong>:
-      <em class="summary">4-Tuple <code>(x, y, z, h)</code> of (geocentric) components, all 
-        in <code>meter</code> or the same <code>units</code>.</em>
-    <ul>
-    <li> <strong class="uidlink"><a href="pygeodesy.triaxials.triaxial3.Cartesian5Tuple-class.html">pygeodesy.triaxials.triaxial3.Cartesian5Tuple</a></strong>:
-      <em class="summary">5-Tuple <code>(x, y, z, h, llk)</code> with <i>cartesian</i> 
-        <code>x</code>, <code>y</code> and <code>z</code> coordinates on 
-        and height <code>h</code> above or below the triaxial's surface and
-        kind <code>llk</code> set to the original <code>LLK</code> or 
-        <code>None</code>.</em>
-    </li>
-    </ul>
-    </li>
     <li> <strong class="uidlink">pygeodesy.ltpTuples._Abc4Tuple</strong>:
       <em class="summary">(INTERNAL) Base class for <code>Aer4Tuple</code>, 
         <code>Enu4Tuple</code>, <code>Ned4Tuple</code> and 
@@ -4565,8 +4579,8 @@ dict(**kwargs) -&gt; new dictionary initialized with the name=value pairs
         <code>LLK.CONFORMAL</code>.</em>
     </li>
     <li> <strong class="uidlink"><a href="pygeodesy.triaxials.triaxial3.PhiLamZet5Tuple-class.html">pygeodesy.triaxials.triaxial3.PhiLamZet5Tuple</a></strong>:
-      <em class="summary">5-Tuple <code>(phi, lam, zet, h, llk)</code> with trixial lat- lat-
-        <code>phi</code>, longitude <code>lam</code> and azimuth 
+      <em class="summary">5-Tuple <code>(phi, lam, zet, h, llk)</code> with triaxial lat- 
+        lat- <code>phi</code>, longitude <code>lam</code> and azimuth 
         <code>zet</code>, all in <a href="pygeodesy.angles.Ang-class.html" 
         class="link">Ang</a>les on and height <code>h</code> off the 
         triaxial's surface and kind <code>llk</code> set to an 
@@ -4765,6 +4779,24 @@ dict(**kwargs) -&gt; new dictionary initialized with the name=value pairs
     </li>
     </ul>
     </li>
+    <li> <strong class="uidlink">pygeodesy.namedTuples._xyzh_Tuple</strong>:
+      <em class="summary">(INTERNAL) Base 4/5-Tuple for <code>Vector4Tuple</code>, 
+        <code>triaxials.triaxials3.Cartesian5Tuple</code> and 
+        <code>pyaxqg.__pygeodesy.Hector4Tuple</code>.</em>
+    <ul>
+    <li> <strong class="uidlink"><a href="pygeodesy.triaxials.triaxial3.Cartesian5Tuple-class.html">pygeodesy.triaxials.triaxial3.Cartesian5Tuple</a></strong>:
+      <em class="summary">5-Tuple <code>(x, y, z, h, llk)</code> with <i>cartesian</i> 
+        <code>x</code>, <code>y</code> and <code>z</code> coordinates on 
+        and height <code>h</code> above or below the triaxial's surface and
+        kind <code>llk</code> set to the original <code>LLK</code> or 
+        <code>None</code>.</em>
+    </li>
+    <li> <strong class="uidlink"><a href="pygeodesy.namedTuples.Vector4Tuple-class.html">pygeodesy.namedTuples.Vector4Tuple</a></strong>:
+      <em class="summary">4-Tuple <code>(x, y, z, h)</code> of (geocentric) components, all 
+        in <code>meter</code> or the same <code>units</code>.</em>
+    </li>
+    </ul>
+    </li>
     <li> <strong class="uidlink"><a href="pygeodesy.ellipsoids.a_f2Tuple-class.html">pygeodesy.ellipsoids.a_f2Tuple</a></strong>:
       <em class="summary">2-Tuple <code>(a, f)</code> specifying an ellipsoid by 
         <i>equatorial</i> radius <code>a</code> in <code>meter</code> and 
@@ -4817,7 +4849,7 @@ dict(**kwargs) -&gt; new dictionary initialized with the name=value pairs
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Sun Jul 26 20:28:58 2026
+    Generated by Epydoc 3.0.1 on Mon Aug 10 08:59:58 2026
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

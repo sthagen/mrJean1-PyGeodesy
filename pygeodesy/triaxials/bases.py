@@ -46,7 +46,7 @@ from pygeodesy.constants import EPS, EPS0, EPS02, EPS4, INT0, NAN, PI_3, PI2, PI
 from pygeodesy.fmath import cbrt, fmean_, hypot, norm2, sqrt0,  fabs, sqrt
 from pygeodesy.fsums import _Fsumf_, fsumf_
 # from pygeodesy.internals import typename  # _MODS
-from pygeodesy.interns import _a_, _b_, _c_, _inside_, _not_, _NOTEQUAL_, _null_, \
+from pygeodesy.interns import _a_, _b_, _c_, _h_, _inside_, _not_, _NOTEQUAL_, _null_, \
                               _outside_, _scale_, _SPACE_, _spherical_, _x_, _y_, _z_
 from pygeodesy.lazily import _ALL_DOCS, _ALL_LAZY, _ALL_MODS as _MODS, _FOR_DOCS
 from pygeodesy.named import _NamedEnum, _NamedEnumItem, _NamedTuple, _Pass
@@ -63,7 +63,7 @@ from pygeodesy.vector3d import _otherV3d, Vector3d
 # from math import fabs, sqrt  # from .fmath
 
 __all__ = _ALL_LAZY.triaxials_bases
-__version__ = '26.03.12'
+__version__ = '26.08.08'
 
 _bet_         = 'bet'  # PYCHOK shared
 _llk_         = 'llk'  # PYCHOK shared
@@ -98,19 +98,19 @@ class LLK(object):
     '''Enum-like C{Lat-/Longitude Kinds (LLK)}, see U{coord<https://GeographicLib.
        SourceForge.io/C++/doc/classGeographicLib_1_1Triaxial_1_1Cartesian3.html>}.
     '''
-    CONFORMAL        = _LLK('CONFORMAL')
+    CONFORMAL      = _LLK('CONFORMAL')
 
-    ELLIPSOIDAL      = _LLK('ELLIPSOIDAL')    # bet, omg, alp
-    GEOCENTRIC       = _LLK('GEOCENTRIC')     # phi2p, lam2p, zet
-    GEOCENTRIC_X     = _LLK('GEOCENTRIC_X')
-    GEODETIC         = _LLK('GEODETIC')       # phi, lam, zet
-    GEODETIC_LON0    = _LLK('GEODETIC_LON0')
-    GEODETIC_X       = _LLK('GEODETIC_X')
-    GEOGRAPHIC       =  GEODETIC
-    PARAMETRIC       = _LLK('PARAMETRIC')     # phi1p, lam1p, zet
-    PARAMETRIC_X     = _LLK('PARAMETRIC_X')
-    PLANETODETIC     =  GEODETIC
-    PLANETOCENTRIC   =  GEOCENTRIC
+    ELLIPSOIDAL    = _LLK('ELLIPSOIDAL')    # bet, omg, alp
+    GEOCENTRIC     = _LLK('GEOCENTRIC')     # phi2p, lam2p, zet
+    GEOCENTRIC_X   = _LLK('GEOCENTRIC_X')
+    GEODETIC       = _LLK('GEODETIC')       # phi, lam, zet
+    GEODETIC_LON0  = _LLK('GEODETIC_LON0')
+    GEODETIC_X     = _LLK('GEODETIC_X')
+    GEOGRAPHIC     =  GEODETIC
+    PARAMETRIC     = _LLK('PARAMETRIC')     # phi1p, lam1p, zet
+    PARAMETRIC_X   = _LLK('PARAMETRIC_X')
+    PLANETODETIC   =  GEODETIC
+    PLANETOCENTRIC =  GEOCENTRIC
 
     _CENTRICS = (GEOCENTRIC, GEOCENTRIC_X, PLANETOCENTRIC)
     _DETICS   = (GEODETIC, GEODETIC_X, GEODETIC_LON0, GEOGRAPHIC, PLANETODETIC)
@@ -156,8 +156,16 @@ if not _FOR_DOCS:  # PYCHOK force epydoc
 del _FOR_DOCS
 
 
-def _HeightINT0(h):
-    return h if h is INT0 else Height(h=h)
+def _HeightINT0(h, name=_h_, **kwds):  # Error=...
+    '''(INTERNAL) Return C{INT0} or C{Height(h=h, **kwds)}.
+    '''
+    return h if h is INT0 else Height(h, name=name, **kwds)
+
+
+class TriaxialError(_ValueError):
+    '''Raised for any C{triaxial} issue.
+    '''
+    pass  # ...
 
 
 class _UnOrderedTriaxialBase(_NamedEnumItem):
@@ -377,7 +385,7 @@ class _UnOrderedTriaxialBase(_NamedEnumItem):
            @arg lat: Geodetic latitude (C{degrees90}, C{str} or C{Ang}).
 
            @return: An L{Ellipse5Tuple}C{(a, b, height, lat, beta)} with C{a},
-                    C{b} and C{height} measured along this trixial's semi-axis
+                    C{b} and C{height} measured along this  triaxial's semi-axis
                     C{a}, C{b} and C{c}, respectively.
 
            @see: Method L{Ellipsoid.circle4<pygeodesy.Ellipsoid.circle4>} for
@@ -650,22 +658,21 @@ class _UnOrderedTriaxialBase(_NamedEnumItem):
            @kwarg z: Z component (C{scalar}), like B{C{y}}.
            @kwarg eps: On-surface tolerance (C{scalar}, distance I{squared}).
 
-           @return: C{INT0} if C{(B{x}, B{y}, B{z})} is near this triaxial's surface
-                    within tolerance B{C{eps}}, otherwise the signed, radial distance
-                    I{squared} (C{float}), nega-/positive for in- respectively outside
-                    this triaxial.
+           @return: Signed, radial distance I{squared} to this triangle's surface
+                    (C{scalar}), C{INT0} if within tolerance B{C{eps}}, positive
+                    if outside or negative if inside this triaxial.
 
            @see: Methods L{Triaxial.height4} and L{Triaxial.normal3d}.
         '''
-        v = _otherV3d_(x_xyz, y, z)
-        s =  fsumf_(_N_1_0, *map(_over02, v.xyz3, self._abc3))
-        return INT0 if fabs(s) < eps else s
+        v  = _otherV3d_(x_xyz, y, z)
+        s2 =  fsumf_(_N_1_0, *map(_over02, v.xyz3, self._abc3))
+        return INT0 if fabs(s2) < eps else Scalar(sideOf=s2)
 
-    def _sideOn(self, v, eps=_EPS2e4):
+    def _sideOn(self, v, eps=_EPS2e4, Error=TriaxialError):  # in pyaxqg
         s = self.sideOf(v.xyz, eps=eps)
-        if s:  # PYCHOK no cover
-            t = _SPACE_((_inside_ if s < 0 else _outside_), self.toRepr())
-            raise TriaxialError(eps=eps, sideOf=s, x=v.x, y=v.y, z=v.z, txt=t)
+        if s and Error:  # PYCHOK no cover
+            t = _SPACE_((_inside_ if s < 0 else _outside_), repr(self))
+            raise Error(eps=eps, sideOf=s, x=v.x, y=v.y, z=v.z, txt=t)
         return s
 
     def toEllipsoid(self, **name):
@@ -706,6 +713,7 @@ class _UnOrderedTriaxialBase(_NamedEnumItem):
         T = _UnOrderedTriaxialBase
         m = _MODS.triaxials
         C =  m.Triaxial3B
+        k =  dict(**name)
         if isinstance(self, C):
             t  = T.b, C.e2, C.k2, C.kp2
         else:
@@ -713,8 +721,13 @@ class _UnOrderedTriaxialBase(_NamedEnumItem):
             C  = m.ConformalSphere
             t += (C.ab, C.bc) if isinstance(self, C) else (T.b, T.c)
             C  = _Triaxial3Base
-            t += (C.k2, C.kp2) if isinstance(self, C) else \
-                 (T.e2ab, T.e2bc, T.e2ac)
+            if isinstance(self, C):
+                t += C.k2, C.kp2
+                pm = self.Lon0  # PYCHOK attr
+                if pm:
+                    k.update(Lon0=pm.degrees)
+            else:
+                t += T.e2ab, T.e2bc, T.e2ac
         for C in (m.Conformal, m.Conformal3):
             if isinstance(self, C):
                 t += C.xyQ2,
@@ -722,7 +735,7 @@ class _UnOrderedTriaxialBase(_NamedEnumItem):
         t += T.volume, T.area, T.R2
         if terse:
             t = t[:terse]
-        return self._instr(prec=prec, props=t, **name)
+        return self._instr(prec=prec, props=t, **k)
 
     @Property_RO
     def unOrdered(self):
@@ -848,8 +861,9 @@ class _OrderedTriaxialBase(_UnOrderedTriaxialBase):
 class _Triaxial3Base(_OrderedTriaxialBase):
     '''(INTERNAL) Base class for I{unordered} triaxialC{3} classes.
     '''
-    _e2_k2_kp2 = None
-    _Lon0      = None
+    _e2_k2_kp2   =   None
+    _Lon0        =   None
+    _lon0WGS84_3 = -(1493 / 100)  # in pyaxqg
 
     @Property_RO
     def e2(self):
@@ -885,9 +899,9 @@ class _Triaxial3Base(_OrderedTriaxialBase):
 
     @property_RO
     def isBiaxial(self):
-        '''Is this triaxial I{biaxial} (C{bool}), C{a} == C{b} or C{b} == C{c}?
+        '''Is this triaxial I{biaxial} (C{bool}), C{a} == C{b} or C{b} == C{c} or C{a} == C{c}?
         '''
-        return self.isOblate or self.isProlate
+        return self.isOblate or self.isProlate or self.a == self.c
 
     @property_RO
     def isOblate(self):
@@ -900,6 +914,12 @@ class _Triaxial3Base(_OrderedTriaxialBase):
         '''Is this triaxial I{prolate} (C{bool}), C{b} == C{c}?
         '''
         return bool(self.k2 == 0)
+
+    @property_RO
+    def isTriaxial(self):
+        '''Is this triaxial I{triaxial} (C{bool}), C{a} != C{b} and C{b} != C{c} and c{a} != C{c}?
+        '''
+        return not self.isBiaxial
 
     @Property_RO
     def _k_kp(self):
@@ -937,19 +957,18 @@ class _Triaxial3Base(_OrderedTriaxialBase):
     def _lcc23(self):
         return self._a2c2, self._b2c2, _0_0
 
-    @property_doc_(" longitude of the I{earth}'s major semi-axis C{a}, (L{Ang}), Karney's C{Triaxial_Earth_lon0}.")
+    @property_doc_(" prime-meridian rotation, longitude of the I{earth}'s major semi-axis C{a}, (L{Ang}), Karney's C{Triaxial_Earth_lon0}.")
     def Lon0(self):
         if self._Lon0 is None:
-            WGS84_3 = self.name.startswith('WGS84_3')
-            self.Lon0 = -(1493 / 100) if WGS84_3 else 0
+            WGS84_3   = self.name.startswith('WGS84_3')
+            self.Lon0 = self._lon0WGS84_3 if WGS84_3 else 0
         return self._Lon0
 
     @Lon0.setter  # PYCHOK setter!
     def Lon0(self, lon0):
-        m = _MODS.angles
-        d =  lon0.degrees if m.isAng(lon0) else Degrees(lon0)
+        A = _MODS.angles.Ang
         n = _Triaxial3Base.Lon0.name
-        self._Lon0 = m.Ang.fromDegrees(d, name=n)
+        self._Lon0 = A(lon0, unit=Degrees, name=n)
 
     @Property_RO
     def _xE(self):
@@ -974,12 +993,6 @@ class _Triaxial3Base(_OrderedTriaxialBase):
         '''(INTERNAL) Get the y-elliptic function.
         '''
         return self._xyE(-self.e2, self.kp2, self.k2)
-
-
-class TriaxialError(_ValueError):
-    '''Raised for any triaxial issue.
-    '''
-    pass  # ...
 
 
 class _TriaxialsBase(_NamedEnum):

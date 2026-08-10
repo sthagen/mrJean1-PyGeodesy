@@ -40,7 +40,7 @@ from pygeodesy.utily import sincos2
 from math import atan, atanh, exp, fabs, log, sinh, sqrt
 
 __all__ = _ALL_LAZY.triaxials_conformal3
-__version__ = '26.02.15'
+__version__ = '26.08.02'
 
 _gam_    = 'gam'
 _LOG2MIN =  log(EPS) * _2_0
@@ -324,7 +324,7 @@ class Conformal3(_Triaxial3Base):
             m =  self._c_b * _h1sg(atanh)
         elif not k2:  # prolate pole
             m = _over(self._a_b, _h1sg(atan))
-        else:  # trixial umbilical
+        else:  # triaxial umbilical
             S =  self._C3S
             s = _over(S.k2 * S.kp2, k2 * kp2)
             m = (sqrt(s) * (self.b / S.b)) if s > 0 else _0_0

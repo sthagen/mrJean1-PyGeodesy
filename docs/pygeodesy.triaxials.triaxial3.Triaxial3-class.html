@@ -109,6 +109,27 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
+          <td><span class="summary-sig"><a href="pygeodesy.triaxials.triaxial3.Triaxial3-class.html#forward" class="summary-sig-name">forward</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">lat</span>,
+        <span class="summary-sig-arg">lon</span>,
+        <span class="summary-sig-arg">**height_unit_name</span>)</span><br />
+      Convert a <i>geodetic</i> lat- and longitude to a cartesian on this 
+      triaxial's surface.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
           <td><span class="summary-sig"><a href="pygeodesy.triaxials.triaxial3.Triaxial3-class.html#forwardBetOmg" class="summary-sig-name">forwardBetOmg</a>(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">bet</span>,
         <span class="summary-sig-arg">omg</span>,
@@ -275,7 +296,7 @@
         <span class="summary-sig-arg">llk</span>=<span class="summary-sig-default">'GEODETIC'</span>,
         <span class="summary-sig-arg">**unit_name</span>)</span><br />
       Convert a lat-, longitude and heading to a cartesian and a direction 
-      on this trixial's surface.</td>
+      on this  triaxial's surface.</td>
           <td align="right" valign="top">
             
             
@@ -298,6 +319,28 @@
         <span class="summary-sig-arg">dir3d</span>=<span class="summary-sig-default">None</span>,
         <span class="summary-sig-arg">**llk_name</span>)</span><br />
       Scale a cartesian and direction to this triaxial's surface.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="pygeodesy.triaxials.triaxial3.Triaxial3-class.html#reverse" class="summary-sig-name">reverse</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">x_ct</span>,
+        <span class="summary-sig-arg">y</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">z</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">**name</span>)</span><br />
+      Convert a cartesian <i>on this triaxial's surface</i> to 
+      <i>geodetic</i> lat- and longitude.</td>
           <td align="right" valign="top">
             
             
@@ -472,7 +515,7 @@
           <td><span class="summary-sig"><a href="pygeodesy.triaxials.triaxial3.Triaxial3-class.html#random2" class="summary-sig-name">random2</a>(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">llk</span>=<span class="summary-sig-default">'ELLIPSOIDAL'</span>,
         <span class="summary-sig-arg">both</span>=<span class="summary-sig-default">False</span>,
-        <span class="summary-sig-arg">_rand</span>=<span class="summary-sig-default">&lt;built-in method random of Random object at 0x7fef6a08ce20&gt;</span>)</span><br />
+        <span class="summary-sig-arg">_rand</span>=<span class="summary-sig-default">&lt;built-in method random of Random object at 0x7fa8be067020&gt;</span>)</span><br />
       Return a random cartesian with/out direction on this triaxial's 
       surface.</td>
           <td align="right" valign="top">
@@ -598,6 +641,7 @@
       <code><a href="pygeodesy.triaxials.bases._Triaxial3Base-class.html#isBiaxial">isBiaxial</a></code>,
       <code><a href="pygeodesy.triaxials.bases._Triaxial3Base-class.html#isOblate">isOblate</a></code>,
       <code><a href="pygeodesy.triaxials.bases._Triaxial3Base-class.html#isProlate">isProlate</a></code>,
+      <code><a href="pygeodesy.triaxials.bases._Triaxial3Base-class.html#isTriaxial">isTriaxial</a></code>,
       <code><a href="pygeodesy.triaxials.bases._Triaxial3Base-class.html#k2">k2</a></code>,
       <code><a href="pygeodesy.triaxials.bases._Triaxial3Base-class.html#kp2">kp2</a></code>
       </p>
@@ -659,6 +703,57 @@
     <span class="table-header">Method Details</span></td>
 </tr>
 </table>
+<a name="forward"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">forward</span>&nbsp;(<span class="sig-arg">self</span>,
+        <span class="sig-arg">lat</span>,
+        <span class="sig-arg">lon</span>,
+        <span class="sig-arg">**height_unit_name</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Convert a <i>geodetic</i> lat- and longitude to a cartesian on this 
+  triaxial's surface.</p>
+  <dl class="fields">
+    <dt>Arguments:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>lat</code></strong> - Geodetic latitude (<code>degrees</code> or 
+          <b><code>unit</code></b>).</li>
+        <li><strong class="pname"><code>lon</code></strong> - Geodetic longitude (<code>degrees</code> or 
+          <b><code>unit</code></b>).</li>
+        <li><strong class="pname"><code>height_unit_name</code></strong> - Optional <code><b>height</b>=0</code> (<code>meter</code>), 
+          scalar <code><b>unit</b>=</code><a 
+          href="pygeodesy.units.Radians-class.html" 
+          class="link">Radians</a> (or <a 
+          href="pygeodesy.units.Degrees-class.html" 
+          class="link">Degrees</a>) and <code><b>name</b>=NN</code> 
+          (<code>str</code>).</li>
+    </ul></dd>
+    <dt>Returns:</dt>
+        <dd>A <a 
+          href="pygeodesy.triaxials.triaxial3.Cartesian5Tuple-class.html" 
+          class="link">Cartesian5Tuple</a><code>(x, y, z, h, llk)</code> 
+          with <code>h=<b>height</b></code> and kind 
+          <code>llk=LLK.GEODETIC</code> or 
+          <code>llk=LLK.GEODETIC_LON0</code>.</dd>
+  </dl>
+<div class="fields">      <p><strong>See Also:</strong>
+        Methods <a 
+        href="pygeodesy.triaxials.triaxial3.Triaxial3-class.html#forwardPhiLam"
+        class="link">Triaxial3.forwardPhiLam</a> and <a 
+        href="pygeodesy.triaxials.triaxial3.Triaxial3-class.html#reverse" 
+        class="link">Triaxial3.reverse</a>.
+      </p>
+</div></td></tr></table>
+</div>
 <a name="forwardBetOmg"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
@@ -969,7 +1064,7 @@
         <dd>A <a 
           href="pygeodesy.triaxials.triaxial3.Cartesian5Tuple-class.html" 
           class="link">Cartesian5Tuple</a><code>(x, y, z, h, llk)</code> 
-          with height <code>h=0</code> and kind 
+          with height <code>h=<b>height</b></code> and kind 
           <code>llk=<b>llk</b></code>.</dd>
   </dl>
 <div class="fields">      <p><strong>Note:</strong>
@@ -1004,7 +1099,7 @@
   </tr></table>
   
   <p>Convert a lat-, longitude and heading to a cartesian and a direction 
-  on this trixial's surface.</p>
+  on this  triaxial's surface.</p>
   <dl class="fields">
     <dt>Arguments:</dt>
     <dd><ul class="nomargin-top">
@@ -1094,6 +1189,58 @@
           and <code>direction</code>, a <code>Vector3d</code> tangent to 
           this triaxial's surface or <code>None</code> iff 
           <code><b>dir3d</b> is None</code>.</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="reverse"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">reverse</span>&nbsp;(<span class="sig-arg">self</span>,
+        <span class="sig-arg">x_ct</span>,
+        <span class="sig-arg">y</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">z</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">**name</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Convert a cartesian <i>on this triaxial's surface</i> to 
+  <i>geodetic</i> lat- and longitude.</p>
+  <dl class="fields">
+    <dt>Arguments:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>x_ct</code></strong> - X component (<code>scalar</code>) or a cartesian (<a 
+          href="pygeodesy.triaxials.triaxial3.Cartesian5Tuple-class.html" 
+          class="link">Cartesian5Tuple</a> or any <code>Cartesian</code>, 
+          <a href="pygeodesy.ecef.Ecef9Tuple-class.html" 
+          class="link">Ecef9Tuple</a>, <a 
+          href="pygeodesy.vector3d.Vector3d-class.html" 
+          class="link">Vector3d</a>, <a 
+          href="pygeodesy.namedTuples.Vector3Tuple-class.html" 
+          class="link">Vector3Tuple</a> or <a 
+          href="pygeodesy.namedTuples.Vector4Tuple-class.html" 
+          class="link">Vector4Tuple</a>).</li>
+        <li><strong class="pname"><code>y</code></strong> - Y component (<code>scalar</code>), required if 
+          <b><code>x_xyz</code></b> is <code>scalar</code>, ignored 
+          otherwise.</li>
+        <li><strong class="pname"><code>z</code></strong> - Z component (<code>scalar</code>), like <b><code>y</code></b>.</li>
+        <li><strong class="pname"><code>name</code></strong> - Optional <code><b>name</b>=NN</code> (<code>str</code>).</li>
+    </ul></dd>
+    <dt>Returns:</dt>
+        <dd>A <a 
+          href="pygeodesy.triaxials.triaxial3.LatLonAzi5Tuple-class.html" 
+          class="link">LatLonAzi5Tuple</a><code>(lat, lon, azimuth, h, 
+          llk)</code> with <code>azimuth</code> usually <code>INT0</code>, 
+          height <code>h</code> off this triaxial's surface in 
+          <code>meter</code> or <code>INT0</code> and <code>llk</code> 
+          either <code>LLK.GEODETIC</code> or 
+          <code>LLK.GEODETIC_LON0</code>.</dd>
   </dl>
 </td></tr></table>
 </div>
@@ -1495,7 +1642,7 @@
   <h3 class="epydoc"><span class="sig"><span class="sig-name">random2</span>&nbsp;(<span class="sig-arg">self</span>,
         <span class="sig-arg">llk</span>=<span class="sig-default">'ELLIPSOIDAL'</span>,
         <span class="sig-arg">both</span>=<span class="sig-default">False</span>,
-        <span class="sig-arg">_rand</span>=<span class="sig-default">&lt;built-in method random of Random object at 0x7fef6a08ce20&gt;</span>)</span>
+        <span class="sig-arg">_rand</span>=<span class="sig-default">&lt;built-in method random of Random object at 0x7fa8be067020&gt;</span>)</span>
   </h3>
   </td><td align="right" valign="top"
     >&nbsp;
@@ -1670,7 +1817,7 @@
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Sun Jul 26 20:29:01 2026
+    Generated by Epydoc 3.0.1 on Mon Aug 10 09:00:02 2026
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

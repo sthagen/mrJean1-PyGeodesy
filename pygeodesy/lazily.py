@@ -315,7 +315,7 @@ _ALL_LAZY = _NamedEnum_RO(_name='_ALL_LAZY',
                                    'EasNor2Tuple', 'EasNor3Tuple', 'Ellipse5Tuple',
                                    'Forward4Tuple', 'Intersection3Tuple',
                                    'LatLon2Tuple', 'LatLon3Tuple', 'LatLon4Tuple',
-                                   'LatLonDatum3Tuple', 'LatLonDatum5Tuple',
+                                   'LatLonDatum3Tuple', 'LatLonDatum5Tuple', 'LatLonNheight3Tuple',
                                    'LatLonPrec3Tuple', 'LatLonPrec5Tuple',
                                    'NearestOn2Tuple', 'NearestOn3Tuple', 'NearestOn6Tuple', 'NearestOn8Tuple',
                                    'PhiLam2Tuple', 'PhiLam3Tuple', 'PhiLam4Tuple', 'Point3Tuple', 'Points2Tuple',
@@ -354,7 +354,7 @@ _ALL_LAZY = _NamedEnum_RO(_name='_ALL_LAZY',
                 triaxials_bases=_a('LLK', 'TriaxialError'),
            triaxials_conformal3=_a('BetOmgGam5Tuple',
                                    'Conformal3', 'Conformal3B', 'Conformal3Sphere', 'Conformal5Tuple'),
-            triaxials_triaxial3=_a('BetOmgAlp5Tuple', 'Cartesian5Tuple', 'PhiLamZet5Tuple',
+            triaxials_triaxial3=_a('BetOmgAlp5Tuple', 'Cartesian5Tuple', 'LatLonAzi5Tuple', 'PhiLamZet5Tuple',
                                    'Triaxial3', 'Triaxial3B', 'Triaxial3s'),
             triaxials_triaxial5=_a('BetaOmega2Tuple', 'BetaOmega3Tuple',
                                    'Conformal', 'ConformalSphere', 'Conformal2Tuple',
@@ -902,7 +902,7 @@ def _lazy_module(name):  # overwritten by _lazy_import2
 
 
 __all__ = _ALL_LAZY.lazily
-__version__ = '26.07.17'
+__version__ = '26.08.06'
 
 if __name__ == _DMAIN_:
 

@@ -22,12 +22,12 @@ from pygeodesy.constants import EPS, EPS0, NAN, PI2, _0_0, _N_0_0, \
                                _over, _pos_self, remainder
 from pygeodesy.errors import _xkwds, _xkwds_get, _xkwds_pop2
 from pygeodesy.fmath import hypot,  _ALL_LAZY, _MODS
-# from pygeodesy.interns import _COMMASPACE_  # from .streprs
+# from pygeodesy.interns import NN, _COMMASPACE_  # from .streprs
 # from pygeodesy.lazily import _ALL_LAZY, _ALL_MODS as _MODS  # from .fmath
 from pygeodesy.named import _Named, _NamedTuple, _Pass
 from pygeodesy.props import Property_RO, property_doc_, property_RO, \
                            _allPropertiesOf_n, _update_all
-from pygeodesy.streprs import Fmt, fstr, unstr,  _COMMASPACE_
+from pygeodesy.streprs import Fmt, fstr, unstr,  NN, _COMMASPACE_
 from pygeodesy.units import Degrees, _isDegrees, _isRadians, Radians
 from pygeodesy.utily import atan2, atan2d, sincos2, sincos2d, SinCos2
 
@@ -35,7 +35,7 @@ from math import asinh, ceil as _ceil, fabs, floor as _floor, \
                  isinf, isnan, sinh
 
 __all__ = _ALL_LAZY.angles
-__version__ = '25.12.02'
+__version__ = '26.08.06'
 
 _EPS03 = EPS / (1 << 20)
 # _HD = _180_0
@@ -82,17 +82,17 @@ def _normalize2(s, c):
     return sc
 
 
+def _orthogonal2(pred, s, c):
+    return (_copysign_1_0(s), _copysign_0_0(c)) if pred else \
+           (_copysign_0_0(s), _copysign_1_0(c))
+
+
 def _other(x, unit=Radians, **unused):
     # get C{x} as C{Ang} from C{Degrees}, C{Radians} or C{Lambertian}
     return Ang.fromLambertian(x) if                       unit is Lambertian else (
            Ang.fromRadians(x)    if _isRadians(x, iscalar=unit is Radians)   else (
            Ang.fromDegrees(x)    if _isDegrees(x, iscalar=unit is Degrees)   else
           _raiseError(unit, x)))  # PYCHOK indent
-
-
-def _orthogonal2(pred, s, c):
-    return (_copysign_1_0(s), _copysign_0_0(c)) if pred else \
-           (_copysign_0_0(s), _copysign_1_0(c))
 
 
 def _raiseError(unit, arg, **kwds):
@@ -151,10 +151,11 @@ class Ang(_Named):
                   unit circle.
         '''
         s, c, n, u = s_ang.scnu4 if isAng(s_ang) else (
-                    _other(s_ang, **unit_name).scnu4 if c is None else
-                    _scnu4(s_ang, c, n, **unit_name))
-        if unit_name:
-            u, name = _xkwds_pop2(unit_name, unit=u)
+              _other(s_ang, **unit_name).scnu4 if c is None else
+              _scnu4(s_ang, c, n, **unit_name))
+        if unit_name:  # Error=... from _NamedTuple.toUnits()
+            u    = _xkwds_get(unit_name, unit=u)
+            name = _xkwds_get(unit_name, name=NN)
             if name:
                 self.name = name
         self._n = _fint(n)
@@ -505,8 +506,8 @@ class Ang(_Named):
             r       = rad.radians0
         elif _isRadians(rad, iscalar=True):
             s, c = sincos2(rad)
-            r = atan2(s, c)
-            n = round((rad - r) / PI2)
+            r    = atan2(s, c)
+            n    = round((rad - r) / PI2)
         else:
             _raiseError(Ang.fromRadians, rad, **unit_name)
         a = Ang(s, c, n, **_xkwds(unit_name, unit=Radians))
@@ -882,7 +883,7 @@ class _Ang3Tuple(_NamedTuple):
         return self.toUnit(Radians, *n)
 
     def toUnit(self, unit, *n):
-        '''Change any C{Ang} to C{unit}, .
+        '''Change any C{Ang} to C{unit}, optional name C{n}.
         '''
         for a in self:
             if isAng(a):  # and a.unit is not unit:
